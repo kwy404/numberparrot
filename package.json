@@ -1,6 +1,6 @@
 {
   "name": "numberparrot",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Parse localized number and currency strings in JavaScript. The missing Intl.NumberFormat parser: convert \"1.234,56\", \"1 234,56 €\", \"12,34,567.89\" or Arabic digits back into real numbers for any locale. Zero dependencies, TypeScript, numeral.js alternative.",
   "keywords": [
     "parse",

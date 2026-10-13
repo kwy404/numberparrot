@@ -1,4 +1,4 @@
-<p align="right"><b>English</b> | <a href="https://github.com/kwy404/numberparrot/blob/main/README.pt-BR.md">Português (Brasil)</a></p>
+<p align="right"><b>English</b> | <a href="https://github.com/kwy404/numberparrot/blob/main/i18n/README.pt-BR.md">Português (Brasil)</a></p>
 
 <p align="center">
   <picture>
