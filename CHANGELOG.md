@@ -6,6 +6,14 @@ All notable changes to this project are documented here. The format follows
 
 ## [Unreleased]
 
+## [0.1.2] - 2026-10-12
+
+### Changed
+
+- Documentation site: the header nav stays on one line on wide screens and collapses into a Voodoo.js menu button under 900px.
+- Documentation site and README: added a More from kwy404 section with related projects.
+- README: added npm downloads badges.
+
 ## [0.1.1] - 2026-10-12
 
 ### Fixed
@@ -36,5 +44,7 @@ All notable changes to this project are documented here. The format follows
   built with Voodoo.js and code examples are highlighted at build time with Shiki.
 - Mascot Pico and project artwork.
 
-[Unreleased]: https://github.com/kwy404/numberparrot/compare/v0.1.0...HEAD
+[Unreleased]: https://github.com/kwy404/numberparrot/compare/v0.1.2...HEAD
+[0.1.2]: https://github.com/kwy404/numberparrot/compare/v0.1.1...v0.1.2
+[0.1.1]: https://github.com/kwy404/numberparrot/compare/v0.1.0...v0.1.1
 [0.1.0]: https://github.com/kwy404/numberparrot/releases/tag/v0.1.0
