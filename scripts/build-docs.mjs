@@ -422,7 +422,7 @@ function layout({ file, title, description, body, jsonld }) {
   <script type="application/ld+json">${JSON.stringify(jsonld)}</script>
   <script>try{var t=localStorage.getItem("np-theme");if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
   <link rel="stylesheet" href="style.css">
-  <script src="https://cdn.jsdelivr.net/npm/voodoojs@0.13.0/dist/voodoo.full.min.js" data-manual defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/voodoojs@1.0.0/dist/voodoo.full.min.js" data-manual defer></script>
   <script type="module" src="app.js"></script>
 </head>
 <body>
