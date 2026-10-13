@@ -1,0 +1,92 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="420" viewBox="0 0 900 420" role="img" aria-label="Animated comparison of parseFloat and numberparrot">
+  <title>numberparrot demo: 1.234.567,89 in pt-BR, 1'234'567.89 in de-CH, 12,34,567.89 in en-IN and Arabic-Indic digits in ar-EG all parse to 1234567.89, while parseFloat returns 1.234, 1, 12 and NaN</title>
+  <style>
+    text { font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace; }
+    .t { font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; }
+    .r { opacity: 0; }
+    @keyframes k0in { 0%, 0.00% { opacity: 0; transform: translateY(6px); } 2.92%, 88% { opacity: 1; transform: translateY(0); } 95%, 100% { opacity: 0; } }
+    .k0in { animation: k0in 12s ease-out infinite; }
+    @keyframes k0pf { 0%, 3.75% { opacity: 0; transform: translateY(6px); } 6.67%, 88% { opacity: 1; transform: translateY(0); } 95%, 100% { opacity: 0; } }
+    .k0pf { animation: k0pf 12s ease-out infinite; }
+    @keyframes k0np { 0%, 7.50% { opacity: 0; transform: translateY(6px); } 10.42%, 88% { opacity: 1; transform: translateY(0); } 95%, 100% { opacity: 0; } }
+    .k0np { animation: k0np 12s ease-out infinite; }
+    @keyframes k1in { 0%, 9.17% { opacity: 0; transform: translateY(6px); } 12.08%, 88% { opacity: 1; transform: translateY(0); } 95%, 100% { opacity: 0; } }
+    .k1in { animation: k1in 12s ease-out infinite; }
+    @keyframes k1pf { 0%, 12.92% { opacity: 0; transform: translateY(6px); } 15.83%, 88% { opacity: 1; transform: translateY(0); } 95%, 100% { opacity: 0; } }
+    .k1pf { animation: k1pf 12s ease-out infinite; }
+    @keyframes k1np { 0%, 16.67% { opacity: 0; transform: translateY(6px); } 19.58%, 88% { opacity: 1; transform: translateY(0); } 95%, 100% { opacity: 0; } }
+    .k1np { animation: k1np 12s ease-out infinite; }
+    @keyframes k2in { 0%, 18.33% { opacity: 0; transform: translateY(6px); } 21.25%, 88% { opacity: 1; transform: translateY(0); } 95%, 100% { opacity: 0; } }
+    .k2in { animation: k2in 12s ease-out infinite; }
+    @keyframes k2pf { 0%, 22.08% { opacity: 0; transform: translateY(6px); } 25.00%, 88% { opacity: 1; transform: translateY(0); } 95%, 100% { opacity: 0; } }
+    .k2pf { animation: k2pf 12s ease-out infinite; }
+    @keyframes k2np { 0%, 25.83% { opacity: 0; transform: translateY(6px); } 28.75%, 88% { opacity: 1; transform: translateY(0); } 95%, 100% { opacity: 0; } }
+    .k2np { animation: k2np 12s ease-out infinite; }
+    @keyframes k3in { 0%, 27.50% { opacity: 0; transform: translateY(6px); } 30.42%, 88% { opacity: 1; transform: translateY(0); } 95%, 100% { opacity: 0; } }
+    .k3in { animation: k3in 12s ease-out infinite; }
+    @keyframes k3pf { 0%, 31.25% { opacity: 0; transform: translateY(6px); } 34.17%, 88% { opacity: 1; transform: translateY(0); } 95%, 100% { opacity: 0; } }
+    .k3pf { animation: k3pf 12s ease-out infinite; }
+    @keyframes k3np { 0%, 35.00% { opacity: 0; transform: translateY(6px); } 37.92%, 88% { opacity: 1; transform: translateY(0); } 95%, 100% { opacity: 0; } }
+    .k3np { animation: k3np 12s ease-out infinite; }
+    @keyframes done { 0%, 45.00% { opacity: 0; } 48.33%, 88% { opacity: 1; } 95%, 100% { opacity: 0; } }
+    .done { animation: done 12s ease-out infinite; }
+    @media (prefers-reduced-motion: reduce) { .r { animation: none !important; opacity: 1; } }
+  </style>
+  <rect width="900" height="420" rx="22" fill="#F6FBF8"/>
+  <g transform="translate(26 14) scale(0.17)">
+  <g >
+    <path d="M150 318 L104 392 L146 384 L178 336 Z" fill="#F25C54"/>
+    <path d="M178 330 L162 398 L204 378 L206 334 Z" fill="#2FBF71"/>
+    <path d="M184 34 C172 4 206 -2 214 24 C218 40 214 58 208 74 Z" fill="#F25C54"/>
+    <path d="M214 60 C222 24 258 30 248 58 C242 72 230 80 218 86 Z" fill="#F25C54"/>
+    <path d="M178 70 C150 46 132 74 152 90 C162 98 176 100 188 98 Z" fill="#F25C54"/>
+    <ellipse cx="190" cy="248" rx="96" ry="116" fill="#2FBF71"/>
+    <circle cx="214" cy="146" r="82" fill="#2FBF71"/>
+    <ellipse cx="214" cy="270" rx="56" ry="76" fill="#FFC83D"/>
+    <path d="M118 196 C92 262 112 322 152 350 C186 316 196 262 184 214 C168 188 138 182 118 196 Z" fill="#F25C54"/>
+    <path d="M128 236 C140 264 150 290 152 322" fill="none" stroke="#FFC83D" stroke-width="9" stroke-linecap="round"/>
+    <path d="M150 220 C162 248 168 274 166 300" fill="none" stroke="#FFC83D" stroke-width="9" stroke-linecap="round"/>
+    <ellipse cx="246" cy="136" rx="44" ry="42" fill="#FFFFFF"/>
+    <circle cx="250" cy="130" r="17" fill="#1D2B3A"/>
+    <circle cx="256" cy="123" r="6" fill="#FFFFFF"/>
+    <path d="M282 112 C336 104 352 150 334 196 C324 172 306 162 284 164 Z" fill="#FFC83D"/>
+    <path d="M284 164 C304 162 320 172 326 190 C306 196 290 192 278 180 Z" fill="#1D2B3A"/>
+    <path d="M176 352 C176 368 168 376 160 380 M214 352 C214 368 222 376 230 380" fill="none" stroke="#1D2B3A" stroke-width="10" stroke-linecap="round"/>
+  </g></g>
+  <text class="t" x="100" y="50" font-size="24" font-weight="800" fill="#1D2B3A">One number, four spellings</text>
+  <text class="t" x="100" y="76" font-size="15" fill="#4A5A6C">The same value written in pt-BR, de-CH, en-IN and ar-EG</text>
+  <text class="t" x="44" y="106" font-size="14" font-weight="700" fill="#6B7A8C">INPUT</text>
+  <text class="t" x="370" y="106" font-size="14" font-weight="700" fill="#F25C54">parseFloat(input)</text>
+  <text class="t" x="620" y="106" font-size="14" font-weight="700" fill="#1E9E5A">parse(input, locale)</text>
+  
+  <g>
+    <rect x="24" y="114" width="852" height="52" rx="12" fill="#FFFFFF" stroke="#E2E8E4"/>
+    <g class="r k0in"><text x="44" y="147" font-size="22" fill="#1D2B3A" font-weight="700">1.234.567,89</text>
+    <text x="270" y="147" font-size="16" fill="#6B7A8C">pt-BR</text></g>
+    <g class="r k0pf"><text x="370" y="147" font-size="22" fill="#F25C54" font-weight="700">1.234</text></g>
+    <g class="r k0np"><text x="620" y="147" font-size="22" fill="#1E9E5A" font-weight="700">1234567.89</text></g>
+  </g>
+  <g>
+    <rect x="24" y="176" width="852" height="52" rx="12" fill="#FFFFFF" stroke="#E2E8E4"/>
+    <g class="r k1in"><text x="44" y="209" font-size="22" fill="#1D2B3A" font-weight="700">1'234'567.89</text>
+    <text x="270" y="209" font-size="16" fill="#6B7A8C">de-CH</text></g>
+    <g class="r k1pf"><text x="370" y="209" font-size="22" fill="#F25C54" font-weight="700">1</text></g>
+    <g class="r k1np"><text x="620" y="209" font-size="22" fill="#1E9E5A" font-weight="700">1234567.89</text></g>
+  </g>
+  <g>
+    <rect x="24" y="238" width="852" height="52" rx="12" fill="#FFFFFF" stroke="#E2E8E4"/>
+    <g class="r k2in"><text x="44" y="271" font-size="22" fill="#1D2B3A" font-weight="700">12,34,567.89</text>
+    <text x="270" y="271" font-size="16" fill="#6B7A8C">en-IN</text></g>
+    <g class="r k2pf"><text x="370" y="271" font-size="22" fill="#F25C54" font-weight="700">12</text></g>
+    <g class="r k2np"><text x="620" y="271" font-size="22" fill="#1E9E5A" font-weight="700">1234567.89</text></g>
+  </g>
+  <g>
+    <rect x="24" y="300" width="852" height="52" rx="12" fill="#FFFFFF" stroke="#E2E8E4"/>
+    <g class="r k3in"><text x="44" y="333" font-size="22" fill="#1D2B3A" font-weight="700">&#x0661;&#x066C;&#x0662;&#x0663;&#x0664;&#x066C;&#x0665;&#x0666;&#x0667;&#x066B;&#x0668;&#x0669;</text>
+    <text x="270" y="333" font-size="16" fill="#6B7A8C">ar-EG</text></g>
+    <g class="r k3pf"><text x="370" y="333" font-size="22" fill="#F25C54" font-weight="700">NaN</text></g>
+    <g class="r k3np"><text x="620" y="333" font-size="22" fill="#1E9E5A" font-weight="700">1234567.89</text></g>
+  </g>
+  <g class="r done"><rect x="24" y="372" width="852" height="34" rx="10" fill="#2FBF71" opacity="0.15"/>
+  <text class="t" x="450" y="395" font-size="16" font-weight="700" text-anchor="middle" fill="#1D2B3A">Every spelling becomes the same JavaScript number: 1234567.89</text></g>
+</svg>

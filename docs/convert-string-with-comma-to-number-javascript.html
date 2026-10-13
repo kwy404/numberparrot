@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Convert a String with a Comma to a Number in JavaScript | numberparrot</title>
+  <meta name="description" content="How to convert &quot;1,5&quot; or &quot;1.234,56&quot; to a number in JavaScript. Why replace(&quot;,&quot;, &quot;.&quot;) and parseFloat fail, and a locale aware fix that works in every locale.">
+  <link rel="canonical" href="https://kwy404.github.io/numberparrot/convert-string-with-comma-to-number-javascript.html">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <meta name="theme-color" content="#2FBF71">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="numberparrot">
+  <meta property="og:title" content="Convert a String with a Comma to a Number in JavaScript | numberparrot">
+  <meta property="og:description" content="How to convert &quot;1,5&quot; or &quot;1.234,56&quot; to a number in JavaScript. Why replace(&quot;,&quot;, &quot;.&quot;) and parseFloat fail, and a locale aware fix that works in every locale.">
+  <meta property="og:url" content="https://kwy404.github.io/numberparrot/convert-string-with-comma-to-number-javascript.html">
+  <meta property="og:image" content="https://kwy404.github.io/numberparrot/og.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="numberparrot: parse localized numbers and currency strings in JavaScript">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Convert a String with a Comma to a Number in JavaScript | numberparrot">
+  <meta name="twitter:description" content="How to convert &quot;1,5&quot; or &quot;1.234,56&quot; to a number in JavaScript. Why replace(&quot;,&quot;, &quot;.&quot;) and parseFloat fail, and a locale aware fix that works in every locale.">
+  <meta name="twitter:image" content="https://kwy404.github.io/numberparrot/og.png">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"Convert a String with a Comma to a Number in JavaScript","description":"How to convert \"1,5\" or \"1.234,56\" to a number in JavaScript. Why replace(\",\", \".\") and parseFloat fail, and a locale aware fix that works in every locale.","url":"https://kwy404.github.io/numberparrot/convert-string-with-comma-to-number-javascript.html","image":"https://kwy404.github.io/numberparrot/og.png","datePublished":"2026-10-12","dateModified":"2026-10-12","inLanguage":"en","author":{"@type":"Person","name":"Alexandre Kohler","url":"https://github.com/kwy404"},"publisher":{"@type":"Person","name":"Alexandre Kohler","url":"https://github.com/kwy404"},"mainEntityOfPage":"https://kwy404.github.io/numberparrot/convert-string-with-comma-to-number-javascript.html","about":{"@type":"SoftwareSourceCode","name":"numberparrot","codeRepository":"https://github.com/kwy404/numberparrot","programmingLanguage":"TypeScript"}}</script>
+  <script>try{var t=localStorage.getItem("np-theme");if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/voodoojs@0.13.0/dist/voodoo.full.min.js" data-manual defer></script>
+  <script type="module" src="app.js"></script>
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+  <header class="site">
+    <div class="container">
+      <a class="brand" href="./"><img src="favicon.svg" width="32" height="32" alt=""><span>number<b>parrot</b></span></a>
+      <nav class="site" aria-label="Main">
+        <a href="./">Playground</a>
+        <a href="convert-string-with-comma-to-number-javascript.html" aria-current="page">Comma to number</a>
+        <a href="parsefloat-comma-decimal-separator.html">parseFloat and commas</a>
+        <a href="parse-localized-number-javascript.html">Localized numbers</a>
+        <a href="parse-currency-string-javascript.html">Currency strings</a>
+        <a href="https://github.com/kwy404/numberparrot">GitHub</a>
+        <button class="theme-toggle" type="button" :aria-pressed="theme === 'dark' ? 'true' : 'false'" @click="toggleTheme()" v-text="theme === 'dark' ? 'Light theme' : 'Dark theme'">Theme</button>
+      </nav>
+    </div>
+  </header>
+  <main id="main">
+    <div class="container">
+
+<p class="breadcrumb"><a href="./">numberparrot</a> / Guides</p>
+<article>
+<h1>Convert a String with a Comma to a Number in JavaScript</h1>
+
+<p class="lead">Half the world writes decimals with a comma. JavaScript only understands a dot. Here is why the usual fixes break and how to convert comma strings reliably.</p>
+
+<h2>The problem</h2>
+<p>A user in Brazil, Germany or France types <code>1.234,56</code>. JavaScript reads it like this:</p>
+<div class="code-frame" id="code-1" data-lang="ts"><div class="code-bar"><span class="code-tab">example.ts</span><button type="button" class="code-copy" aria-label="Copy code" @click="copy($el)" v-text="copied === 'code-1' ? 'Copied' : 'Copy'">Copy</button></div><pre class="shiki shiki-themes light-plus dark-plus" style="--shiki-light:#000000;--shiki-dark:#D4D4D4;--shiki-light-bg:#FFFFFF;--shiki-dark-bg:#1E1E1E" tabindex="0" aria-label="example.ts code example"><code><span class="line"><span style="--shiki-light:#795E26;--shiki-dark:#DCDCAA">parseFloat</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">(</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178">"1.234,56"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">); </span><span style="--shiki-light:#008000;--shiki-dark:#6A9955">// 1.234   (stops at the second ".")</span></span>
+<span class="line"><span style="--shiki-light:#795E26;--shiki-dark:#DCDCAA">Number</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">(</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178">"1.234,56"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">);     </span><span style="--shiki-light:#008000;--shiki-dark:#6A9955">// NaN</span></span>
+<span class="line"><span style="--shiki-light:#795E26;--shiki-dark:#DCDCAA">parseFloat</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">(</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178">"1,5"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">);      </span><span style="--shiki-light:#008000;--shiki-dark:#6A9955">// 1       (stops at the ",")</span></span></code></pre></div>
+
+<h2>Why replace(",", ".") is not enough</h2>
+<p>The most common answer online is to swap the comma for a dot. It works for <code>"1,5"</code> and breaks for everything else:</p>
+<div class="table-wrap"><table>
+<thead><tr><th>Input</th><th>Meaning</th><th><code>Number(s.replace(",", "."))</code></th></tr></thead>
+<tbody>
+<tr><td><code>1,5</code></td><td>1.5 (de-DE)</td><td class="good">1.5</td></tr>
+<tr><td><code>1.234,56</code></td><td>1234.56 (pt-BR)</td><td class="bad">NaN</td></tr>
+<tr><td><code>1,234</code></td><td>1234 (en-US)</td><td class="bad">1.234</td></tr>
+<tr><td><code>1 234,56</code></td><td>1234.56 (fr-FR)</td><td class="bad">NaN</td></tr>
+<tr><td><code>R$ 10,00</code></td><td>10 (pt-BR)</td><td class="bad">NaN</td></tr>
+</tbody></table></div>
+<p>Removing every dot first (<code>s.replace(/\./g, "").replace(",", ".")</code>) fixes Brazilian input and silently corrupts English input, where the dot is the decimal separator. There is no character swap that is right for every locale, because the meaning of <code>.</code> and <code>,</code> depends on who wrote the number.</p>
+
+<h2>The fix: parse with the locale</h2>
+<p>numberparrot reads the decimal and group separators for the locale from <code>Intl.NumberFormat</code>, so it parses exactly what the locale writes, and returns <code>NaN</code> for anything else instead of guessing:</p>
+<div class="code-frame" id="code-2" data-lang="ts"><div class="code-bar"><span class="code-tab">example.ts</span><button type="button" class="code-copy" aria-label="Copy code" @click="copy($el)" v-text="copied === 'code-2' ? 'Copied' : 'Copy'">Copy</button></div><pre class="shiki shiki-themes light-plus dark-plus" style="--shiki-light:#000000;--shiki-dark:#D4D4D4;--shiki-light-bg:#FFFFFF;--shiki-dark-bg:#1E1E1E" tabindex="0" aria-label="example.ts code example"><code><span class="line"><span style="--shiki-light:#AF00DB;--shiki-dark:#C586C0">import</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4"> { </span><span style="--shiki-light:#001080;--shiki-dark:#9CDCFE">parse</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4"> } </span><span style="--shiki-light:#AF00DB;--shiki-dark:#C586C0">from</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178"> "numberparrot"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#795E26;--shiki-dark:#DCDCAA">parse</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">(</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178">"1,5"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">, </span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178">"de-DE"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">);        </span><span style="--shiki-light:#008000;--shiki-dark:#6A9955">// 1.5</span></span>
+<span class="line"><span style="--shiki-light:#795E26;--shiki-dark:#DCDCAA">parse</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">(</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178">"1.234,56"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">, </span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178">"pt-BR"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">);   </span><span style="--shiki-light:#008000;--shiki-dark:#6A9955">// 1234.56</span></span>
+<span class="line"><span style="--shiki-light:#795E26;--shiki-dark:#DCDCAA">parse</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">(</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178">"1 234,56"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">, </span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178">"fr-FR"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">);   </span><span style="--shiki-light:#008000;--shiki-dark:#6A9955">// 1234.56 (any kind of space)</span></span>
+<span class="line"><span style="--shiki-light:#795E26;--shiki-dark:#DCDCAA">parse</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">(</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178">"R$ 10,00"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">, </span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178">"pt-BR"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">);   </span><span style="--shiki-light:#008000;--shiki-dark:#6A9955">// 10</span></span>
+<span class="line"><span style="--shiki-light:#795E26;--shiki-dark:#DCDCAA">parse</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">(</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178">"1,234"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">, </span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178">"en-US"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">);      </span><span style="--shiki-light:#008000;--shiki-dark:#6A9955">// 1234</span></span>
+<span class="line"><span style="--shiki-light:#795E26;--shiki-dark:#DCDCAA">parse</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">(</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178">"1.234,56"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">, </span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178">"en-US"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">);   </span><span style="--shiki-light:#008000;--shiki-dark:#6A9955">// NaN, not an en-US number</span></span></code></pre></div>
+
+<h2>When you do not know the locale</h2>
+<p>For CSV files or pasted values, <code>detect()</code> works out the decimal separator from the string itself and tells you when it cannot be sure:</p>
+<div class="code-frame" id="code-3" data-lang="ts"><div class="code-bar"><span class="code-tab">example.ts</span><button type="button" class="code-copy" aria-label="Copy code" @click="copy($el)" v-text="copied === 'code-3' ? 'Copied' : 'Copy'">Copy</button></div><pre class="shiki shiki-themes light-plus dark-plus" style="--shiki-light:#000000;--shiki-dark:#D4D4D4;--shiki-light-bg:#FFFFFF;--shiki-dark-bg:#1E1E1E" tabindex="0" aria-label="example.ts code example"><code><span class="line"><span style="--shiki-light:#AF00DB;--shiki-dark:#C586C0">import</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4"> { </span><span style="--shiki-light:#001080;--shiki-dark:#9CDCFE">detect</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4"> } </span><span style="--shiki-light:#AF00DB;--shiki-dark:#C586C0">from</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178"> "numberparrot"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#795E26;--shiki-dark:#DCDCAA">detect</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">(</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178">"1.234,56"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">).</span><span style="--shiki-light:#001080;--shiki-dark:#9CDCFE">value</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">;  </span><span style="--shiki-light:#008000;--shiki-dark:#6A9955">// 1234.56, confidence 0.95</span></span>
+<span class="line"><span style="--shiki-light:#795E26;--shiki-dark:#DCDCAA">detect</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">(</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178">"1,5"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">).</span><span style="--shiki-light:#001080;--shiki-dark:#9CDCFE">value</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">;       </span><span style="--shiki-light:#008000;--shiki-dark:#6A9955">// 1.5</span></span>
+<span class="line"><span style="--shiki-light:#795E26;--shiki-dark:#DCDCAA">detect</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">(</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178">"1,234"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">);           </span><span style="--shiki-light:#008000;--shiki-dark:#6A9955">// ambiguous: true, alternatives [1234, 1.234]</span></span></code></pre></div>
+
+<h2>In a form field</h2>
+<div class="code-frame" id="code-4" data-lang="ts"><div class="code-bar"><span class="code-tab">example.ts</span><button type="button" class="code-copy" aria-label="Copy code" @click="copy($el)" v-text="copied === 'code-4' ? 'Copied' : 'Copy'">Copy</button></div><pre class="shiki shiki-themes light-plus dark-plus" style="--shiki-light:#000000;--shiki-dark:#D4D4D4;--shiki-light-bg:#FFFFFF;--shiki-dark-bg:#1E1E1E" tabindex="0" aria-label="example.ts code example"><code><span class="line"><span style="--shiki-light:#AF00DB;--shiki-dark:#C586C0">import</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4"> { </span><span style="--shiki-light:#001080;--shiki-dark:#9CDCFE">createParser</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4"> } </span><span style="--shiki-light:#AF00DB;--shiki-dark:#C586C0">from</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178"> "numberparrot"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#0000FF;--shiki-dark:#569CD6">const</span><span style="--shiki-light:#0070C1;--shiki-dark:#4FC1FF"> brl</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4"> = </span><span style="--shiki-light:#795E26;--shiki-dark:#DCDCAA">createParser</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">(</span><span style="--shiki-light:#001080;--shiki-dark:#9CDCFE">navigator</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">.</span><span style="--shiki-light:#001080;--shiki-dark:#9CDCFE">language</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">); </span><span style="--shiki-light:#008000;--shiki-dark:#6A9955">// for example "pt-BR"</span></span>
+<span class="line"><span style="--shiki-light:#001080;--shiki-dark:#9CDCFE">input</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">.</span><span style="--shiki-light:#795E26;--shiki-dark:#DCDCAA">addEventListener</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">(</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178">"change"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">, () </span><span style="--shiki-light:#0000FF;--shiki-dark:#569CD6">=></span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4"> {</span></span>
+<span class="line"><span style="--shiki-light:#0000FF;--shiki-dark:#569CD6">  const</span><span style="--shiki-light:#0070C1;--shiki-dark:#4FC1FF"> value</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4"> = </span><span style="--shiki-light:#001080;--shiki-dark:#9CDCFE">brl</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">.</span><span style="--shiki-light:#795E26;--shiki-dark:#DCDCAA">parse</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">(</span><span style="--shiki-light:#001080;--shiki-dark:#9CDCFE">input</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">.</span><span style="--shiki-light:#001080;--shiki-dark:#9CDCFE">value</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">);</span></span>
+<span class="line"><span style="--shiki-light:#001080;--shiki-dark:#9CDCFE">  input</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">.</span><span style="--shiki-light:#795E26;--shiki-dark:#DCDCAA">setCustomValidity</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">(</span><span style="--shiki-light:#001080;--shiki-dark:#9CDCFE">Number</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">.</span><span style="--shiki-light:#795E26;--shiki-dark:#DCDCAA">isNaN</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">(</span><span style="--shiki-light:#001080;--shiki-dark:#9CDCFE">value</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">) ? </span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178">"Please enter a number"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4"> : </span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178">""</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">);</span></span>
+<span class="line"><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">});</span></span></code></pre></div>
+
+<h2>Install</h2>
+<div class="install">
+  <div class="tabs" role="tablist" aria-label="Package manager">
+    <button type="button" role="tab" id="pm-1-npm" aria-controls="pm-1-npm-panel" aria-selected="true" :aria-selected="pm === 'npm' ? 'true' : 'false'" @click="setPm('npm')">npm</button>
+    <button type="button" role="tab" id="pm-1-pnpm" aria-controls="pm-1-pnpm-panel" aria-selected="false" :aria-selected="pm === 'pnpm' ? 'true' : 'false'" @click="setPm('pnpm')">pnpm</button>
+    <button type="button" role="tab" id="pm-1-yarn" aria-controls="pm-1-yarn-panel" aria-selected="false" :aria-selected="pm === 'yarn' ? 'true' : 'false'" @click="setPm('yarn')">yarn</button>
+    <button type="button" role="tab" id="pm-1-bun" aria-controls="pm-1-bun-panel" aria-selected="false" :aria-selected="pm === 'bun' ? 'true' : 'false'" @click="setPm('bun')">bun</button>
+  </div>
+  <div role="tabpanel" id="pm-1-npm-panel" aria-labelledby="pm-1-npm" v-show="pm === 'npm'">
+<div class="code-frame" id="code-5" data-lang="sh"><div class="code-bar"><span class="code-tab">Terminal</span><button type="button" class="code-copy" aria-label="Copy code" @click="copy($el)" v-text="copied === 'code-5' ? 'Copied' : 'Copy'">Copy</button></div><pre class="shiki shiki-themes light-plus dark-plus" style="--shiki-light:#000000;--shiki-dark:#D4D4D4;--shiki-light-bg:#FFFFFF;--shiki-dark-bg:#1E1E1E" tabindex="0" aria-label="Terminal code example"><code><span class="line"><span style="--shiki-light:#795E26;--shiki-dark:#DCDCAA">npm</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178"> install</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178"> numberparrot</span></span></code></pre></div>
+  </div>
+  <div role="tabpanel" id="pm-1-pnpm-panel" aria-labelledby="pm-1-pnpm" style="display:none" v-show="pm === 'pnpm'">
+<div class="code-frame" id="code-6" data-lang="sh"><div class="code-bar"><span class="code-tab">Terminal</span><button type="button" class="code-copy" aria-label="Copy code" @click="copy($el)" v-text="copied === 'code-6' ? 'Copied' : 'Copy'">Copy</button></div><pre class="shiki shiki-themes light-plus dark-plus" style="--shiki-light:#000000;--shiki-dark:#D4D4D4;--shiki-light-bg:#FFFFFF;--shiki-dark-bg:#1E1E1E" tabindex="0" aria-label="Terminal code example"><code><span class="line"><span style="--shiki-light:#795E26;--shiki-dark:#DCDCAA">pnpm</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178"> add</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178"> numberparrot</span></span></code></pre></div>
+  </div>
+  <div role="tabpanel" id="pm-1-yarn-panel" aria-labelledby="pm-1-yarn" style="display:none" v-show="pm === 'yarn'">
+<div class="code-frame" id="code-7" data-lang="sh"><div class="code-bar"><span class="code-tab">Terminal</span><button type="button" class="code-copy" aria-label="Copy code" @click="copy($el)" v-text="copied === 'code-7' ? 'Copied' : 'Copy'">Copy</button></div><pre class="shiki shiki-themes light-plus dark-plus" style="--shiki-light:#000000;--shiki-dark:#D4D4D4;--shiki-light-bg:#FFFFFF;--shiki-dark-bg:#1E1E1E" tabindex="0" aria-label="Terminal code example"><code><span class="line"><span style="--shiki-light:#795E26;--shiki-dark:#DCDCAA">yarn</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178"> add</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178"> numberparrot</span></span></code></pre></div>
+  </div>
+  <div role="tabpanel" id="pm-1-bun-panel" aria-labelledby="pm-1-bun" style="display:none" v-show="pm === 'bun'">
+<div class="code-frame" id="code-8" data-lang="sh"><div class="code-bar"><span class="code-tab">Terminal</span><button type="button" class="code-copy" aria-label="Copy code" @click="copy($el)" v-text="copied === 'code-8' ? 'Copied' : 'Copy'">Copy</button></div><pre class="shiki shiki-themes light-plus dark-plus" style="--shiki-light:#000000;--shiki-dark:#D4D4D4;--shiki-light-bg:#FFFFFF;--shiki-dark-bg:#1E1E1E" tabindex="0" aria-label="Terminal code example"><code><span class="line"><span style="--shiki-light:#795E26;--shiki-dark:#DCDCAA">bun</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178"> add</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178"> numberparrot</span></span></code></pre></div>
+  </div>
+</div>
+<p>Zero dependencies, ESM and CommonJS, TypeScript types included. Works in Node.js 18+, Deno, Bun and browsers. <a href="./">Try it in the playground</a>.</p>
+</article>
+<h2>More guides</h2>
+<ul class="guides">
+  <li><a href="parsefloat-comma-decimal-separator.html"><strong>parseFloat with a Comma Decimal Separator: Why It Returns the Wrong Number</strong><span>Why parseFloat returns 1.234 for 1.234,56, and the fix.</span></a></li>
+  <li><a href="parse-localized-number-javascript.html"><strong>Parse a Localized Number in JavaScript (Any Locale, Using Intl)</strong><span>Read back what toLocaleString and Intl.NumberFormat write.</span></a></li>
+  <li><a href="parse-currency-string-javascript.html"><strong>Parse a Currency String to a Number in JavaScript (R$, €, ₹, CHF)</strong><span>Amount and ISO code from R$ 1.234,56, € and ₹ strings.</span></a></li>
+  <li><a href="arabic-digits-to-number-javascript.html"><strong>Convert Arabic and Persian Digits to a Number in JavaScript</strong><span>١٬٢٣٤٫٥٦ and ۱۲۳٫۴۵ to real numbers.</span></a></li>
+  <li><a href="intl-numberformat-parse.html"><strong>Intl.NumberFormat Parse: How to Reverse Intl Number Formatting</strong><span>The missing reverse of Intl.NumberFormat#format.</span></a></li>
+  <li><a href="numeral-js-alternative.html"><strong>numeral.js Alternative for Parsing Localized Numbers</strong><span>Replace numeral().value() with locale aware parsing.</span></a></li>
+</ul>
+    </div>
+  </main>
+  <footer class="site">
+    <div class="container">
+      <img src="img/mascot.svg" width="32" height="32" alt="">
+      <span>numberparrot is MIT licensed, made by <a href="https://github.com/kwy404">Alexandre Kohler</a>.</span>
+      <a href="https://github.com/kwy404/numberparrot">Source on GitHub</a>
+      <a href="https://www.npmjs.com/package/numberparrot">npm</a>
+      <span>Interactive parts built with <a href="https://github.com/kwy404/Voodoo.js">Voodoo.js</a>.</span>
+    </div>
+  </footer>
+</body>
+</html>

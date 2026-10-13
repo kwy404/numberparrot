@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Convert Arabic and Persian Digits to a Number in JavaScript | numberparrot</title>
+  <meta name="description" content="Convert Arabic-Indic (٠١٢٣), Persian (۰۱۲۳), Devanagari, Thai and full width digits to JavaScript numbers, including the Arabic decimal and thousands separators.">
+  <link rel="canonical" href="https://kwy404.github.io/numberparrot/arabic-digits-to-number-javascript.html">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <meta name="theme-color" content="#2FBF71">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="numberparrot">
+  <meta property="og:title" content="Convert Arabic and Persian Digits to a Number in JavaScript | numberparrot">
+  <meta property="og:description" content="Convert Arabic-Indic (٠١٢٣), Persian (۰۱۲۳), Devanagari, Thai and full width digits to JavaScript numbers, including the Arabic decimal and thousands separators.">
+  <meta property="og:url" content="https://kwy404.github.io/numberparrot/arabic-digits-to-number-javascript.html">
+  <meta property="og:image" content="https://kwy404.github.io/numberparrot/og.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="numberparrot: parse localized numbers and currency strings in JavaScript">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Convert Arabic and Persian Digits to a Number in JavaScript | numberparrot">
+  <meta name="twitter:description" content="Convert Arabic-Indic (٠١٢٣), Persian (۰۱۲۳), Devanagari, Thai and full width digits to JavaScript numbers, including the Arabic decimal and thousands separators.">
+  <meta name="twitter:image" content="https://kwy404.github.io/numberparrot/og.png">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"Convert Arabic and Persian Digits to a Number in JavaScript","description":"Convert Arabic-Indic (٠١٢٣), Persian (۰۱۲۳), Devanagari, Thai and full width digits to JavaScript numbers, including the Arabic decimal and thousands separators.","url":"https://kwy404.github.io/numberparrot/arabic-digits-to-number-javascript.html","image":"https://kwy404.github.io/numberparrot/og.png","datePublished":"2026-10-12","dateModified":"2026-10-12","inLanguage":"en","author":{"@type":"Person","name":"Alexandre Kohler","url":"https://github.com/kwy404"},"publisher":{"@type":"Person","name":"Alexandre Kohler","url":"https://github.com/kwy404"},"mainEntityOfPage":"https://kwy404.github.io/numberparrot/arabic-digits-to-number-javascript.html","about":{"@type":"SoftwareSourceCode","name":"numberparrot","codeRepository":"https://github.com/kwy404/numberparrot","programmingLanguage":"TypeScript"}}</script>
+  <script>try{var t=localStorage.getItem("np-theme");if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/voodoojs@0.13.0/dist/voodoo.full.min.js" data-manual defer></script>
+  <script type="module" src="app.js"></script>
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+  <header class="site">
+    <div class="container">
+      <a class="brand" href="./"><img src="favicon.svg" width="32" height="32" alt=""><span>number<b>parrot</b></span></a>
+      <nav class="site" aria-label="Main">
+        <a href="./">Playground</a>
+        <a href="convert-string-with-comma-to-number-javascript.html">Comma to number</a>
+        <a href="parsefloat-comma-decimal-separator.html">parseFloat and commas</a>
+        <a href="parse-localized-number-javascript.html">Localized numbers</a>
+        <a href="parse-currency-string-javascript.html">Currency strings</a>
+        <a href="https://github.com/kwy404/numberparrot">GitHub</a>
+        <button class="theme-toggle" type="button" :aria-pressed="theme === 'dark' ? 'true' : 'false'" @click="toggleTheme()" v-text="theme === 'dark' ? 'Light theme' : 'Dark theme'">Theme</button>
+      </nav>
+    </div>
+  </header>
+  <main id="main">
+    <div class="container">
+
+<p class="breadcrumb"><a href="./">numberparrot</a> / Guides</p>
+<article>
+<h1>Convert Arabic and Persian Digits to a Number in JavaScript</h1>
+
+<p class="lead">Arabic-Indic and Persian digits are real digits, and <code>Intl.NumberFormat</code> prints them by default for locales like ar-EG and fa-IR. JavaScript cannot read them back.</p>
+
+<h2>The problem</h2>
+<div class="code-frame" id="code-1" data-lang="ts"><div class="code-bar"><span class="code-tab">example.ts</span><button type="button" class="code-copy" aria-label="Copy code" @click="copy($el)" v-text="copied === 'code-1' ? 'Copied' : 'Copy'">Copy</button></div><pre class="shiki shiki-themes light-plus dark-plus" style="--shiki-light:#000000;--shiki-dark:#D4D4D4;--shiki-light-bg:#FFFFFF;--shiki-dark-bg:#1E1E1E" tabindex="0" aria-label="example.ts code example"><code><span class="line"><span style="--shiki-light:#0000FF;--shiki-dark:#569CD6">const</span><span style="--shiki-light:#0070C1;--shiki-dark:#4FC1FF"> text</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4"> = </span><span style="--shiki-light:#0000FF;--shiki-dark:#569CD6">new</span><span style="--shiki-light:#001080;--shiki-dark:#9CDCFE"> Intl</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">.</span><span style="--shiki-light:#795E26;--shiki-dark:#DCDCAA">NumberFormat</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">(</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178">"ar-EG"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">).</span><span style="--shiki-light:#795E26;--shiki-dark:#DCDCAA">format</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">(</span><span style="--shiki-light:#098658;--shiki-dark:#B5CEA8">1234.56</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">); </span><span style="--shiki-light:#008000;--shiki-dark:#6A9955">// "١٬٢٣٤٫٥٦"</span></span>
+<span class="line"><span style="--shiki-light:#795E26;--shiki-dark:#DCDCAA">Number</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">(</span><span style="--shiki-light:#001080;--shiki-dark:#9CDCFE">text</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">);     </span><span style="--shiki-light:#008000;--shiki-dark:#6A9955">// NaN</span></span>
+<span class="line"><span style="--shiki-light:#795E26;--shiki-dark:#DCDCAA">parseFloat</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">(</span><span style="--shiki-light:#001080;--shiki-dark:#9CDCFE">text</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">); </span><span style="--shiki-light:#008000;--shiki-dark:#6A9955">// NaN</span></span>
+<span class="line"><span style="--shiki-light:#795E26;--shiki-dark:#DCDCAA">Number</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">(</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178">"١٢٣"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">);    </span><span style="--shiki-light:#008000;--shiki-dark:#6A9955">// NaN</span></span></code></pre></div>
+
+<h2>The usual trick and its gaps</h2>
+<p>A common snippet maps each digit with its char code:</p>
+<div class="code-frame" id="code-2" data-lang="ts"><div class="code-bar"><span class="code-tab">example.ts</span><button type="button" class="code-copy" aria-label="Copy code" @click="copy($el)" v-text="copied === 'code-2' ? 'Copied' : 'Copy'">Copy</button></div><pre class="shiki shiki-themes light-plus dark-plus" style="--shiki-light:#000000;--shiki-dark:#D4D4D4;--shiki-light-bg:#FFFFFF;--shiki-dark-bg:#1E1E1E" tabindex="0" aria-label="example.ts code example"><code><span class="line"><span style="--shiki-light:#0000FF;--shiki-dark:#569CD6">const</span><span style="--shiki-light:#795E26;--shiki-dark:#DCDCAA"> toLatin</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4"> = (</span><span style="--shiki-light:#001080;--shiki-dark:#9CDCFE">s</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">) </span><span style="--shiki-light:#0000FF;--shiki-dark:#569CD6">=></span></span>
+<span class="line"><span style="--shiki-light:#001080;--shiki-dark:#9CDCFE">  s</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">.</span><span style="--shiki-light:#795E26;--shiki-dark:#DCDCAA">replace</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">(</span><span style="--shiki-light:#811F3F;--shiki-dark:#D16969">/</span><span style="--shiki-light:#D16969;--shiki-dark:#CE9178">[</span><span style="--shiki-light:#811F3F;--shiki-dark:#D16969">٠-٩</span><span style="--shiki-light:#D16969;--shiki-dark:#CE9178">]</span><span style="--shiki-light:#811F3F;--shiki-dark:#D16969">/</span><span style="--shiki-light:#0000FF;--shiki-dark:#569CD6">g</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">, (</span><span style="--shiki-light:#001080;--shiki-dark:#9CDCFE">d</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">) </span><span style="--shiki-light:#0000FF;--shiki-dark:#569CD6">=></span><span style="--shiki-light:#001080;--shiki-dark:#9CDCFE"> d</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">.</span><span style="--shiki-light:#795E26;--shiki-dark:#DCDCAA">charCodeAt</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">(</span><span style="--shiki-light:#098658;--shiki-dark:#B5CEA8">0</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">) - </span><span style="--shiki-light:#098658;--shiki-dark:#B5CEA8">0x0660</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">)</span></span>
+<span class="line"><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">   .</span><span style="--shiki-light:#795E26;--shiki-dark:#DCDCAA">replace</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">(</span><span style="--shiki-light:#811F3F;--shiki-dark:#D16969">/</span><span style="--shiki-light:#D16969;--shiki-dark:#CE9178">[</span><span style="--shiki-light:#811F3F;--shiki-dark:#D16969">۰-۹</span><span style="--shiki-light:#D16969;--shiki-dark:#CE9178">]</span><span style="--shiki-light:#811F3F;--shiki-dark:#D16969">/</span><span style="--shiki-light:#0000FF;--shiki-dark:#569CD6">g</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">, (</span><span style="--shiki-light:#001080;--shiki-dark:#9CDCFE">d</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">) </span><span style="--shiki-light:#0000FF;--shiki-dark:#569CD6">=></span><span style="--shiki-light:#001080;--shiki-dark:#9CDCFE"> d</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">.</span><span style="--shiki-light:#795E26;--shiki-dark:#DCDCAA">charCodeAt</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">(</span><span style="--shiki-light:#098658;--shiki-dark:#B5CEA8">0</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">) - </span><span style="--shiki-light:#098658;--shiki-dark:#B5CEA8">0x06f0</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">);</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#795E26;--shiki-dark:#DCDCAA">Number</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">(</span><span style="--shiki-light:#795E26;--shiki-dark:#DCDCAA">toLatin</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">(</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178">"١٢٣"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">));        </span><span style="--shiki-light:#008000;--shiki-dark:#6A9955">// 123, fine</span></span>
+<span class="line"><span style="--shiki-light:#795E26;--shiki-dark:#DCDCAA">Number</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">(</span><span style="--shiki-light:#795E26;--shiki-dark:#DCDCAA">toLatin</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">(</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178">"١٬٢٣٤٫٥٦"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">));   </span><span style="--shiki-light:#008000;--shiki-dark:#6A9955">// NaN: ٬ and ٫ are still there</span></span></code></pre></div>
+<p>It also misses the Arabic decimal separator <code>٫</code> (U+066B), the Arabic thousands separator <code>٬</code> (U+066C), the invisible bidi marks that Intl places around the minus sign, the Arabic percent sign <code>٪</code>, and every other script: Devanagari, Bengali, Thai, full width and more.</p>
+
+<h2>The fix</h2>
+<div class="code-frame" id="code-3" data-lang="ts"><div class="code-bar"><span class="code-tab">example.ts</span><button type="button" class="code-copy" aria-label="Copy code" @click="copy($el)" v-text="copied === 'code-3' ? 'Copied' : 'Copy'">Copy</button></div><pre class="shiki shiki-themes light-plus dark-plus" style="--shiki-light:#000000;--shiki-dark:#D4D4D4;--shiki-light-bg:#FFFFFF;--shiki-dark-bg:#1E1E1E" tabindex="0" aria-label="example.ts code example"><code><span class="line"><span style="--shiki-light:#AF00DB;--shiki-dark:#C586C0">import</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4"> { </span><span style="--shiki-light:#001080;--shiki-dark:#9CDCFE">parse</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4"> } </span><span style="--shiki-light:#AF00DB;--shiki-dark:#C586C0">from</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178"> "numberparrot"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#795E26;--shiki-dark:#DCDCAA">parse</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">(</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178">"١٬٢٣٤٫٥٦"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">, </span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178">"ar-EG"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">);      </span><span style="--shiki-light:#008000;--shiki-dark:#6A9955">// 1234.56</span></span>
+<span class="line"><span style="--shiki-light:#795E26;--shiki-dark:#DCDCAA">parse</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">(</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178">"۱۲۳٫۴۵"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">, </span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178">"fa-IR"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">);         </span><span style="--shiki-light:#008000;--shiki-dark:#6A9955">// 123.45</span></span>
+<span class="line"><span style="--shiki-light:#795E26;--shiki-dark:#DCDCAA">parse</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">(</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178">"١٥٪"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">, </span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178">"ar-EG"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">);            </span><span style="--shiki-light:#008000;--shiki-dark:#6A9955">// 0.15</span></span>
+<span class="line"><span style="--shiki-light:#795E26;--shiki-dark:#DCDCAA">parse</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">(</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178">"१२,३४,५६७.८९"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">, </span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178">"hi-IN"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">);   </span><span style="--shiki-light:#008000;--shiki-dark:#6A9955">// 1234567.89 (Devanagari)</span></span>
+<span class="line"><span style="--shiki-light:#795E26;--shiki-dark:#DCDCAA">parse</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">(</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178">"๑,๒๓๔.๕"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">, </span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178">"th-TH"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">);       </span><span style="--shiki-light:#008000;--shiki-dark:#6A9955">// 1234.5 (Thai)</span></span>
+<span class="line"><span style="--shiki-light:#795E26;--shiki-dark:#DCDCAA">parse</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">(</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178">"১,২৩৪.৫"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">, </span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178">"bn-BD"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">);        </span><span style="--shiki-light:#008000;--shiki-dark:#6A9955">// 1234.5 (Bengali)</span></span>
+<span class="line"><span style="--shiki-light:#795E26;--shiki-dark:#DCDCAA">parse</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">(</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178">"１２３４．５"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">, </span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178">"ja-JP"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">);    </span><span style="--shiki-light:#008000;--shiki-dark:#6A9955">// 1234.5 (full width)</span></span></code></pre></div>
+<p>Every Unicode decimal digit is supported, whatever locale you pass. Text with mixed scripts works too: <code>parse("١٢٣", "en-US")</code> is <code>123</code>.</p>
+
+<h2>Normalize while the user types</h2>
+<div class="code-frame" id="code-4" data-lang="ts"><div class="code-bar"><span class="code-tab">example.ts</span><button type="button" class="code-copy" aria-label="Copy code" @click="copy($el)" v-text="copied === 'code-4' ? 'Copied' : 'Copy'">Copy</button></div><pre class="shiki shiki-themes light-plus dark-plus" style="--shiki-light:#000000;--shiki-dark:#D4D4D4;--shiki-light-bg:#FFFFFF;--shiki-dark-bg:#1E1E1E" tabindex="0" aria-label="example.ts code example"><code><span class="line"><span style="--shiki-light:#AF00DB;--shiki-dark:#C586C0">import</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4"> { </span><span style="--shiki-light:#001080;--shiki-dark:#9CDCFE">normalizeInput</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4"> } </span><span style="--shiki-light:#AF00DB;--shiki-dark:#C586C0">from</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178"> "numberparrot"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#795E26;--shiki-dark:#DCDCAA">normalizeInput</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">(</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178">"١٢٫٥"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">, </span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178">"ar-EG"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">);</span></span>
+<span class="line"><span style="--shiki-light:#008000;--shiki-dark:#6A9955">// { text: "12٫5", value: 12.5, valid: true, complete: true }</span></span></code></pre></div>
+
+<h2>Install</h2>
+<div class="install">
+  <div class="tabs" role="tablist" aria-label="Package manager">
+    <button type="button" role="tab" id="pm-5-npm" aria-controls="pm-5-npm-panel" aria-selected="true" :aria-selected="pm === 'npm' ? 'true' : 'false'" @click="setPm('npm')">npm</button>
+    <button type="button" role="tab" id="pm-5-pnpm" aria-controls="pm-5-pnpm-panel" aria-selected="false" :aria-selected="pm === 'pnpm' ? 'true' : 'false'" @click="setPm('pnpm')">pnpm</button>
+    <button type="button" role="tab" id="pm-5-yarn" aria-controls="pm-5-yarn-panel" aria-selected="false" :aria-selected="pm === 'yarn' ? 'true' : 'false'" @click="setPm('yarn')">yarn</button>
+    <button type="button" role="tab" id="pm-5-bun" aria-controls="pm-5-bun-panel" aria-selected="false" :aria-selected="pm === 'bun' ? 'true' : 'false'" @click="setPm('bun')">bun</button>
+  </div>
+  <div role="tabpanel" id="pm-5-npm-panel" aria-labelledby="pm-5-npm" v-show="pm === 'npm'">
+<div class="code-frame" id="code-5" data-lang="sh"><div class="code-bar"><span class="code-tab">Terminal</span><button type="button" class="code-copy" aria-label="Copy code" @click="copy($el)" v-text="copied === 'code-5' ? 'Copied' : 'Copy'">Copy</button></div><pre class="shiki shiki-themes light-plus dark-plus" style="--shiki-light:#000000;--shiki-dark:#D4D4D4;--shiki-light-bg:#FFFFFF;--shiki-dark-bg:#1E1E1E" tabindex="0" aria-label="Terminal code example"><code><span class="line"><span style="--shiki-light:#795E26;--shiki-dark:#DCDCAA">npm</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178"> install</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178"> numberparrot</span></span></code></pre></div>
+  </div>
+  <div role="tabpanel" id="pm-5-pnpm-panel" aria-labelledby="pm-5-pnpm" style="display:none" v-show="pm === 'pnpm'">
+<div class="code-frame" id="code-6" data-lang="sh"><div class="code-bar"><span class="code-tab">Terminal</span><button type="button" class="code-copy" aria-label="Copy code" @click="copy($el)" v-text="copied === 'code-6' ? 'Copied' : 'Copy'">Copy</button></div><pre class="shiki shiki-themes light-plus dark-plus" style="--shiki-light:#000000;--shiki-dark:#D4D4D4;--shiki-light-bg:#FFFFFF;--shiki-dark-bg:#1E1E1E" tabindex="0" aria-label="Terminal code example"><code><span class="line"><span style="--shiki-light:#795E26;--shiki-dark:#DCDCAA">pnpm</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178"> add</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178"> numberparrot</span></span></code></pre></div>
+  </div>
+  <div role="tabpanel" id="pm-5-yarn-panel" aria-labelledby="pm-5-yarn" style="display:none" v-show="pm === 'yarn'">
+<div class="code-frame" id="code-7" data-lang="sh"><div class="code-bar"><span class="code-tab">Terminal</span><button type="button" class="code-copy" aria-label="Copy code" @click="copy($el)" v-text="copied === 'code-7' ? 'Copied' : 'Copy'">Copy</button></div><pre class="shiki shiki-themes light-plus dark-plus" style="--shiki-light:#000000;--shiki-dark:#D4D4D4;--shiki-light-bg:#FFFFFF;--shiki-dark-bg:#1E1E1E" tabindex="0" aria-label="Terminal code example"><code><span class="line"><span style="--shiki-light:#795E26;--shiki-dark:#DCDCAA">yarn</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178"> add</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178"> numberparrot</span></span></code></pre></div>
+  </div>
+  <div role="tabpanel" id="pm-5-bun-panel" aria-labelledby="pm-5-bun" style="display:none" v-show="pm === 'bun'">
+<div class="code-frame" id="code-8" data-lang="sh"><div class="code-bar"><span class="code-tab">Terminal</span><button type="button" class="code-copy" aria-label="Copy code" @click="copy($el)" v-text="copied === 'code-8' ? 'Copied' : 'Copy'">Copy</button></div><pre class="shiki shiki-themes light-plus dark-plus" style="--shiki-light:#000000;--shiki-dark:#D4D4D4;--shiki-light-bg:#FFFFFF;--shiki-dark-bg:#1E1E1E" tabindex="0" aria-label="Terminal code example"><code><span class="line"><span style="--shiki-light:#795E26;--shiki-dark:#DCDCAA">bun</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178"> add</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178"> numberparrot</span></span></code></pre></div>
+  </div>
+</div>
+<p>Zero dependencies, ESM and CommonJS, TypeScript types included. Works in Node.js 18+, Deno, Bun and browsers. <a href="./">Try it in the playground</a>.</p>
+</article>
+<h2>More guides</h2>
+<ul class="guides">
+  <li><a href="convert-string-with-comma-to-number-javascript.html"><strong>Convert a String with a Comma to a Number in JavaScript</strong><span>Turn &quot;1.234,56&quot; into 1234.56 without replace() hacks.</span></a></li>
+  <li><a href="parsefloat-comma-decimal-separator.html"><strong>parseFloat with a Comma Decimal Separator: Why It Returns the Wrong Number</strong><span>Why parseFloat returns 1.234 for 1.234,56, and the fix.</span></a></li>
+  <li><a href="parse-localized-number-javascript.html"><strong>Parse a Localized Number in JavaScript (Any Locale, Using Intl)</strong><span>Read back what toLocaleString and Intl.NumberFormat write.</span></a></li>
+  <li><a href="parse-currency-string-javascript.html"><strong>Parse a Currency String to a Number in JavaScript (R$, €, ₹, CHF)</strong><span>Amount and ISO code from R$ 1.234,56, € and ₹ strings.</span></a></li>
+  <li><a href="intl-numberformat-parse.html"><strong>Intl.NumberFormat Parse: How to Reverse Intl Number Formatting</strong><span>The missing reverse of Intl.NumberFormat#format.</span></a></li>
+  <li><a href="numeral-js-alternative.html"><strong>numeral.js Alternative for Parsing Localized Numbers</strong><span>Replace numeral().value() with locale aware parsing.</span></a></li>
+</ul>
+    </div>
+  </main>
+  <footer class="site">
+    <div class="container">
+      <img src="img/mascot.svg" width="32" height="32" alt="">
+      <span>numberparrot is MIT licensed, made by <a href="https://github.com/kwy404">Alexandre Kohler</a>.</span>
+      <a href="https://github.com/kwy404/numberparrot">Source on GitHub</a>
+      <a href="https://www.npmjs.com/package/numberparrot">npm</a>
+      <span>Interactive parts built with <a href="https://github.com/kwy404/Voodoo.js">Voodoo.js</a>.</span>
+    </div>
+  </footer>
+</body>
+</html>

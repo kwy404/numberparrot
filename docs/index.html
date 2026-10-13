@@ -1,0 +1,191 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>numberparrot: parse localized numbers and currency strings in JavaScript</title>
+  <meta name="description" content="parseFloat(&quot;1.234,56&quot;) returns 1.234. numberparrot returns 1234.56. Parse numbers and currency strings written in any locale, with Intl data and zero dependencies.">
+  <link rel="canonical" href="https://kwy404.github.io/numberparrot/">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <meta name="theme-color" content="#2FBF71">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="numberparrot">
+  <meta property="og:title" content="numberparrot: parse localized numbers and currency strings in JavaScript">
+  <meta property="og:description" content="parseFloat(&quot;1.234,56&quot;) returns 1.234. numberparrot returns 1234.56. Parse numbers and currency strings written in any locale, with Intl data and zero dependencies.">
+  <meta property="og:url" content="https://kwy404.github.io/numberparrot/">
+  <meta property="og:image" content="https://kwy404.github.io/numberparrot/og.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="numberparrot: parse localized numbers and currency strings in JavaScript">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="numberparrot: parse localized numbers and currency strings in JavaScript">
+  <meta name="twitter:description" content="parseFloat(&quot;1.234,56&quot;) returns 1.234. numberparrot returns 1234.56. Parse numbers and currency strings written in any locale, with Intl data and zero dependencies.">
+  <meta name="twitter:image" content="https://kwy404.github.io/numberparrot/og.png">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"SoftwareSourceCode","name":"numberparrot","description":"Parse localized number and currency strings into JavaScript numbers for any locale, using Intl.NumberFormat data. Zero dependencies.","url":"https://kwy404.github.io/numberparrot/","codeRepository":"https://github.com/kwy404/numberparrot","programmingLanguage":["TypeScript","JavaScript"],"runtimePlatform":["Node.js","Deno","Bun","Web browsers"],"license":"https://opensource.org/licenses/MIT","author":{"@type":"Person","name":"Alexandre Kohler","url":"https://github.com/kwy404"},"version":"0.1.0","image":"https://kwy404.github.io/numberparrot/og.png","keywords":"parse localized number javascript, convert string with comma to number javascript, parse currency string to number javascript, parseFloat comma decimal, intl number parse, numeral.js alternative"}</script>
+  <script>try{var t=localStorage.getItem("np-theme");if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/voodoojs@0.13.0/dist/voodoo.full.min.js" data-manual defer></script>
+  <script type="module" src="app.js"></script>
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+  <header class="site">
+    <div class="container">
+      <a class="brand" href="./"><img src="favicon.svg" width="32" height="32" alt=""><span>number<b>parrot</b></span></a>
+      <nav class="site" aria-label="Main">
+        <a href="./" aria-current="page">Playground</a>
+        <a href="convert-string-with-comma-to-number-javascript.html">Comma to number</a>
+        <a href="parsefloat-comma-decimal-separator.html">parseFloat and commas</a>
+        <a href="parse-localized-number-javascript.html">Localized numbers</a>
+        <a href="parse-currency-string-javascript.html">Currency strings</a>
+        <a href="https://github.com/kwy404/numberparrot">GitHub</a>
+        <button class="theme-toggle" type="button" :aria-pressed="theme === 'dark' ? 'true' : 'false'" @click="toggleTheme()" v-text="theme === 'dark' ? 'Light theme' : 'Dark theme'">Theme</button>
+      </nav>
+    </div>
+  </header>
+  <main id="main">
+    <div class="container">
+
+<section class="hero" aria-labelledby="title">
+  <div>
+    <h1 id="title">Parse localized numbers and currency strings in JavaScript</h1>
+    <p class="lead"><code>parseFloat("1.234,56")</code> returns <code class="bad">1.234</code>. numberparrot returns <code class="good">1234.56</code>. It is the missing parser for <code>Intl.NumberFormat</code>: zero dependencies, every locale.</p>
+    <div class="cta">
+      <a class="button primary" href="#playground">Try it</a>
+      <a class="button" href="https://github.com/kwy404/numberparrot#readme">Read the docs</a>
+      <a class="button" href="https://www.npmjs.com/package/numberparrot">npm install numberparrot</a>
+    </div>
+  </div>
+  <img src="img/mascot.svg" width="180" height="180" alt="Pico, the numberparrot mascot: a friendly green parrot that repeats numbers in any language">
+</section>
+
+<section id="playground" class="card playground" aria-labelledby="pg-title" v-data="playground()" v-effect="r = analyze(text, locale)">
+  <h2 id="pg-title" style="margin-top:0">Playground: parseFloat vs numberparrot</h2>
+  <form id="pg-form" @submit.prevent="">
+    <div>
+      <label for="pg-value">Number as text</label>
+      <input id="pg-value" value="1.234,56" v-model="text" autocomplete="off" spellcheck="false">
+    </div>
+    <div>
+      <label for="pg-locale">Locale</label>
+      <select id="pg-locale" v-model="locale">
+        <option value="auto">Detect automatically</option>
+        <option value="en-US">en-US English (US)</option>
+        <option value="pt-BR" selected>pt-BR Portuguese (Brazil)</option>
+        <option value="de-DE">de-DE German</option>
+        <option value="fr-FR">fr-FR French</option>
+        <option value="de-CH">de-CH German (Switzerland)</option>
+        <option value="en-IN">en-IN English (India)</option>
+        <option value="hi-IN">hi-IN Hindi</option>
+        <option value="ar-EG">ar-EG Arabic (Egypt)</option>
+        <option value="fa-IR">fa-IR Persian</option>
+        <option value="th-TH">th-TH Thai</option>
+        <option value="ja-JP">ja-JP Japanese</option>
+        <option value="es-ES">es-ES Spanish</option>
+        <option value="it-IT">it-IT Italian</option>
+        <option value="ru-RU">ru-RU Russian</option>
+        <option value="pl-PL">pl-PL Polish</option>
+        <option value="sv-SE">sv-SE Swedish</option>
+        <option value="tr-TR">tr-TR Turkish</option>
+        <option value="en-CA">en-CA English (Canada)</option>
+        <option value="es-MX">es-MX Spanish (Mexico)</option>
+      </select>
+    </div>
+  </form>
+  <div class="examples" aria-label="Examples">
+    <button type="button" data-example="1.234,56" data-locale="pt-BR" @click="text = $el.dataset.example; locale = $el.dataset.locale">1.234,56</button>
+    <button type="button" data-example="R$ 1.234,56" data-locale="pt-BR" @click="text = $el.dataset.example; locale = $el.dataset.locale">R$ 1.234,56</button>
+    <button type="button" data-example="1 234,56 €" data-locale="fr-FR" @click="text = $el.dataset.example; locale = $el.dataset.locale">1 234,56 €</button>
+    <button type="button" data-example="CHF 1'234.50" data-locale="de-CH" @click="text = $el.dataset.example; locale = $el.dataset.locale">CHF 1'234.50</button>
+    <button type="button" data-example="₹12,34,567.89" data-locale="en-IN" @click="text = $el.dataset.example; locale = $el.dataset.locale">₹12,34,567.89</button>
+    <button type="button" data-example="١٬٢٣٤٫٥٦" data-locale="ar-EG" @click="text = $el.dataset.example; locale = $el.dataset.locale">١٬٢٣٤٫٥٦</button>
+    <button type="button" data-example="۱۲۳٫۴۵" data-locale="fa-IR" @click="text = $el.dataset.example; locale = $el.dataset.locale">۱۲۳٫۴۵</button>
+    <button type="button" data-example="(1.234,56)" data-locale="de-DE" @click="text = $el.dataset.example; locale = $el.dataset.locale">(1.234,56)</button>
+    <button type="button" data-example="−1 234,56 kr" data-locale="sv-SE" @click="text = $el.dataset.example; locale = $el.dataset.locale">−1 234,56 kr</button>
+    <button type="button" data-example="%15" data-locale="tr-TR" @click="text = $el.dataset.example; locale = $el.dataset.locale">%15</button>
+    <button type="button" data-example="1,234" data-locale="auto" @click="text = $el.dataset.example; locale = $el.dataset.locale">1,234</button>
+  </div>
+  <div class="results" aria-live="polite">
+    <div class="result" data-state="wrong" :data-state="r.pf.state"><span class="label">parseFloat(text)</span><output v-text="r.pf.value">1.234</output><small v-text="r.pf.note">wrong number</small></div>
+    <div class="result" data-state="wrong" :data-state="r.num.state"><span class="label">Number(text)</span><output v-text="r.num.value">NaN</output><small v-text="r.num.note">wrong number</small></div>
+    <div class="result" data-state="right" :data-state="r.parse.state"><span class="label">parse(text, locale)</span><output v-text="r.parse.value">1234.56</output><small v-text="r.parse.note">locale pt-BR: decimal &quot;,&quot;, group &quot;.&quot;</small></div>
+    <div class="result" data-state="right" :data-state="r.currency.state"><span class="label">parseCurrency(text, locale)</span><output v-text="r.currency.value">1234.56</output><small v-text="r.currency.note">no currency in the input</small></div>
+    <div class="result" data-state="right" :data-state="r.detect.state"><span class="label">detect(text)</span><output v-text="r.detect.value">1234.56</output><small v-text="r.detect.note">confidence 0.95. Both &quot;.&quot; and &quot;,&quot; appear; the last one, &quot;,&quot;, is the decimal separator</small></div>
+    <div class="result"><span class="label">round trip with Intl</span><output v-text="r.format.value">1.234,56</output><small v-text="r.format.note">Intl.NumberFormat(&quot;pt-BR&quot;).format(result)</small></div>
+  </div>
+</section>
+
+<h2>Features</h2>
+<div class="features">
+  <div class="feature"><img src="img/icons/locales.svg" width="48" height="48" alt=""><div><h3>Any locale</h3><p>Separators, digits and symbols come from Intl.NumberFormat for every locale your runtime knows.</p></div></div>
+  <div class="feature"><img src="img/icons/currency.svg" width="48" height="48" alt=""><div><h3>Currency</h3><p>Symbols and ISO codes on either side: R$ 1.234,56, 1 234,56 €, CHF 1'234.50.</p></div></div>
+  <div class="feature"><img src="img/icons/digits.svg" width="48" height="48" alt=""><div><h3>Any digits</h3><p>Arabic-Indic, Persian, Devanagari, Bengali, Thai, full width and every Unicode digit.</p></div></div>
+  <div class="feature"><img src="img/icons/accounting.svg" width="48" height="48" alt=""><div><h3>Accounting negatives</h3><p>(1.234,56), trailing minus and every minus sign look alike.</p></div></div>
+  <div class="feature"><img src="img/icons/detection.svg" width="48" height="48" alt=""><div><h3>Detection</h3><p>detect() finds the decimal separator and flags real ambiguity like 1,234.</p></div></div>
+  <div class="feature"><img src="img/icons/money.svg" width="48" height="48" alt=""><div><h3>Money safety</h3><p>toMinorUnits gives exact integer cents: 0,29 is 29, never 28.999999999999996.</p></div></div>
+  <div class="feature"><img src="img/icons/input.svg" width="48" height="48" alt=""><div><h3>Form input</h3><p>normalizeInput() cleans fields while typing and keeps partial values like 1.234, valid.</p></div></div>
+</div>
+
+<h2>parseFloat vs numberparrot, side by side</h2>
+<img class="demo" src="img/demo.svg" width="900" height="420" loading="lazy" alt="Animated comparison: 1.234.567,89 in pt-BR, 1'234'567.89 in de-CH, 12,34,567.89 in en-IN and Arabic-Indic digits in ar-EG all parse to 1234567.89 with numberparrot, while parseFloat returns 1.234, 1, 12 and NaN">
+
+<h2>Install</h2>
+<div class="install">
+  <div class="tabs" role="tablist" aria-label="Package manager">
+    <button type="button" role="tab" id="pm-8-npm" aria-controls="pm-8-npm-panel" aria-selected="true" :aria-selected="pm === 'npm' ? 'true' : 'false'" @click="setPm('npm')">npm</button>
+    <button type="button" role="tab" id="pm-8-pnpm" aria-controls="pm-8-pnpm-panel" aria-selected="false" :aria-selected="pm === 'pnpm' ? 'true' : 'false'" @click="setPm('pnpm')">pnpm</button>
+    <button type="button" role="tab" id="pm-8-yarn" aria-controls="pm-8-yarn-panel" aria-selected="false" :aria-selected="pm === 'yarn' ? 'true' : 'false'" @click="setPm('yarn')">yarn</button>
+    <button type="button" role="tab" id="pm-8-bun" aria-controls="pm-8-bun-panel" aria-selected="false" :aria-selected="pm === 'bun' ? 'true' : 'false'" @click="setPm('bun')">bun</button>
+  </div>
+  <div role="tabpanel" id="pm-8-npm-panel" aria-labelledby="pm-8-npm" v-show="pm === 'npm'">
+<div class="code-frame" id="code-1" data-lang="sh"><div class="code-bar"><span class="code-tab">Terminal</span><button type="button" class="code-copy" aria-label="Copy code" @click="copy($el)" v-text="copied === 'code-1' ? 'Copied' : 'Copy'">Copy</button></div><pre class="shiki shiki-themes light-plus dark-plus" style="--shiki-light:#000000;--shiki-dark:#D4D4D4;--shiki-light-bg:#FFFFFF;--shiki-dark-bg:#1E1E1E" tabindex="0" aria-label="Terminal code example"><code><span class="line"><span style="--shiki-light:#795E26;--shiki-dark:#DCDCAA">npm</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178"> install</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178"> numberparrot</span></span></code></pre></div>
+  </div>
+  <div role="tabpanel" id="pm-8-pnpm-panel" aria-labelledby="pm-8-pnpm" style="display:none" v-show="pm === 'pnpm'">
+<div class="code-frame" id="code-2" data-lang="sh"><div class="code-bar"><span class="code-tab">Terminal</span><button type="button" class="code-copy" aria-label="Copy code" @click="copy($el)" v-text="copied === 'code-2' ? 'Copied' : 'Copy'">Copy</button></div><pre class="shiki shiki-themes light-plus dark-plus" style="--shiki-light:#000000;--shiki-dark:#D4D4D4;--shiki-light-bg:#FFFFFF;--shiki-dark-bg:#1E1E1E" tabindex="0" aria-label="Terminal code example"><code><span class="line"><span style="--shiki-light:#795E26;--shiki-dark:#DCDCAA">pnpm</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178"> add</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178"> numberparrot</span></span></code></pre></div>
+  </div>
+  <div role="tabpanel" id="pm-8-yarn-panel" aria-labelledby="pm-8-yarn" style="display:none" v-show="pm === 'yarn'">
+<div class="code-frame" id="code-3" data-lang="sh"><div class="code-bar"><span class="code-tab">Terminal</span><button type="button" class="code-copy" aria-label="Copy code" @click="copy($el)" v-text="copied === 'code-3' ? 'Copied' : 'Copy'">Copy</button></div><pre class="shiki shiki-themes light-plus dark-plus" style="--shiki-light:#000000;--shiki-dark:#D4D4D4;--shiki-light-bg:#FFFFFF;--shiki-dark-bg:#1E1E1E" tabindex="0" aria-label="Terminal code example"><code><span class="line"><span style="--shiki-light:#795E26;--shiki-dark:#DCDCAA">yarn</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178"> add</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178"> numberparrot</span></span></code></pre></div>
+  </div>
+  <div role="tabpanel" id="pm-8-bun-panel" aria-labelledby="pm-8-bun" style="display:none" v-show="pm === 'bun'">
+<div class="code-frame" id="code-4" data-lang="sh"><div class="code-bar"><span class="code-tab">Terminal</span><button type="button" class="code-copy" aria-label="Copy code" @click="copy($el)" v-text="copied === 'code-4' ? 'Copied' : 'Copy'">Copy</button></div><pre class="shiki shiki-themes light-plus dark-plus" style="--shiki-light:#000000;--shiki-dark:#D4D4D4;--shiki-light-bg:#FFFFFF;--shiki-dark-bg:#1E1E1E" tabindex="0" aria-label="Terminal code example"><code><span class="line"><span style="--shiki-light:#795E26;--shiki-dark:#DCDCAA">bun</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178"> add</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178"> numberparrot</span></span></code></pre></div>
+  </div>
+</div>
+<div class="code-frame" id="code-5" data-lang="ts"><div class="code-bar"><span class="code-tab">example.ts</span><button type="button" class="code-copy" aria-label="Copy code" @click="copy($el)" v-text="copied === 'code-5' ? 'Copied' : 'Copy'">Copy</button></div><pre class="shiki shiki-themes light-plus dark-plus" style="--shiki-light:#000000;--shiki-dark:#D4D4D4;--shiki-light-bg:#FFFFFF;--shiki-dark-bg:#1E1E1E" tabindex="0" aria-label="example.ts code example"><code><span class="line"><span style="--shiki-light:#AF00DB;--shiki-dark:#C586C0">import</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4"> { </span><span style="--shiki-light:#001080;--shiki-dark:#9CDCFE">parse</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">, </span><span style="--shiki-light:#001080;--shiki-dark:#9CDCFE">parseCurrency</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">, </span><span style="--shiki-light:#001080;--shiki-dark:#9CDCFE">detect</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">, </span><span style="--shiki-light:#001080;--shiki-dark:#9CDCFE">normalizeInput</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4"> } </span><span style="--shiki-light:#AF00DB;--shiki-dark:#C586C0">from</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178"> "numberparrot"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#795E26;--shiki-dark:#DCDCAA">parse</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">(</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178">"1.234,56"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">, </span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178">"pt-BR"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">);             </span><span style="--shiki-light:#008000;--shiki-dark:#6A9955">// 1234.56</span></span>
+<span class="line"><span style="--shiki-light:#795E26;--shiki-dark:#DCDCAA">parse</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">(</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178">"1'234.56"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">, </span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178">"de-CH"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">);             </span><span style="--shiki-light:#008000;--shiki-dark:#6A9955">// 1234.56</span></span>
+<span class="line"><span style="--shiki-light:#795E26;--shiki-dark:#DCDCAA">parse</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">(</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178">"12,34,567.89"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">, </span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178">"en-IN"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">);         </span><span style="--shiki-light:#008000;--shiki-dark:#6A9955">// 1234567.89</span></span>
+<span class="line"><span style="--shiki-light:#795E26;--shiki-dark:#DCDCAA">parse</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">(</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178">"١٬٢٣٤٫٥٦"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">, </span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178">"ar-EG"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">);             </span><span style="--shiki-light:#008000;--shiki-dark:#6A9955">// 1234.56</span></span>
+<span class="line"><span style="--shiki-light:#795E26;--shiki-dark:#DCDCAA">parse</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">(</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178">"(1.234,56)"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">, </span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178">"de-DE"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">);           </span><span style="--shiki-light:#008000;--shiki-dark:#6A9955">// -1234.56</span></span>
+<span class="line"><span style="--shiki-light:#795E26;--shiki-dark:#DCDCAA">parse</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">(</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178">"15%"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">, </span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178">"en-US"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">);                  </span><span style="--shiki-light:#008000;--shiki-dark:#6A9955">// 0.15</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#795E26;--shiki-dark:#DCDCAA">parseCurrency</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">(</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178">"R$ 1.234,56"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">, </span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178">"pt-BR"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">);  </span><span style="--shiki-light:#008000;--shiki-dark:#6A9955">// { amount: 1234.56, currency: "BRL", ... }</span></span>
+<span class="line"><span style="--shiki-light:#795E26;--shiki-dark:#DCDCAA">parseCurrency</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">(</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178">"0,29"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">, </span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178">"pt-BR"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">, { </span><span style="--shiki-light:#001080;--shiki-dark:#9CDCFE">toMinorUnits:</span><span style="--shiki-light:#0000FF;--shiki-dark:#569CD6"> true</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4"> }).</span><span style="--shiki-light:#001080;--shiki-dark:#9CDCFE">amount</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">; </span><span style="--shiki-light:#008000;--shiki-dark:#6A9955">// 29</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#795E26;--shiki-dark:#DCDCAA">detect</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">(</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178">"1,234"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">);                        </span><span style="--shiki-light:#008000;--shiki-dark:#6A9955">// { ambiguous: true, alternatives: [1234, 1.234], ... }</span></span>
+<span class="line"><span style="--shiki-light:#795E26;--shiki-dark:#DCDCAA">normalizeInput</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">(</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178">"1.234,"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">, </span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178">"pt-BR"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">);      </span><span style="--shiki-light:#008000;--shiki-dark:#6A9955">// { text: "1.234,", value: 1234, valid: true, complete: false }</span></span></code></pre></div>
+<p>Works in Node.js 18+, Deno, Bun and every modern browser. ESM and CommonJS builds, TypeScript types, about 6 kB gzipped for the whole library. The full API reference is in the <a href="https://github.com/kwy404/numberparrot#api-reference">README</a>.</p>
+
+<h2>Guides</h2>
+<ul class="guides">
+  <li><a href="convert-string-with-comma-to-number-javascript.html"><strong>Convert a String with a Comma to a Number in JavaScript</strong><span>Turn &quot;1.234,56&quot; into 1234.56 without replace() hacks.</span></a></li>
+  <li><a href="parsefloat-comma-decimal-separator.html"><strong>parseFloat with a Comma Decimal Separator: Why It Returns the Wrong Number</strong><span>Why parseFloat returns 1.234 for 1.234,56, and the fix.</span></a></li>
+  <li><a href="parse-localized-number-javascript.html"><strong>Parse a Localized Number in JavaScript (Any Locale, Using Intl)</strong><span>Read back what toLocaleString and Intl.NumberFormat write.</span></a></li>
+  <li><a href="parse-currency-string-javascript.html"><strong>Parse a Currency String to a Number in JavaScript (R$, €, ₹, CHF)</strong><span>Amount and ISO code from R$ 1.234,56, € and ₹ strings.</span></a></li>
+  <li><a href="arabic-digits-to-number-javascript.html"><strong>Convert Arabic and Persian Digits to a Number in JavaScript</strong><span>١٬٢٣٤٫٥٦ and ۱۲۳٫۴۵ to real numbers.</span></a></li>
+  <li><a href="intl-numberformat-parse.html"><strong>Intl.NumberFormat Parse: How to Reverse Intl Number Formatting</strong><span>The missing reverse of Intl.NumberFormat#format.</span></a></li>
+  <li><a href="numeral-js-alternative.html"><strong>numeral.js Alternative for Parsing Localized Numbers</strong><span>Replace numeral().value() with locale aware parsing.</span></a></li>
+</ul>
+    </div>
+  </main>
+  <footer class="site">
+    <div class="container">
+      <img src="img/mascot.svg" width="32" height="32" alt="">
+      <span>numberparrot is MIT licensed, made by <a href="https://github.com/kwy404">Alexandre Kohler</a>.</span>
+      <a href="https://github.com/kwy404/numberparrot">Source on GitHub</a>
+      <a href="https://www.npmjs.com/package/numberparrot">npm</a>
+      <span>Interactive parts built with <a href="https://github.com/kwy404/Voodoo.js">Voodoo.js</a>.</span>
+    </div>
+  </footer>
+</body>
+</html>

@@ -26,7 +26,9 @@ All notable changes to this project are documented here. The format follows
 - `isValid`, `createParser`, `normalizeInput` (form fields while typing) and
   `getLocaleInfo`.
 - ESM and CommonJS builds with type definitions, zero runtime dependencies.
-- Documentation site with a playground, mascot Pico and project artwork.
+- Documentation site with a live playground and seven guides. Interactive parts are
+  built with Voodoo.js and code examples are highlighted at build time with Shiki.
+- Mascot Pico and project artwork.
 
 [Unreleased]: https://github.com/kwy404/numberparrot/compare/v0.1.0...HEAD
 [0.1.0]: https://github.com/kwy404/numberparrot/releases/tag/v0.1.0

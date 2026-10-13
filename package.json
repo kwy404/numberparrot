@@ -78,6 +78,8 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "size": "node scripts/size.mjs",
+    "docs": "node scripts/build-assets.mjs && node scripts/build-docs.mjs && npm run docs:highlight",
+    "docs:highlight": "node scripts/highlight-docs.mjs",
     "prepublishOnly": "npm run build && npm test"
   },
   "devDependencies": {
@@ -85,6 +87,7 @@
     "@types/node": "^20.19.43",
     "esbuild": "^0.28.2",
     "eslint": "^9.39.5",
+    "shiki": "^3.23.0",
     "tsup": "^8.5.1",
     "typescript": "~5.9.3",
     "typescript-eslint": "^8.71.2",
