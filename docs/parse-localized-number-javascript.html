@@ -29,10 +29,11 @@
 </head>
 <body>
   <a class="skip" href="#main">Skip to content</a>
-  <header class="site">
+  <header class="site" v-data="{ open: false }" :class="{ 'menu-open': open }">
     <div class="container">
       <a class="brand" href="./"><img src="favicon.svg" width="32" height="32" alt=""><span>number<b>parrot</b></span></a>
-      <nav class="site" aria-label="Main">
+      <button class="menu-toggle" type="button" aria-controls="site-nav" :aria-expanded="open ? 'true' : 'false'" @click="open = !open" v-text="open ? 'Close' : 'Menu'">Menu</button>
+      <nav class="site" id="site-nav" aria-label="Main" :class="{ open: open }">
         <a href="./">Playground</a>
         <a href="convert-string-with-comma-to-number-javascript.html">Comma to number</a>
         <a href="parsefloat-comma-decimal-separator.html">parseFloat and commas</a>
@@ -132,6 +133,14 @@
       <a href="https://github.com/kwy404/numberparrot">Source on GitHub</a>
       <a href="https://www.npmjs.com/package/numberparrot">npm</a>
       <span>Interactive parts built with <a href="https://github.com/kwy404/Voodoo.js">Voodoo.js</a>.</span>
+    </div>
+    <div class="container more">
+      <span>More from kwy404:</span>
+      <a href="https://kwy404.github.io/graphemely/">graphemely</a>
+      <a href="https://kwy404.github.io/edgegoat/">edgegoat</a>
+      <a href="https://kwy404.github.io/vueleap/">vueleap</a>
+      <a href="https://github.com/kwy404/breakhound">breakhound</a>
+      <a href="https://github.com/kwy404/Voodoo.js">Voodoo.js</a>
     </div>
   </footer>
 </body>
