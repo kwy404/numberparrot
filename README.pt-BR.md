@@ -1,9 +1,9 @@
-<p align="right"><a href="README.md">English</a> | <b>Português (Brasil)</b></p>
+<p align="right"><a href="https://github.com/kwy404/numberparrot/blob/main/README.md">English</a> | <b>Português (Brasil)</b></p>
 
 <p align="center">
   <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="assets/banner-dark.svg">
-    <img src="assets/banner.svg" width="880" alt="Banner do numberparrot: o papagaio Pico ao lado do texto converter números e valores monetários localizados em JavaScript, mostrando parseFloat('1.234,56') retornando 1.234 e parse('1.234,56', 'pt-BR') retornando 1234.56">
+    <source media="(prefers-color-scheme: dark)" srcset="https://cdn.jsdelivr.net/gh/kwy404/numberparrot@main/assets/banner-dark.svg">
+    <img src="https://cdn.jsdelivr.net/gh/kwy404/numberparrot@main/assets/banner.svg" width="880" alt="Banner do numberparrot: o papagaio Pico ao lado do texto converter números e valores monetários localizados em JavaScript, mostrando parseFloat('1.234,56') retornando 1.234 e parse('1.234,56', 'pt-BR') retornando 1234.56">
   </picture>
 </p>
 
@@ -18,50 +18,50 @@
   <a href="https://www.npmjs.com/package/numberparrot"><img src="https://img.shields.io/npm/v/numberparrot?color=2FBF71&label=npm" width="80" alt="versão do numberparrot no npm"></a>
   <a href="https://bundlephobia.com/package/numberparrot"><img src="https://img.shields.io/bundlephobia/minzip/numberparrot?label=minzip" width="96" alt="tamanho do pacote numberparrot minificado e com gzip"></a>
   <a href="https://github.com/kwy404/numberparrot/actions/workflows/ci.yml"><img src="https://github.com/kwy404/numberparrot/actions/workflows/ci.yml/badge.svg" width="92" alt="status do CI do numberparrot no Node 18, 20 e 22"></a>
-  <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue.svg" width="78" alt="licença MIT"></a>
+  <a href="https://github.com/kwy404/numberparrot/blob/main/LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue.svg" width="78" alt="licença MIT"></a>
   <a href="https://www.typescriptlang.org/"><img src="https://img.shields.io/badge/types-TypeScript-3178C6?logo=typescript&logoColor=white" width="112" alt="escrito em TypeScript com tipos incluídos"></a>
 </p>
 
 <table align="center">
   <tr>
-    <td width="64"><img src="assets/icons/locales.svg" width="48" alt="ícone de globo: converter números de qualquer idioma"></td>
+    <td width="64"><img src="https://cdn.jsdelivr.net/gh/kwy404/numberparrot@main/assets/icons/locales.svg" width="48" alt="ícone de globo: converter números de qualquer idioma"></td>
     <td><b>Qualquer locale</b></td>
     <td>Separadores, dígitos e símbolos vêm do <code>Intl.NumberFormat</code>, então todo locale que o seu runtime conhece funciona.</td>
   </tr>
   <tr>
-    <td><img src="assets/icons/currency.svg" width="48" alt="ícone de moedas: converter string de moeda para número"></td>
+    <td><img src="https://cdn.jsdelivr.net/gh/kwy404/numberparrot@main/assets/icons/currency.svg" width="48" alt="ícone de moedas: converter string de moeda para número"></td>
     <td><b>Moeda</b></td>
     <td>Símbolos e códigos ISO antes ou depois do valor: <code>R$ 1.234,56</code>, <code>1 234,56 €</code>, <code>CHF 1'234.50</code>.</td>
   </tr>
   <tr>
-    <td><img src="assets/icons/digits.svg" width="48" alt="ícone de dígitos: arábicos, persas, devanágari e tailandeses"></td>
+    <td><img src="https://cdn.jsdelivr.net/gh/kwy404/numberparrot@main/assets/icons/digits.svg" width="48" alt="ícone de dígitos: arábicos, persas, devanágari e tailandeses"></td>
     <td><b>Qualquer dígito</b></td>
     <td>Arábico-índicos, persas, devanágari, bengali, tailandeses, largura total e todo outro dígito Unicode.</td>
   </tr>
   <tr>
-    <td><img src="assets/icons/accounting.svg" width="48" alt="ícone de parênteses: negativos contábeis"></td>
+    <td><img src="https://cdn.jsdelivr.net/gh/kwy404/numberparrot@main/assets/icons/accounting.svg" width="48" alt="ícone de parênteses: negativos contábeis"></td>
     <td><b>Negativos contábeis</b></td>
     <td><code>(1.234,56)</code>, sinal de menos no final, o sinal de menos Unicode e seus parecidos.</td>
   </tr>
   <tr>
-    <td><img src="assets/icons/detection.svg" width="48" alt="ícone de lupa: detectar separador decimal e locale"></td>
+    <td><img src="https://cdn.jsdelivr.net/gh/kwy404/numberparrot@main/assets/icons/detection.svg" width="48" alt="ícone de lupa: detectar separador decimal e locale"></td>
     <td><b>Detecção</b></td>
     <td>Não sabe o locale? <code>detect()</code> encontra o separador decimal e avisa quando há ambiguidade real, como em <code>1,234</code>.</td>
   </tr>
   <tr>
-    <td><img src="assets/icons/money.svg" width="48" alt="ícone de escudo: segurança com dinheiro em centavos inteiros"></td>
+    <td><img src="https://cdn.jsdelivr.net/gh/kwy404/numberparrot@main/assets/icons/money.svg" width="48" alt="ícone de escudo: segurança com dinheiro em centavos inteiros"></td>
     <td><b>Dinheiro seguro</b></td>
     <td><code>toMinorUnits</code> devolve centavos inteiros a partir dos dígitos: <code>"0,29"</code> vira <code>29</code>, nunca <code>28.999999999999996</code>.</td>
   </tr>
   <tr>
-    <td><img src="assets/icons/input.svg" width="48" alt="ícone de campo de texto: validar input numérico durante a digitação"></td>
+    <td><img src="https://cdn.jsdelivr.net/gh/kwy404/numberparrot@main/assets/icons/input.svg" width="48" alt="ícone de campo de texto: validar input numérico durante a digitação"></td>
     <td><b>Formulários</b></td>
     <td><code>normalizeInput()</code> limpa o campo a cada tecla e mantém valores parciais como <code>1.234,</code> válidos.</td>
   </tr>
 </table>
 
 <p align="center">
-  <img src="assets/demo.svg" width="820" alt="Demonstração animada: converter números localizados em JavaScript. 1.234.567,89 (pt-BR), 1'234'567.89 (de-CH), 12,34,567.89 (en-IN) e dígitos arábico-índicos (ar-EG) viram 1234567.89 com o numberparrot, enquanto parseFloat retorna 1.234, 1, 12 e NaN">
+  <img src="https://cdn.jsdelivr.net/gh/kwy404/numberparrot@main/assets/demo.svg" width="820" alt="Demonstração animada: converter números localizados em JavaScript. 1.234.567,89 (pt-BR), 1'234'567.89 (de-CH), 12,34,567.89 (en-IN) e dígitos arábico-índicos (ar-EG) viram 1234567.89 com o numberparrot, enquanto parseFloat retorna 1.234, 1, 12 e NaN">
 </p>
 
 <p align="center">
@@ -222,7 +222,7 @@ normalizeInput("R$ 1.234,567", "pt-BR", { maxFractionDigits: 2 });
 | `getLocaleInfo(locale?)` | `LocaleInfo` | Símbolos do locale vindos do `Intl`. |
 | `NumberParseError` | classe | Lançado no modo `strict`, com `code`, `input` e `locale`. |
 
-A referência completa, com todas as opções e códigos de erro, está no [README em inglês](README.md#api-reference).
+A referência completa, com todas as opções e códigos de erro, está no [README em inglês](https://github.com/kwy404/numberparrot/blob/main/README.md#api-reference).
 
 ## Locales testados
 
@@ -256,4 +256,4 @@ Node.js 18 ou mais novo, Deno, Bun e navegadores modernos. O pacote inteiro tem 
 
 ## Licença
 
-[MIT](LICENSE) © 2026 Alexandre Kohler.
+[MIT](https://github.com/kwy404/numberparrot/blob/main/LICENSE) © 2026 Alexandre Kohler.

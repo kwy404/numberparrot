@@ -1,9 +1,9 @@
-<p align="right"><b>English</b> | <a href="README.pt-BR.md">Português (Brasil)</a></p>
+<p align="right"><b>English</b> | <a href="https://github.com/kwy404/numberparrot/blob/main/README.pt-BR.md">Português (Brasil)</a></p>
 
 <p align="center">
   <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="assets/banner-dark.svg">
-    <img src="assets/banner.svg" width="880" alt="numberparrot banner: Pico the parrot mascot next to the text parse localized numbers and currency strings in JavaScript, showing parseFloat('1.234,56') returning 1.234 and parse('1.234,56', 'pt-BR') returning 1234.56">
+    <source media="(prefers-color-scheme: dark)" srcset="https://cdn.jsdelivr.net/gh/kwy404/numberparrot@main/assets/banner-dark.svg">
+    <img src="https://cdn.jsdelivr.net/gh/kwy404/numberparrot@main/assets/banner.svg" width="880" alt="numberparrot banner: Pico the parrot mascot next to the text parse localized numbers and currency strings in JavaScript, showing parseFloat('1.234,56') returning 1.234 and parse('1.234,56', 'pt-BR') returning 1234.56">
   </picture>
 </p>
 
@@ -18,50 +18,50 @@
   <a href="https://www.npmjs.com/package/numberparrot"><img src="https://img.shields.io/npm/v/numberparrot?color=2FBF71&label=npm" width="80" alt="numberparrot npm version"></a>
   <a href="https://bundlephobia.com/package/numberparrot"><img src="https://img.shields.io/bundlephobia/minzip/numberparrot?label=minzip" width="96" alt="numberparrot bundle size minified and gzipped"></a>
   <a href="https://github.com/kwy404/numberparrot/actions/workflows/ci.yml"><img src="https://github.com/kwy404/numberparrot/actions/workflows/ci.yml/badge.svg" width="92" alt="numberparrot CI status for Node 18, 20 and 22"></a>
-  <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue.svg" width="78" alt="MIT license"></a>
+  <a href="https://github.com/kwy404/numberparrot/blob/main/LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue.svg" width="78" alt="MIT license"></a>
   <a href="https://www.typescriptlang.org/"><img src="https://img.shields.io/badge/types-TypeScript-3178C6?logo=typescript&logoColor=white" width="112" alt="written in TypeScript with bundled type definitions"></a>
 </p>
 
 <table align="center">
   <tr>
-    <td width="64"><img src="assets/icons/locales.svg" width="48" alt="globe icon: parse numbers in any locale"></td>
+    <td width="64"><img src="https://cdn.jsdelivr.net/gh/kwy404/numberparrot@main/assets/icons/locales.svg" width="48" alt="globe icon: parse numbers in any locale"></td>
     <td><b>Any locale</b></td>
     <td>Separators, digits and symbols come from <code>Intl.NumberFormat</code>, so every locale your runtime knows works.</td>
   </tr>
   <tr>
-    <td><img src="assets/icons/currency.svg" width="48" alt="coin stack icon: parse currency strings to numbers"></td>
+    <td><img src="https://cdn.jsdelivr.net/gh/kwy404/numberparrot@main/assets/icons/currency.svg" width="48" alt="coin stack icon: parse currency strings to numbers"></td>
     <td><b>Currency</b></td>
     <td>Symbols and ISO codes before or after the amount: <code>R$ 1.234,56</code>, <code>1 234,56 €</code>, <code>CHF 1'234.50</code>.</td>
   </tr>
   <tr>
-    <td><img src="assets/icons/digits.svg" width="48" alt="digit tiles icon: Arabic-Indic, Persian, Devanagari and Thai digits"></td>
+    <td><img src="https://cdn.jsdelivr.net/gh/kwy404/numberparrot@main/assets/icons/digits.svg" width="48" alt="digit tiles icon: Arabic-Indic, Persian, Devanagari and Thai digits"></td>
     <td><b>Any digits</b></td>
     <td>Arabic-Indic, Persian, Devanagari, Bengali, Thai, full width and every other Unicode digit.</td>
   </tr>
   <tr>
-    <td><img src="assets/icons/accounting.svg" width="48" alt="parentheses icon: accounting negative numbers"></td>
+    <td><img src="https://cdn.jsdelivr.net/gh/kwy404/numberparrot@main/assets/icons/accounting.svg" width="48" alt="parentheses icon: accounting negative numbers"></td>
     <td><b>Accounting negatives</b></td>
     <td><code>(1.234,56)</code>, trailing minus, the Unicode minus sign and its look alikes.</td>
   </tr>
   <tr>
-    <td><img src="assets/icons/detection.svg" width="48" alt="magnifier icon: detect decimal separator and locale"></td>
+    <td><img src="https://cdn.jsdelivr.net/gh/kwy404/numberparrot@main/assets/icons/detection.svg" width="48" alt="magnifier icon: detect decimal separator and locale"></td>
     <td><b>Detection</b></td>
     <td>Unknown locale? <code>detect()</code> finds the decimal separator and flags real ambiguity like <code>1,234</code>.</td>
   </tr>
   <tr>
-    <td><img src="assets/icons/money.svg" width="48" alt="shield icon: money safety with integer cents"></td>
+    <td><img src="https://cdn.jsdelivr.net/gh/kwy404/numberparrot@main/assets/icons/money.svg" width="48" alt="shield icon: money safety with integer cents"></td>
     <td><b>Money safety</b></td>
     <td><code>toMinorUnits</code> gives integer cents from the decimal digits: <code>"0,29"</code> is <code>29</code>, never <code>28.999999999999996</code>.</td>
   </tr>
   <tr>
-    <td><img src="assets/icons/input.svg" width="48" alt="text field icon: validate number input fields while typing"></td>
+    <td><img src="https://cdn.jsdelivr.net/gh/kwy404/numberparrot@main/assets/icons/input.svg" width="48" alt="text field icon: validate number input fields while typing"></td>
     <td><b>Form input</b></td>
     <td><code>normalizeInput()</code> cleans fields on every keystroke and keeps partial values like <code>1.234,</code> valid.</td>
   </tr>
 </table>
 
 <p align="center">
-  <img src="assets/demo.svg" width="820" alt="Animated demo: parse localized number strings in JavaScript. 1.234.567,89 (pt-BR), 1'234'567.89 (de-CH), 12,34,567.89 (en-IN) and Arabic-Indic digits (ar-EG) all become 1234567.89 with numberparrot, while parseFloat returns 1.234, 1, 12 and NaN">
+  <img src="https://cdn.jsdelivr.net/gh/kwy404/numberparrot@main/assets/demo.svg" width="820" alt="Animated demo: parse localized number strings in JavaScript. 1.234.567,89 (pt-BR), 1'234'567.89 (de-CH), 12,34,567.89 (en-IN) and Arabic-Indic digits (ar-EG) all become 1234567.89 with numberparrot, while parseFloat returns 1.234, 1, 12 and NaN">
 </p>
 
 <p align="center">
@@ -409,8 +409,8 @@ The full guide and an interactive playground live at **[kwy404.github.io/numberp
 
 ## Contributing
 
-Issues and pull requests are welcome. See [CONTRIBUTING.md](CONTRIBUTING.md) for the setup, the test matrix and the project rules. Changes are listed in [CHANGELOG.md](CHANGELOG.md).
+Issues and pull requests are welcome. See [CONTRIBUTING.md](https://github.com/kwy404/numberparrot/blob/main/CONTRIBUTING.md) for the setup, the test matrix and the project rules. Changes are listed in [CHANGELOG.md](https://github.com/kwy404/numberparrot/blob/main/CHANGELOG.md).
 
 ## License
 
-[MIT](LICENSE) © 2026 Alexandre Kohler. Mascot Pico and all artwork in `assets/` are part of the project under the same license.
+[MIT](https://github.com/kwy404/numberparrot/blob/main/LICENSE) © 2026 Alexandre Kohler. Mascot Pico and all artwork in `assets/` are part of the project under the same license.

@@ -25,6 +25,9 @@ jobs:
       - run: npm ci
       - run: npm run build
       - run: npm run typecheck
+      # ESLint 9 and typescript-eslint 8 pull in dependencies that require Node 20+,
+      # so lint runs on the newer jobs only. Build, typecheck and tests run everywhere.
       - run: npm run lint
+        if: matrix.node != 18
       - run: npm test
       - run: npm run size
