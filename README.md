@@ -16,6 +16,8 @@
 
 <p align="center">
   <a href="https://www.npmjs.com/package/numberparrot"><img src="https://img.shields.io/npm/v/numberparrot?color=2FBF71&label=npm" width="80" alt="numberparrot npm version"></a>
+  <a href="https://www.npmjs.com/package/numberparrot"><img src="https://img.shields.io/npm/dm/numberparrot" alt="numberparrot npm downloads per month"></a>
+  <a href="https://www.npmjs.com/package/numberparrot"><img src="https://img.shields.io/npm/dt/numberparrot" alt="numberparrot total npm downloads"></a>
   <a href="https://bundlephobia.com/package/numberparrot"><img src="https://img.shields.io/bundlephobia/minzip/numberparrot?label=minzip" width="96" alt="numberparrot bundle size minified and gzipped"></a>
   <a href="https://github.com/kwy404/numberparrot/actions/workflows/ci.yml"><img src="https://github.com/kwy404/numberparrot/actions/workflows/ci.yml/badge.svg" width="92" alt="numberparrot CI status for Node 18, 20 and 22"></a>
   <a href="https://github.com/kwy404/numberparrot/blob/main/LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue.svg" width="78" alt="MIT license"></a>
@@ -410,6 +412,14 @@ The full guide and an interactive playground live at **[kwy404.github.io/numberp
 ## Contributing
 
 Issues and pull requests are welcome. See [CONTRIBUTING.md](https://github.com/kwy404/numberparrot/blob/main/CONTRIBUTING.md) for the setup, the test matrix and the project rules. Changes are listed in [CHANGELOG.md](https://github.com/kwy404/numberparrot/blob/main/CHANGELOG.md).
+
+## More from kwy404
+
+- [graphemely](https://kwy404.github.io/graphemely/)
+- [edgegoat](https://kwy404.github.io/edgegoat/)
+- [vueleap](https://kwy404.github.io/vueleap/)
+- [breakhound](https://github.com/kwy404/breakhound)
+- [Voodoo.js](https://github.com/kwy404/Voodoo.js)
 
 ## License
 
