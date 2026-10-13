@@ -3,11 +3,15 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  <script>(function(){try{var t=localStorage.getItem("voodoo:theme");if(t&&t.charAt(0)==='"')t=JSON.parse(t);var r=document.documentElement;if(t==="light"||t==="dark"){r.setAttribute("data-theme",t);r.style.colorScheme=t}}catch(e){}})();</script>
   <title>parseFloat with a Comma Decimal Separator: Why It Returns the Wrong Number | numberparrot</title>
   <meta name="description" content="parseFloat(&quot;1,5&quot;) returns 1 and parseFloat(&quot;1.234,56&quot;) returns 1.234. Learn why parseFloat ignores the comma decimal separator and how to parse it correctly.">
   <link rel="canonical" href="https://kwy404.github.io/numberparrot/parsefloat-comma-decimal-separator.html">
+  <meta name="author" content="Alexandre Kohler">
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
-  <meta name="theme-color" content="#2FBF71">
+  <meta name="theme-color" content="#F7FBF6" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0E1A14" media="(prefers-color-scheme: dark)">
   <meta property="og:type" content="article">
   <meta property="og:site_name" content="numberparrot">
   <meta property="og:title" content="parseFloat with a Comma Decimal Separator: Why It Returns the Wrong Number | numberparrot">
@@ -16,61 +20,140 @@
   <meta property="og:image" content="https://kwy404.github.io/numberparrot/og.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
-  <meta property="og:image:alt" content="numberparrot: parse localized numbers and currency strings in JavaScript">
+  <meta property="og:image:alt" content="numberparrot: parse localized numbers and currency strings in JavaScript, with Pico the parrot">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="parseFloat with a Comma Decimal Separator: Why It Returns the Wrong Number | numberparrot">
   <meta name="twitter:description" content="parseFloat(&quot;1,5&quot;) returns 1 and parseFloat(&quot;1.234,56&quot;) returns 1.234. Learn why parseFloat ignores the comma decimal separator and how to parse it correctly.">
   <meta name="twitter:image" content="https://kwy404.github.io/numberparrot/og.png">
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"parseFloat with a Comma Decimal Separator: Why It Returns the Wrong Number","description":"parseFloat(\"1,5\") returns 1 and parseFloat(\"1.234,56\") returns 1.234. Learn why parseFloat ignores the comma decimal separator and how to parse it correctly.","url":"https://kwy404.github.io/numberparrot/parsefloat-comma-decimal-separator.html","image":"https://kwy404.github.io/numberparrot/og.png","datePublished":"2026-10-12","dateModified":"2026-10-12","inLanguage":"en","author":{"@type":"Person","name":"Alexandre Kohler","url":"https://github.com/kwy404"},"publisher":{"@type":"Person","name":"Alexandre Kohler","url":"https://github.com/kwy404"},"mainEntityOfPage":"https://kwy404.github.io/numberparrot/parsefloat-comma-decimal-separator.html","about":{"@type":"SoftwareSourceCode","name":"numberparrot","codeRepository":"https://github.com/kwy404/numberparrot","programmingLanguage":"TypeScript"}}</script>
-  <script>try{var t=localStorage.getItem("np-theme");if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
-  <link rel="stylesheet" href="style.css">
+  <meta name="twitter:image:alt" content="numberparrot: parse localized numbers and currency strings in JavaScript, with Pico the parrot">
+  <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"TechArticle","headline":"parseFloat with a Comma Decimal Separator: Why It Returns the Wrong Number","description":"parseFloat(\"1,5\") returns 1 and parseFloat(\"1.234,56\") returns 1.234. Learn why parseFloat ignores the comma decimal separator and how to parse it correctly.","url":"https://kwy404.github.io/numberparrot/parsefloat-comma-decimal-separator.html","image":"https://kwy404.github.io/numberparrot/og.png","datePublished":"2026-10-12","dateModified":"2026-10-13","inLanguage":"en","author":{"@type":"Person","name":"Alexandre Kohler","url":"https://github.com/kwy404","sameAs":["https://github.com/kwy404","https://www.linkedin.com/in/alexandre-silva-173687256/"]},"publisher":{"@type":"Person","name":"Alexandre Kohler","url":"https://github.com/kwy404","sameAs":["https://github.com/kwy404","https://www.linkedin.com/in/alexandre-silva-173687256/"]},"mainEntityOfPage":"https://kwy404.github.io/numberparrot/parsefloat-comma-decimal-separator.html","about":{"@type":"SoftwareSourceCode","name":"numberparrot","codeRepository":"https://github.com/kwy404/numberparrot","programmingLanguage":"TypeScript"}},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"numberparrot","item":"https://kwy404.github.io/numberparrot/"},{"@type":"ListItem","position":2,"name":"parseFloat with a Comma Decimal Separator: Why It Returns the Wrong Number","item":"https://kwy404.github.io/numberparrot/parsefloat-comma-decimal-separator.html"}]}]}</script>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700;800&family=Space+Grotesk:wght@500;600;700&display=swap">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/monsooncss@0.2.0/dist/monsoon.min.css">
+  <link rel="stylesheet" href="site.css">
   <script src="https://cdn.jsdelivr.net/npm/voodoojs@1.0.0/dist/voodoo.full.min.js" data-manual defer></script>
   <script type="module" src="app.js"></script>
 </head>
-<body>
-  <a class="skip" href="#main">Skip to content</a>
-  <header class="site" v-data="{ open: false }" :class="{ 'menu-open': open }">
-    <div class="container">
-      <a class="brand" href="./"><img src="favicon.svg" width="32" height="32" alt=""><span>number<b>parrot</b></span></a>
-      <button class="menu-toggle" type="button" aria-controls="site-nav" :aria-expanded="open ? 'true' : 'false'" @click="open = !open" v-text="open ? 'Close' : 'Menu'">Menu</button>
-      <nav class="site" id="site-nav" aria-label="Main" :class="{ open: open }">
-        <a href="./">Playground</a>
-        <a href="convert-string-with-comma-to-number-javascript.html">Comma to number</a>
-        <a href="parsefloat-comma-decimal-separator.html" aria-current="page">parseFloat and commas</a>
-        <a href="parse-localized-number-javascript.html">Localized numbers</a>
-        <a href="parse-currency-string-javascript.html">Currency strings</a>
-        <a href="https://github.com/kwy404/numberparrot">GitHub</a>
-        <button class="theme-toggle" type="button" :aria-pressed="theme === 'dark' ? 'true' : 'false'" @click="toggleTheme()" v-text="theme === 'dark' ? 'Light theme' : 'Dark theme'">Theme</button>
-      </nav>
+<body class="bg-background text-foreground antialiased">
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="np-top">
+  <div class="container np-top-row">
+    <a class="np-brand" href="./" aria-label="numberparrot home"><img src="favicon.svg" width="30" height="30" alt=""><span>number<b>parrot</b></span></a>
+    <a class="badge badge-sm badge-outline np-ver" href="https://github.com/kwy404/numberparrot/blob/main/CHANGELOG.md" aria-label="Version 1.0.0, read the changelog">v1.0.0</a>
+    <nav class="np-nav" aria-label="Main"><a class="np-nav-link" href="./#board">World board</a><a class="np-nav-link" href="./#departures">Departures</a><a class="np-nav-link" href="./#use-cases">Use cases</a><a class="np-nav-link" href="api.html">API</a><a class="np-nav-link" href="./#guides" aria-current="page">Guides</a></nav>
+    <div class="np-top-end">
+      <button type="button" class="np-search-btn" @click="openSearch()" aria-label="Search the docs" aria-haspopup="dialog"><svg class="np-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="m20 20-4.2-4.2"/></svg><span>Search</span><kbd class="kbd kbd-xs">Ctrl K</kbd></button>
+      <a class="np-icon-btn np-hide-sm" href="https://github.com/kwy404/numberparrot" aria-label="numberparrot on GitHub"><svg class="np-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path stroke="none" fill="currentColor" d="M12 1.6a10.4 10.4 0 0 0-3.3 20.3c.5.1.7-.2.7-.5v-1.8c-2.9.6-3.5-1.2-3.5-1.2-.5-1.2-1.2-1.5-1.2-1.5-.9-.6.1-.6.1-.6 1 .1 1.6 1.1 1.6 1.1.9 1.6 2.4 1.1 3 .9.1-.7.4-1.1.7-1.4-2.3-.3-4.7-1.2-4.7-5.1 0-1.1.4-2 1.1-2.8-.1-.3-.5-1.3.1-2.7 0 0 .9-.3 2.9 1.1a9.9 9.9 0 0 1 5.2 0c2-1.4 2.9-1.1 2.9-1.1.6 1.4.2 2.4.1 2.7.7.8 1.1 1.7 1.1 2.8 0 4-2.4 4.8-4.7 5.1.4.3.7.9.7 1.9v2.8c0 .3.2.6.7.5A10.4 10.4 0 0 0 12 1.6Z"/></svg></a>
+      <button type="button" class="np-icon-btn np-theme" v-theme-toggle.cycle aria-label="Color theme: follow the system, light or dark" title="Color theme"><svg class="np-icon np-t-system" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="12.5" rx="2"/><path d="M8.5 20.5h7M12 16.5v4"/></svg><svg class="np-icon np-t-light" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2.5v2M12 19.5v2M4.6 4.6 6 6M18 18l1.4 1.4M2.5 12h2M19.5 12h2M4.6 19.4 6 18M18 6l1.4-1.4"/></svg><svg class="np-icon np-t-dark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5Z"/></svg></button>
+      <button type="button" class="np-icon-btn np-menu-btn" aria-controls="np-menu" aria-expanded="false" :aria-expanded="menu ? 'true' : 'false'" @click="menu = !menu" aria-label="Menu"><svg class="np-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
     </div>
+  </div>
+  <nav id="np-menu" class="np-mobile" aria-label="Mobile" style="display:none" v-show="menu" @click="menu = false">
+    <div class="container"><a class="np-nav-link" href="./#board">World board</a><a class="np-nav-link" href="./#departures">Departures</a><a class="np-nav-link" href="./#use-cases">Use cases</a><a class="np-nav-link" href="api.html">API</a><a class="np-nav-link" href="./#guides" aria-current="page">Guides</a><a class="np-nav-link" href="https://github.com/kwy404/numberparrot">GitHub</a><a class="np-nav-link" href="https://www.npmjs.com/package/numberparrot">npm</a></div>
+  </nav>
+</header>
+  <main id="main" class="container np-doc">
+<aside aria-label="Search, locale picker and contents">
+  <div class="np-rail-inner">
+    <div class="np-rail-search" @keydown.esc="rq = ''">
+      <label class="search-field">
+        <span class="sr-only">Search the docs</span>
+        <input type="search" class="input input-sm" placeholder="Search the docs" autocomplete="off" spellcheck="false" v-model="rq" @keydown.enter.prevent="goRail()">
+        <kbd class="search-field-shortcut">/</kbd>
+      </label>
+      <ul class="np-rail-hits" v-show="rq" style="display:none" aria-label="Search results">
+        <li v-for="hit in rhits" :key="hit.url"><a :href="hit.url"><span class="np-hit-kind" v-text="hit.kind"></span><span v-text="hit.title"></span></a></li>
+        <li class="np-rail-empty" v-show="!rhits.length">No match.</li>
+      </ul>
+    </div>
+    <details class="np-loc" id="np-loc" open>
+      <summary><svg class="np-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-6.5-5.6-6.5-11a6.5 6.5 0 0 1 13 0C18.5 15.4 12 21 12 21Z"/><circle cx="12" cy="10" r="2.3" fill="var(--np-sun)"/></svg><span>Locale picker</span><span class="np-loc-tag" v-text="card.locale">pt-BR</span></summary>
+      <div class="np-loc-body">
+        <label class="sr-only" for="np-loc-select">Locale</label>
+        <select id="np-loc-select" class="select select-sm" v-model="loc"><optgroup label="The Americas"><option value="en-US">en-US New York</option><option value="en-CA">en-CA Toronto</option><option value="fr-CA">fr-CA Montréal</option><option value="es-MX">es-MX Mexico City</option><option value="pt-BR" selected>pt-BR São Paulo</option><option value="es-AR">es-AR Buenos Aires</option><option value="es-CO">es-CO Bogotá</option><option value="es-CL">es-CL Santiago</option></optgroup><optgroup label="Europe"><option value="en-GB">en-GB London</option><option value="de-DE">de-DE Berlin</option><option value="fr-FR">fr-FR Paris</option><option value="es-ES">es-ES Madrid</option><option value="it-IT">it-IT Rome</option><option value="nl-NL">nl-NL Amsterdam</option><option value="pt-PT">pt-PT Lisbon</option><option value="de-CH">de-CH Zürich</option><option value="sv-SE">sv-SE Stockholm</option><option value="pl-PL">pl-PL Warsaw</option><option value="cs-CZ">cs-CZ Prague</option><option value="uk-UA">uk-UA Kyiv</option><option value="ru-RU">ru-RU Moscow</option><option value="tr-TR">tr-TR Istanbul</option></optgroup><optgroup label="Middle East and Africa"><option value="ar-EG">ar-EG Cairo</option><option value="ar-SA">ar-SA Riyadh</option><option value="fa-IR">fa-IR Tehran</option><option value="he-IL">he-IL Tel Aviv</option><option value="sw-KE">sw-KE Nairobi</option><option value="en-ZA">en-ZA Johannesburg</option></optgroup><optgroup label="South Asia"><option value="en-IN">en-IN Mumbai</option><option value="hi-IN">hi-IN Delhi</option><option value="bn-BD">bn-BD Dhaka</option><option value="ur-PK">ur-PK Karachi</option></optgroup><optgroup label="East Asia and Pacific"><option value="ja-JP">ja-JP Tokyo</option><option value="zh-CN">zh-CN Shanghai</option><option value="ko-KR">ko-KR Seoul</option><option value="th-TH">th-TH Bangkok</option><option value="vi-VN">vi-VN Hanoi</option><option value="id-ID">id-ID Jakarta</option><option value="en-AU">en-AU Sydney</option></optgroup></select>
+        <p class="np-loc-city" v-text="card.title">São Paulo (GRU)</p>
+        <dl class="np-loc-dl">
+          <div><dt>Decimal</dt><dd dir="auto" v-text="card.decimal">,</dd></div>
+          <div><dt>Group</dt><dd dir="auto" v-text="card.group">.</dd></div>
+          <div><dt>Minus</dt><dd dir="auto" v-text="card.minus">hyphen minus</dd></div>
+          <div><dt>Digits</dt><dd dir="auto" v-text="card.digits">0123456789</dd></div>
+          <div><dt>Writes</dt><dd dir="auto" v-text="card.sample">1.234.567,89</dd></div>
+          <div><dt>Money</dt><dd dir="auto" v-text="card.money">-R$ 1.234,50</dd></div>
+        </dl>
+        <label class="np-loc-try" for="np-loc-try">Try a number in <span v-text="card.locale">pt-BR</span></label>
+        <input id="np-loc-try" class="input input-sm" v-model="trial" autocomplete="off" spellcheck="false" value="1.234,56">
+        <p class="np-loc-out" data-ok="true" :data-ok="card.ok ? 'true' : 'false'"><code>parse()</code><output v-text="card.result">1234.56</output></p>
+      </div>
+    </details>
+    <nav class="np-toc" aria-labelledby="np-toc-title"><p class="toc-title" id="np-toc-title">On this page</p><ul class="toc"><li><a href="#what-parsefloat-actually-does">What parseFloat actually does</a></li><li><a href="#number-is-stricter-but-not-smarter">Number() is stricter, but not smarter</a></li><li><a href="#the-fix">The fix</a></li><li><a href="#comparison">Comparison</a></li><li><a href="#install">Install</a></li><li><a href="#more-guides">More guides</a></li></ul></nav>
+  </div>
+</aside>
+<article class="np-article">
+  <nav aria-label="Breadcrumb"><ol class="breadcrumbs"><li><a href="./">numberparrot</a></li><li><a href="./#guides">Guides</a></li><li><span aria-current="page" dir="auto">1,5 to 1.5</span></li></ol></nav>
+  <header class="np-doc-head">
+    <div>
+      <p class="np-eyebrow"><svg class="np-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2.5" y="5" width="19" height="14" rx="2"/><path d="M12.5 8v8M5.5 9h4M5.5 12h4M5.5 15h3"/><rect x="15.5" y="8" width="3.5" height="4" rx=".5"/></svg>Guide</p>
+      <h1>parseFloat with a Comma Decimal Separator: Why It Returns the Wrong Number</h1>
+      <p class="np-lead"><code>parseFloat</code> does not fail on numbers written with a comma decimal separator. It does something worse: it returns a wrong number.</p>
+      <p class="np-meta"><span><svg class="np-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>2 min read</span><span><svg class="np-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg>Updated <time datetime="2026-10-13">October 13, 2026</time></span><span><svg class="np-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m8.5 7-5 5 5 5M15.5 7l5 5-5 5M13.5 4.5l-3 15"/></svg>numberparrot 1.0.0</span></p>
+    </div>
+    <div class="np-doc-art" aria-hidden="true"><svg class="np-art" viewBox="0 0 320 210" width="300" height="197" aria-hidden="true">
+  <rect x="4" y="4" width="312" height="202" rx="10" fill="var(--np-paper)" stroke="var(--np-ink)" stroke-width="2"/>
+  <clipPath id="pc-f"><rect x="14" y="14" width="150" height="182" rx="6"/></clipPath>
+  <g clip-path="url(#pc-f)">
+    <rect x="14" y="14" width="150" height="182" fill="var(--np-sky)"/>
+    <circle cx="142" cy="70" r="15" fill="var(--np-sun)"/>
+    <path d="M14 150c22-26 40-36 60-26s30-22 52-30 30 10 38 18v84H14Z" fill="var(--np-leaf)" fill-opacity=".85"/>
+    <path d="M14 172c26-14 52-16 78-6s46 6 72-4v34H14Z" fill="var(--np-leaf)"/>
+    <path d="M24 186c10-4 20-4 30 0s20 4 30 0M98 190c8-3 16-3 24 0" fill="none" stroke="var(--np-paper)" stroke-width="2" stroke-linecap="round"/>
+    <text x="24" y="104" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="800" letter-spacing="2" fill="var(--np-ink)">GREETINGS FROM</text>
+    <text x="24" y="126" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="19" font-weight="800" fill="var(--np-ink)">BERLIN</text>
+  </g>
+  <rect x="14" y="14" width="150" height="182" rx="6" fill="none" stroke="var(--np-ink)" stroke-width="1.5"/>
+  <text x="24" y="44" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="20" font-weight="800" fill="var(--np-ink)">1,5</text>
+  <path d="M178 26v160" stroke="var(--np-soft)" stroke-width="1.5" stroke-dasharray="3 4"/>
+  <svg x="236" y="18" viewBox="0 0 120 120" width="58" height="58" aria-hidden="true">
+  <defs></defs>
+  <g transform="rotate(6 60 60)" opacity=".92">
+  <rect x="6" y="14" width="108" height="92" rx="8" fill="none" stroke="var(--np-ink)" stroke-width="3.2"/><rect x="13" y="30" width="94" height="60" rx="4" fill="none" stroke="var(--np-ink)" stroke-width="1.6"/>
+  <text x="60" y="25.5" text-anchor="middle" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="8.5" font-weight="800" letter-spacing="1.6" fill="var(--np-ink)">EUROPA</text>
+  <text x="60" y="101" text-anchor="middle" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="7.5" font-weight="700" letter-spacing="1.2" fill="var(--np-ink)">CDG · BER · MAD</text>
+  <text x="60" y="66" text-anchor="middle" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="44" font-weight="800" fill="var(--np-ink)">€</text>
+  <text x="60" y="82" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="7" font-weight="700" letter-spacing=".8" fill="var(--np-ink)">13 OCT 2026</text>
+  </g>
+</svg>
+  <g fill="none" stroke="var(--np-ink)" stroke-width="1.4" stroke-linecap="round" opacity=".55">
+    <circle cx="232" cy="52" r="20"/>
+    <path d="M196 84c8-5 16-5 24 0s16 5 24 0 16-5 24 0 16 5 24 0M196 94c8-5 16-5 24 0s16 5 24 0 16-5 24 0 16 5 24 0"/>
+  </g>
+  <path d="M194 130h108M194 152h108M194 174h72" stroke="var(--np-ink)" stroke-width="1.6" stroke-linecap="round" opacity=".7"/>
+  <text x="196" y="125" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="9.5" font-weight="700" fill="var(--np-leaf)">parse(text, locale)</text>
+</svg></div>
   </header>
-  <main id="main">
-    <div class="container">
+  <div class="prose np-prose">
 
-<p class="breadcrumb"><a href="./">numberparrot</a> / Guides</p>
-<article>
-<h1>parseFloat with a Comma Decimal Separator: Why It Returns the Wrong Number</h1>
 
-<p class="lead"><code>parseFloat</code> does not fail on numbers written with a comma decimal separator. It does something worse: it returns a wrong number.</p>
 
-<h2>What parseFloat actually does</h2>
+<h2 id="what-parsefloat-actually-does">What parseFloat actually does<a class="np-anchor" href="#what-parsefloat-actually-does" aria-label="Link to this section">#</a></h2>
 <p><code>parseFloat</code> reads characters from the start of the string while they look like an English number, then stops and returns whatever it has. It never reports an error for the rest of the string.</p>
-<div class="code-frame" id="code-1" data-lang="ts"><div class="code-bar"><span class="code-tab">example.ts</span><button type="button" class="code-copy" aria-label="Copy code" @click="copy($el)" v-text="copied === 'code-1' ? 'Copied' : 'Copy'">Copy</button></div><pre class="shiki shiki-themes light-plus dark-plus" style="--shiki-light:#000000;--shiki-dark:#D4D4D4;--shiki-light-bg:#FFFFFF;--shiki-dark-bg:#1E1E1E" tabindex="0" aria-label="example.ts code example"><code><span class="line"><span style="--shiki-light:#795E26;--shiki-dark:#DCDCAA">parseFloat</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">(</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178">"1,5"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">);           </span><span style="--shiki-light:#008000;--shiki-dark:#6A9955">// 1      (stops at ",")</span></span>
+<figure class="np-code" id="code-1" data-lang="ts"><div class="np-code-bar"><span class="np-dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="np-code-tab"><span class="np-code-badge" data-lang="ts" aria-hidden="true">TS</span>example.ts</span><button type="button" class="np-code-copy" aria-label="Copy code from example.ts" @click="copy($el)"><svg class="np-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="11.5" height="11.5" rx="2"/><path d="M15 9V5.5A2 2 0 0 0 13 3.5H5.5a2 2 0 0 0-2 2V13a2 2 0 0 0 2 2H9"/></svg><span v-text="copied === 'code-1' ? 'Copied' : 'Copy'">Copy</span></button></div><pre class="shiki shiki-themes light-plus dark-plus" style="--shiki-light:#000000;--shiki-dark:#D4D4D4;--shiki-light-bg:#FFFFFF;--shiki-dark-bg:#1E1E1E" tabindex="0" aria-label="example.ts code example"><code><span class="line"><span style="--shiki-light:#795E26;--shiki-dark:#DCDCAA">parseFloat</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">(</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178">"1,5"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">);           </span><span style="--shiki-light:#008000;--shiki-dark:#6A9955">// 1      (stops at ",")</span></span>
 <span class="line"><span style="--shiki-light:#795E26;--shiki-dark:#DCDCAA">parseFloat</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">(</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178">"1.234,56"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">);      </span><span style="--shiki-light:#008000;--shiki-dark:#6A9955">// 1.234  (stops at the second ".")</span></span>
 <span class="line"><span style="--shiki-light:#795E26;--shiki-dark:#DCDCAA">parseFloat</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">(</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178">"1'234.56"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">);      </span><span style="--shiki-light:#008000;--shiki-dark:#6A9955">// 1      (stops at "'")</span></span>
 <span class="line"><span style="--shiki-light:#795E26;--shiki-dark:#DCDCAA">parseFloat</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">(</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178">"12,34,567.89"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">);  </span><span style="--shiki-light:#008000;--shiki-dark:#6A9955">// 12     (stops at ",")</span></span>
-<span class="line"><span style="--shiki-light:#795E26;--shiki-dark:#DCDCAA">parseFloat</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">(</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178">"R$ 10,00"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">);      </span><span style="--shiki-light:#008000;--shiki-dark:#6A9955">// NaN    (starts with "R")</span></span></code></pre></div>
-<p class="callout warn">A wrong number is more dangerous than <code>NaN</code>: <code>1.234</code> passes every <code>isNaN</code> check and quietly ends up in your database, invoice or chart.</p>
+<span class="line"><span style="--shiki-light:#795E26;--shiki-dark:#DCDCAA">parseFloat</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">(</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178">"R$ 10,00"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">);      </span><span style="--shiki-light:#008000;--shiki-dark:#6A9955">// NaN    (starts with "R")</span></span></code></pre><div class="np-code-status" aria-hidden="true"><span><svg class="np-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg>numberparrot</span><span>TypeScript</span><span>UTF-8</span><span>5 lines</span></div></figure>
+<div class="callout callout-warning"><p class="callout-title"><svg class="np-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 3.5c-3.3 4.8-3.3 12.2 0 17M16 3.5c3.3 4.8 3.3 12.2 0 17"/><path d="M9.5 12h5" stroke="var(--np-red)" stroke-width="2.25"/></svg> Watch out</p><p>A wrong number is more dangerous than <code>NaN</code>: <code>1.234</code> passes every <code>isNaN</code> check and quietly ends up in your database, invoice or chart.</p></div>
 
-<h2>Number() is stricter, but not smarter</h2>
-<div class="code-frame" id="code-2" data-lang="ts"><div class="code-bar"><span class="code-tab">example.ts</span><button type="button" class="code-copy" aria-label="Copy code" @click="copy($el)" v-text="copied === 'code-2' ? 'Copied' : 'Copy'">Copy</button></div><pre class="shiki shiki-themes light-plus dark-plus" style="--shiki-light:#000000;--shiki-dark:#D4D4D4;--shiki-light-bg:#FFFFFF;--shiki-dark-bg:#1E1E1E" tabindex="0" aria-label="example.ts code example"><code><span class="line"><span style="--shiki-light:#795E26;--shiki-dark:#DCDCAA">Number</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">(</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178">"1,5"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">);       </span><span style="--shiki-light:#008000;--shiki-dark:#6A9955">// NaN</span></span>
+<h2 id="number-is-stricter-but-not-smarter">Number() is stricter, but not smarter<a class="np-anchor" href="#number-is-stricter-but-not-smarter" aria-label="Link to this section">#</a></h2>
+<figure class="np-code" id="code-2" data-lang="ts"><div class="np-code-bar"><span class="np-dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="np-code-tab"><span class="np-code-badge" data-lang="ts" aria-hidden="true">TS</span>example.ts</span><button type="button" class="np-code-copy" aria-label="Copy code from example.ts" @click="copy($el)"><svg class="np-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="11.5" height="11.5" rx="2"/><path d="M15 9V5.5A2 2 0 0 0 13 3.5H5.5a2 2 0 0 0-2 2V13a2 2 0 0 0 2 2H9"/></svg><span v-text="copied === 'code-2' ? 'Copied' : 'Copy'">Copy</span></button></div><pre class="shiki shiki-themes light-plus dark-plus" style="--shiki-light:#000000;--shiki-dark:#D4D4D4;--shiki-light-bg:#FFFFFF;--shiki-dark-bg:#1E1E1E" tabindex="0" aria-label="example.ts code example"><code><span class="line"><span style="--shiki-light:#795E26;--shiki-dark:#DCDCAA">Number</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">(</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178">"1,5"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">);       </span><span style="--shiki-light:#008000;--shiki-dark:#6A9955">// NaN</span></span>
 <span class="line"><span style="--shiki-light:#795E26;--shiki-dark:#DCDCAA">Number</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">(</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178">"1.234,56"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">);  </span><span style="--shiki-light:#008000;--shiki-dark:#6A9955">// NaN</span></span>
-<span class="line"><span style="--shiki-light:#795E26;--shiki-dark:#DCDCAA">Number</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">(</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178">"1 234"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">);     </span><span style="--shiki-light:#008000;--shiki-dark:#6A9955">// NaN</span></span></code></pre></div>
+<span class="line"><span style="--shiki-light:#795E26;--shiki-dark:#DCDCAA">Number</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">(</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178">"1 234"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">);     </span><span style="--shiki-light:#008000;--shiki-dark:#6A9955">// NaN</span></span></code></pre><div class="np-code-status" aria-hidden="true"><span><svg class="np-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg>numberparrot</span><span>TypeScript</span><span>UTF-8</span><span>3 lines</span></div></figure>
 <p><code>Number</code> rejects the whole string, which is safer, but it still only understands one format: a dot as the decimal separator and no grouping at all.</p>
 
-<h2>The fix</h2>
+<h2 id="the-fix">The fix<a class="np-anchor" href="#the-fix" aria-label="Link to this section">#</a></h2>
 <p>Parse with the locale the number was written in. numberparrot gets the separators from <code>Intl.NumberFormat</code> and validates the whole string:</p>
-<div class="code-frame" id="code-3" data-lang="ts"><div class="code-bar"><span class="code-tab">example.ts</span><button type="button" class="code-copy" aria-label="Copy code" @click="copy($el)" v-text="copied === 'code-3' ? 'Copied' : 'Copy'">Copy</button></div><pre class="shiki shiki-themes light-plus dark-plus" style="--shiki-light:#000000;--shiki-dark:#D4D4D4;--shiki-light-bg:#FFFFFF;--shiki-dark-bg:#1E1E1E" tabindex="0" aria-label="example.ts code example"><code><span class="line"><span style="--shiki-light:#AF00DB;--shiki-dark:#C586C0">import</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4"> { </span><span style="--shiki-light:#001080;--shiki-dark:#9CDCFE">parse</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4"> } </span><span style="--shiki-light:#AF00DB;--shiki-dark:#C586C0">from</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178"> "numberparrot"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">;</span></span>
+<figure class="np-code" id="code-3" data-lang="ts"><div class="np-code-bar"><span class="np-dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="np-code-tab"><span class="np-code-badge" data-lang="ts" aria-hidden="true">TS</span>example.ts</span><button type="button" class="np-code-copy" aria-label="Copy code from example.ts" @click="copy($el)"><svg class="np-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="11.5" height="11.5" rx="2"/><path d="M15 9V5.5A2 2 0 0 0 13 3.5H5.5a2 2 0 0 0-2 2V13a2 2 0 0 0 2 2H9"/></svg><span v-text="copied === 'code-3' ? 'Copied' : 'Copy'">Copy</span></button></div><pre class="shiki shiki-themes light-plus dark-plus" style="--shiki-light:#000000;--shiki-dark:#D4D4D4;--shiki-light-bg:#FFFFFF;--shiki-dark-bg:#1E1E1E" tabindex="0" aria-label="example.ts code example"><code><span class="line"><span style="--shiki-light:#AF00DB;--shiki-dark:#C586C0">import</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4"> { </span><span style="--shiki-light:#001080;--shiki-dark:#9CDCFE">parse</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4"> } </span><span style="--shiki-light:#AF00DB;--shiki-dark:#C586C0">from</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178"> "numberparrot"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">;</span></span>
 <span class="line"></span>
 <span class="line"><span style="--shiki-light:#795E26;--shiki-dark:#DCDCAA">parse</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">(</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178">"1,5"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">, </span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178">"pt-BR"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">);           </span><span style="--shiki-light:#008000;--shiki-dark:#6A9955">// 1.5</span></span>
 <span class="line"><span style="--shiki-light:#795E26;--shiki-dark:#DCDCAA">parse</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">(</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178">"1.234,56"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">, </span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178">"pt-BR"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">);      </span><span style="--shiki-light:#008000;--shiki-dark:#6A9955">// 1234.56</span></span>
@@ -78,68 +161,254 @@
 <span class="line"><span style="--shiki-light:#795E26;--shiki-dark:#DCDCAA">parse</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">(</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178">"12,34,567.89"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">, </span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178">"en-IN"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">);  </span><span style="--shiki-light:#008000;--shiki-dark:#6A9955">// 1234567.89</span></span>
 <span class="line"></span>
 <span class="line"><span style="--shiki-light:#008000;--shiki-dark:#6A9955">// Strict mode throws with a reason instead of returning NaN</span></span>
-<span class="line"><span style="--shiki-light:#795E26;--shiki-dark:#DCDCAA">parse</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">(</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178">"1,23"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">, </span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178">"en-US"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">, { </span><span style="--shiki-light:#001080;--shiki-dark:#9CDCFE">strict:</span><span style="--shiki-light:#0000FF;--shiki-dark:#569CD6"> true</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4"> }); </span><span style="--shiki-light:#008000;--shiki-dark:#6A9955">// NumberParseError: INVALID_GROUPING</span></span></code></pre></div>
+<span class="line"><span style="--shiki-light:#795E26;--shiki-dark:#DCDCAA">parse</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">(</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178">"1,23"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">, </span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178">"en-US"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">, { </span><span style="--shiki-light:#001080;--shiki-dark:#9CDCFE">strict:</span><span style="--shiki-light:#0000FF;--shiki-dark:#569CD6"> true</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4"> }); </span><span style="--shiki-light:#008000;--shiki-dark:#6A9955">// NumberParseError: INVALID_GROUPING</span></span></code></pre><div class="np-code-status" aria-hidden="true"><span><svg class="np-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg>numberparrot</span><span>TypeScript</span><span>UTF-8</span><span>9 lines</span></div></figure>
 
-<h2>Comparison</h2>
-<div class="table-wrap"><table>
+<h2 id="comparison">Comparison<a class="np-anchor" href="#comparison" aria-label="Link to this section">#</a></h2>
+<div class="table-wrap"><table class="table table-zebra">
 <thead><tr><th>Input</th><th>Locale</th><th>parseFloat</th><th>Number</th><th>numberparrot</th></tr></thead>
 <tbody>
-<tr><td><code>1,5</code></td><td>pt-BR</td><td class="bad">1</td><td class="bad">NaN</td><td class="good">1.5</td></tr>
-<tr><td><code>1.234,56</code></td><td>de-DE</td><td class="bad">1.234</td><td class="bad">NaN</td><td class="good">1234.56</td></tr>
-<tr><td><code>1 234,56</code></td><td>fr-FR</td><td class="bad">1</td><td class="bad">NaN</td><td class="good">1234.56</td></tr>
-<tr><td><code>-1.234,56</code></td><td>it-IT</td><td class="bad">-1.234</td><td class="bad">NaN</td><td class="good">-1234.56</td></tr>
+<tr><td><code>1,5</code></td><td>pt-BR</td><td class="np-bad">1</td><td class="np-bad">NaN</td><td class="np-good">1.5</td></tr>
+<tr><td><code>1.234,56</code></td><td>de-DE</td><td class="np-bad">1.234</td><td class="np-bad">NaN</td><td class="np-good">1234.56</td></tr>
+<tr><td><code>1 234,56</code></td><td>fr-FR</td><td class="np-bad">1</td><td class="np-bad">NaN</td><td class="np-good">1234.56</td></tr>
+<tr><td><code>-1.234,56</code></td><td>it-IT</td><td class="np-bad">-1.234</td><td class="np-bad">NaN</td><td class="np-good">-1234.56</td></tr>
 </tbody></table></div>
 
-<h2>Install</h2>
-<div class="install">
-  <div class="tabs" role="tablist" aria-label="Package manager">
-    <button type="button" role="tab" id="pm-2-npm" aria-controls="pm-2-npm-panel" aria-selected="true" :aria-selected="pm === 'npm' ? 'true' : 'false'" @click="setPm('npm')">npm</button>
-    <button type="button" role="tab" id="pm-2-pnpm" aria-controls="pm-2-pnpm-panel" aria-selected="false" :aria-selected="pm === 'pnpm' ? 'true' : 'false'" @click="setPm('pnpm')">pnpm</button>
-    <button type="button" role="tab" id="pm-2-yarn" aria-controls="pm-2-yarn-panel" aria-selected="false" :aria-selected="pm === 'yarn' ? 'true' : 'false'" @click="setPm('yarn')">yarn</button>
-    <button type="button" role="tab" id="pm-2-bun" aria-controls="pm-2-bun-panel" aria-selected="false" :aria-selected="pm === 'bun' ? 'true' : 'false'" @click="setPm('bun')">bun</button>
-  </div>
-  <div role="tabpanel" id="pm-2-npm-panel" aria-labelledby="pm-2-npm" v-show="pm === 'npm'">
-<div class="code-frame" id="code-4" data-lang="sh"><div class="code-bar"><span class="code-tab">Terminal</span><button type="button" class="code-copy" aria-label="Copy code" @click="copy($el)" v-text="copied === 'code-4' ? 'Copied' : 'Copy'">Copy</button></div><pre class="shiki shiki-themes light-plus dark-plus" style="--shiki-light:#000000;--shiki-dark:#D4D4D4;--shiki-light-bg:#FFFFFF;--shiki-dark-bg:#1E1E1E" tabindex="0" aria-label="Terminal code example"><code><span class="line"><span style="--shiki-light:#795E26;--shiki-dark:#DCDCAA">npm</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178"> install</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178"> numberparrot</span></span></code></pre></div>
-  </div>
-  <div role="tabpanel" id="pm-2-pnpm-panel" aria-labelledby="pm-2-pnpm" style="display:none" v-show="pm === 'pnpm'">
-<div class="code-frame" id="code-5" data-lang="sh"><div class="code-bar"><span class="code-tab">Terminal</span><button type="button" class="code-copy" aria-label="Copy code" @click="copy($el)" v-text="copied === 'code-5' ? 'Copied' : 'Copy'">Copy</button></div><pre class="shiki shiki-themes light-plus dark-plus" style="--shiki-light:#000000;--shiki-dark:#D4D4D4;--shiki-light-bg:#FFFFFF;--shiki-dark-bg:#1E1E1E" tabindex="0" aria-label="Terminal code example"><code><span class="line"><span style="--shiki-light:#795E26;--shiki-dark:#DCDCAA">pnpm</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178"> add</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178"> numberparrot</span></span></code></pre></div>
-  </div>
-  <div role="tabpanel" id="pm-2-yarn-panel" aria-labelledby="pm-2-yarn" style="display:none" v-show="pm === 'yarn'">
-<div class="code-frame" id="code-6" data-lang="sh"><div class="code-bar"><span class="code-tab">Terminal</span><button type="button" class="code-copy" aria-label="Copy code" @click="copy($el)" v-text="copied === 'code-6' ? 'Copied' : 'Copy'">Copy</button></div><pre class="shiki shiki-themes light-plus dark-plus" style="--shiki-light:#000000;--shiki-dark:#D4D4D4;--shiki-light-bg:#FFFFFF;--shiki-dark-bg:#1E1E1E" tabindex="0" aria-label="Terminal code example"><code><span class="line"><span style="--shiki-light:#795E26;--shiki-dark:#DCDCAA">yarn</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178"> add</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178"> numberparrot</span></span></code></pre></div>
-  </div>
-  <div role="tabpanel" id="pm-2-bun-panel" aria-labelledby="pm-2-bun" style="display:none" v-show="pm === 'bun'">
-<div class="code-frame" id="code-7" data-lang="sh"><div class="code-bar"><span class="code-tab">Terminal</span><button type="button" class="code-copy" aria-label="Copy code" @click="copy($el)" v-text="copied === 'code-7' ? 'Copied' : 'Copy'">Copy</button></div><pre class="shiki shiki-themes light-plus dark-plus" style="--shiki-light:#000000;--shiki-dark:#D4D4D4;--shiki-light-bg:#FFFFFF;--shiki-dark-bg:#1E1E1E" tabindex="0" aria-label="Terminal code example"><code><span class="line"><span style="--shiki-light:#795E26;--shiki-dark:#DCDCAA">bun</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178"> add</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178"> numberparrot</span></span></code></pre></div>
-  </div>
+<h2 id="install">Install<a class="np-anchor" href="#install" aria-label="Link to this section">#</a></h2>
+<div class="np-install-tabs">
+<div class="np-pms" role="tablist" aria-label="Package manager"><button type="button" role="tab" class="np-pm" id="pm-2-npm" aria-controls="pm-2-npm-panel" aria-selected="true" :aria-selected="pm === 'npm' ? 'true' : 'false'" @click="pm = 'npm'">npm</button><button type="button" role="tab" class="np-pm" id="pm-2-pnpm" aria-controls="pm-2-pnpm-panel" aria-selected="false" :aria-selected="pm === 'pnpm' ? 'true' : 'false'" @click="pm = 'pnpm'">pnpm</button><button type="button" role="tab" class="np-pm" id="pm-2-yarn" aria-controls="pm-2-yarn-panel" aria-selected="false" :aria-selected="pm === 'yarn' ? 'true' : 'false'" @click="pm = 'yarn'">yarn</button><button type="button" role="tab" class="np-pm" id="pm-2-bun" aria-controls="pm-2-bun-panel" aria-selected="false" :aria-selected="pm === 'bun' ? 'true' : 'false'" @click="pm = 'bun'">bun</button></div>
+<div role="tabpanel" id="pm-2-npm-panel" aria-labelledby="pm-2-npm" v-show="pm === 'npm'">
+<figure class="np-code" id="code-4" data-lang="sh"><div class="np-code-bar"><span class="np-dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="np-code-tab"><span class="np-code-badge" data-lang="sh" aria-hidden="true">$_</span>Terminal</span><button type="button" class="np-code-copy" aria-label="Copy code from Terminal" @click="copy($el)"><svg class="np-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="11.5" height="11.5" rx="2"/><path d="M15 9V5.5A2 2 0 0 0 13 3.5H5.5a2 2 0 0 0-2 2V13a2 2 0 0 0 2 2H9"/></svg><span v-text="copied === 'code-4' ? 'Copied' : 'Copy'">Copy</span></button></div><pre class="shiki shiki-themes light-plus dark-plus" style="--shiki-light:#000000;--shiki-dark:#D4D4D4;--shiki-light-bg:#FFFFFF;--shiki-dark-bg:#1E1E1E" tabindex="0" aria-label="Terminal code example"><code><span class="line"><span style="--shiki-light:#795E26;--shiki-dark:#DCDCAA">npm</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178"> install</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178"> numberparrot</span></span></code></pre><div class="np-code-status" aria-hidden="true"><span><svg class="np-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg>numberparrot</span><span>Shell</span><span>UTF-8</span><span>1 line</span></div></figure>
 </div>
-<p>Zero dependencies, ESM and CommonJS, TypeScript types included. Works in Node.js 18+, Deno, Bun and browsers. <a href="./">Try it in the playground</a>.</p>
+<div role="tabpanel" id="pm-2-pnpm-panel" aria-labelledby="pm-2-pnpm" style="display:none" v-show="pm === 'pnpm'">
+<figure class="np-code" id="code-5" data-lang="sh"><div class="np-code-bar"><span class="np-dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="np-code-tab"><span class="np-code-badge" data-lang="sh" aria-hidden="true">$_</span>Terminal</span><button type="button" class="np-code-copy" aria-label="Copy code from Terminal" @click="copy($el)"><svg class="np-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="11.5" height="11.5" rx="2"/><path d="M15 9V5.5A2 2 0 0 0 13 3.5H5.5a2 2 0 0 0-2 2V13a2 2 0 0 0 2 2H9"/></svg><span v-text="copied === 'code-5' ? 'Copied' : 'Copy'">Copy</span></button></div><pre class="shiki shiki-themes light-plus dark-plus" style="--shiki-light:#000000;--shiki-dark:#D4D4D4;--shiki-light-bg:#FFFFFF;--shiki-dark-bg:#1E1E1E" tabindex="0" aria-label="Terminal code example"><code><span class="line"><span style="--shiki-light:#795E26;--shiki-dark:#DCDCAA">pnpm</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178"> add</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178"> numberparrot</span></span></code></pre><div class="np-code-status" aria-hidden="true"><span><svg class="np-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg>numberparrot</span><span>Shell</span><span>UTF-8</span><span>1 line</span></div></figure>
+</div>
+<div role="tabpanel" id="pm-2-yarn-panel" aria-labelledby="pm-2-yarn" style="display:none" v-show="pm === 'yarn'">
+<figure class="np-code" id="code-6" data-lang="sh"><div class="np-code-bar"><span class="np-dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="np-code-tab"><span class="np-code-badge" data-lang="sh" aria-hidden="true">$_</span>Terminal</span><button type="button" class="np-code-copy" aria-label="Copy code from Terminal" @click="copy($el)"><svg class="np-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="11.5" height="11.5" rx="2"/><path d="M15 9V5.5A2 2 0 0 0 13 3.5H5.5a2 2 0 0 0-2 2V13a2 2 0 0 0 2 2H9"/></svg><span v-text="copied === 'code-6' ? 'Copied' : 'Copy'">Copy</span></button></div><pre class="shiki shiki-themes light-plus dark-plus" style="--shiki-light:#000000;--shiki-dark:#D4D4D4;--shiki-light-bg:#FFFFFF;--shiki-dark-bg:#1E1E1E" tabindex="0" aria-label="Terminal code example"><code><span class="line"><span style="--shiki-light:#795E26;--shiki-dark:#DCDCAA">yarn</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178"> add</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178"> numberparrot</span></span></code></pre><div class="np-code-status" aria-hidden="true"><span><svg class="np-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg>numberparrot</span><span>Shell</span><span>UTF-8</span><span>1 line</span></div></figure>
+</div>
+<div role="tabpanel" id="pm-2-bun-panel" aria-labelledby="pm-2-bun" style="display:none" v-show="pm === 'bun'">
+<figure class="np-code" id="code-7" data-lang="sh"><div class="np-code-bar"><span class="np-dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="np-code-tab"><span class="np-code-badge" data-lang="sh" aria-hidden="true">$_</span>Terminal</span><button type="button" class="np-code-copy" aria-label="Copy code from Terminal" @click="copy($el)"><svg class="np-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="11.5" height="11.5" rx="2"/><path d="M15 9V5.5A2 2 0 0 0 13 3.5H5.5a2 2 0 0 0-2 2V13a2 2 0 0 0 2 2H9"/></svg><span v-text="copied === 'code-7' ? 'Copied' : 'Copy'">Copy</span></button></div><pre class="shiki shiki-themes light-plus dark-plus" style="--shiki-light:#000000;--shiki-dark:#D4D4D4;--shiki-light-bg:#FFFFFF;--shiki-dark-bg:#1E1E1E" tabindex="0" aria-label="Terminal code example"><code><span class="line"><span style="--shiki-light:#795E26;--shiki-dark:#DCDCAA">bun</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178"> add</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178"> numberparrot</span></span></code></pre><div class="np-code-status" aria-hidden="true"><span><svg class="np-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg>numberparrot</span><span>Shell</span><span>UTF-8</span><span>1 line</span></div></figure>
+</div>
+</div>
+<p>Zero dependencies, ESM and CommonJS, TypeScript types included. Works in Node.js 18+, Deno, Bun and browsers. <a href="./#board">Try it on the world board</a> or read the <a href="api.html">API reference</a>.</p>
+<h2 id="more-guides">More guides<a class="np-anchor" href="#more-guides" aria-label="Link to this section">#</a></h2>
+<div class="np-tickets">
+<a class="np-ticket np-ticket-compact" href="convert-string-with-comma-to-number-javascript.html">
+  <span class="np-ticket-stub" aria-hidden="true">
+    <span class="np-ticket-gate">Gate</span>
+    <span class="np-ticket-no">01</span>
+    <svg class="np-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7.5A1.5 1.5 0 0 1 4.5 6h15A1.5 1.5 0 0 1 21 7.5V10a2 2 0 0 0 0 4v2.5a1.5 1.5 0 0 1-1.5 1.5h-15A1.5 1.5 0 0 1 3 16.5V14a2 2 0 0 0 0-4Z"/><path d="M15 6v2.2M15 10.9v2.2M15 15.8V18"/></svg>
+  </span>
+  <span class="np-ticket-main">
+    <span class="np-ticket-route" aria-hidden="true"><span dir="auto">1.234,56</span><svg class="np-icon np-ticket-plane" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.2 13.8 3.5 12l-1-1.6 1.6-.6 6.6 1.2 4.8-4.9c.9-.9 2.6-1.4 3.3-.7.7.7.2 2.4-.7 3.3l-4.9 4.8 1.2 6.6-.6 1.6-1.6-1-1.8-6.7-3 2.9.3 2.3-1.2 1.2-1.2-2.8-2.8-1.2 1.2-1.2 2.3.3Z"/></svg><span>1234.56</span></span>
+    <strong class="np-ticket-title">Convert a String with a Comma to a Number in JavaScript</strong>
+    
+  </span>
+</a>
+<a class="np-ticket np-ticket-compact" href="parse-localized-number-javascript.html">
+  <span class="np-ticket-stub" aria-hidden="true">
+    <span class="np-ticket-gate">Gate</span>
+    <span class="np-ticket-no">03</span>
+    <svg class="np-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c-3 3.2-3 14.8 0 18M12 3c3 3.2 3 14.8 0 18M4.6 7.5h14.8M4.6 16.5h14.8"/></svg>
+  </span>
+  <span class="np-ticket-main">
+    <span class="np-ticket-route" aria-hidden="true"><span dir="auto">1 234,56</span><svg class="np-icon np-ticket-plane" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.2 13.8 3.5 12l-1-1.6 1.6-.6 6.6 1.2 4.8-4.9c.9-.9 2.6-1.4 3.3-.7.7.7.2 2.4-.7 3.3l-4.9 4.8 1.2 6.6-.6 1.6-1.6-1-1.8-6.7-3 2.9.3 2.3-1.2 1.2-1.2-2.8-2.8-1.2 1.2-1.2 2.3.3Z"/></svg><span>1234.56</span></span>
+    <strong class="np-ticket-title">Parse a Localized Number in JavaScript (Any Locale, Using Intl)</strong>
+    
+  </span>
+</a>
+<a class="np-ticket np-ticket-compact" href="parse-currency-string-javascript.html">
+  <span class="np-ticket-stub" aria-hidden="true">
+    <span class="np-ticket-gate">Gate</span>
+    <span class="np-ticket-no">04</span>
+    <svg class="np-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><ellipse cx="12" cy="7" rx="7" ry="3" fill="var(--np-sun)" fill-opacity=".35"/><path d="M5 7v5c0 1.7 3.1 3 7 3s7-1.3 7-3V7M5 12v5c0 1.7 3.1 3 7 3s7-1.3 7-3v-5"/><ellipse cx="12" cy="7" rx="7" ry="3"/></svg>
+  </span>
+  <span class="np-ticket-main">
+    <span class="np-ticket-route" aria-hidden="true"><span dir="auto">R$ 10,00</span><svg class="np-icon np-ticket-plane" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.2 13.8 3.5 12l-1-1.6 1.6-.6 6.6 1.2 4.8-4.9c.9-.9 2.6-1.4 3.3-.7.7.7.2 2.4-.7 3.3l-4.9 4.8 1.2 6.6-.6 1.6-1.6-1-1.8-6.7-3 2.9.3 2.3-1.2 1.2-1.2-2.8-2.8-1.2 1.2-1.2 2.3.3Z"/></svg><span>10 BRL</span></span>
+    <strong class="np-ticket-title">Parse a Currency String to a Number in JavaScript (R$, €, ₹, CHF)</strong>
+    
+  </span>
+</a>
+<a class="np-ticket np-ticket-compact" href="arabic-digits-to-number-javascript.html">
+  <span class="np-ticket-stub" aria-hidden="true">
+    <span class="np-ticket-gate">Gate</span>
+    <span class="np-ticket-no">05</span>
+    <svg class="np-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2.5" y="5" width="8.5" height="14" rx="2"/><rect x="13" y="5" width="8.5" height="14" rx="2"/><path d="M5.5 9.5 7.2 8v8M16 9c.3-1 1.1-1.3 1.7-1.3 1 0 1.7.8 1.4 1.8-.3 1-2.9 3.2-3.2 6.5h3.4"/></svg>
+  </span>
+  <span class="np-ticket-main">
+    <span class="np-ticket-route" aria-hidden="true"><span dir="auto">١٢٣٫٤</span><svg class="np-icon np-ticket-plane" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.2 13.8 3.5 12l-1-1.6 1.6-.6 6.6 1.2 4.8-4.9c.9-.9 2.6-1.4 3.3-.7.7.7.2 2.4-.7 3.3l-4.9 4.8 1.2 6.6-.6 1.6-1.6-1-1.8-6.7-3 2.9.3 2.3-1.2 1.2-1.2-2.8-2.8-1.2 1.2-1.2 2.3.3Z"/></svg><span>123.4</span></span>
+    <strong class="np-ticket-title">Convert Arabic and Persian Digits to a Number in JavaScript</strong>
+    
+  </span>
+</a>
+<a class="np-ticket np-ticket-compact" href="intl-numberformat-parse.html">
+  <span class="np-ticket-stub" aria-hidden="true">
+    <span class="np-ticket-gate">Gate</span>
+    <span class="np-ticket-no">06</span>
+    <svg class="np-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="m15.5 8.5-2 5-5 2 2-5Z" fill="var(--np-sun)" fill-opacity=".45"/></svg>
+  </span>
+  <span class="np-ticket-main">
+    <span class="np-ticket-route" aria-hidden="true"><span dir="auto">format()</span><svg class="np-icon np-ticket-plane" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.2 13.8 3.5 12l-1-1.6 1.6-.6 6.6 1.2 4.8-4.9c.9-.9 2.6-1.4 3.3-.7.7.7.2 2.4-.7 3.3l-4.9 4.8 1.2 6.6-.6 1.6-1.6-1-1.8-6.7-3 2.9.3 2.3-1.2 1.2-1.2-2.8-2.8-1.2 1.2-1.2 2.3.3Z"/></svg><span>parse()</span></span>
+    <strong class="np-ticket-title">Intl.NumberFormat Parse: How to Reverse Intl Number Formatting</strong>
+    
+  </span>
+</a>
+<a class="np-ticket np-ticket-compact" href="numeral-js-alternative.html">
+  <span class="np-ticket-stub" aria-hidden="true">
+    <span class="np-ticket-gate">Gate</span>
+    <span class="np-ticket-no">07</span>
+    <svg class="np-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="7" width="18" height="13" rx="2.5"/><path d="M9 7V5.2C9 4.5 9.5 4 10.2 4h3.6c.7 0 1.2.5 1.2 1.2V7M7.5 7v13M16.5 7v13"/></svg>
+  </span>
+  <span class="np-ticket-main">
+    <span class="np-ticket-route" aria-hidden="true"><span dir="auto">numeral</span><svg class="np-icon np-ticket-plane" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.2 13.8 3.5 12l-1-1.6 1.6-.6 6.6 1.2 4.8-4.9c.9-.9 2.6-1.4 3.3-.7.7.7.2 2.4-.7 3.3l-4.9 4.8 1.2 6.6-.6 1.6-1.6-1-1.8-6.7-3 2.9.3 2.3-1.2 1.2-1.2-2.8-2.8-1.2 1.2-1.2 2.3.3Z"/></svg><span>parse</span></span>
+    <strong class="np-ticket-title">numeral.js Alternative for Parsing Localized Numbers</strong>
+    
+  </span>
+</a>
+<a class="np-ticket np-ticket-compact" href="api.html">
+  <span class="np-ticket-stub" aria-hidden="true">
+    <span class="np-ticket-gate">Gate</span>
+    <span class="np-ticket-no">08</span>
+    <svg class="np-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v15H6.5A2.5 2.5 0 0 0 4 20.5Z"/><path d="M4 20.5A2.5 2.5 0 0 0 6.5 23H20v-5"/></svg>
+  </span>
+  <span class="np-ticket-main">
+    <span class="np-ticket-route" aria-hidden="true"><span dir="auto">API</span><svg class="np-icon np-ticket-plane" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.2 13.8 3.5 12l-1-1.6 1.6-.6 6.6 1.2 4.8-4.9c.9-.9 2.6-1.4 3.3-.7.7.7.2 2.4-.7 3.3l-4.9 4.8 1.2 6.6-.6 1.6-1.6-1-1.8-6.7-3 2.9.3 2.3-1.2 1.2-1.2-2.8-2.8-1.2 1.2-1.2 2.3.3Z"/></svg><span>docs</span></span>
+    <strong class="np-ticket-title">numberparrot API Reference: parse, parseCurrency, detect and More</strong>
+    
+  </span>
+</a>
+</div>
+  </div>
 </article>
-<h2>More guides</h2>
-<ul class="guides">
-  <li><a href="convert-string-with-comma-to-number-javascript.html"><strong>Convert a String with a Comma to a Number in JavaScript</strong><span>Turn &quot;1.234,56&quot; into 1234.56 without replace() hacks.</span></a></li>
-  <li><a href="parse-localized-number-javascript.html"><strong>Parse a Localized Number in JavaScript (Any Locale, Using Intl)</strong><span>Read back what toLocaleString and Intl.NumberFormat write.</span></a></li>
-  <li><a href="parse-currency-string-javascript.html"><strong>Parse a Currency String to a Number in JavaScript (R$, €, ₹, CHF)</strong><span>Amount and ISO code from R$ 1.234,56, € and ₹ strings.</span></a></li>
-  <li><a href="arabic-digits-to-number-javascript.html"><strong>Convert Arabic and Persian Digits to a Number in JavaScript</strong><span>١٬٢٣٤٫٥٦ and ۱۲۳٫۴۵ to real numbers.</span></a></li>
-  <li><a href="intl-numberformat-parse.html"><strong>Intl.NumberFormat Parse: How to Reverse Intl Number Formatting</strong><span>The missing reverse of Intl.NumberFormat#format.</span></a></li>
-  <li><a href="numeral-js-alternative.html"><strong>numeral.js Alternative for Parsing Localized Numbers</strong><span>Replace numeral().value() with locale aware parsing.</span></a></li>
-</ul>
+</main>
+  <footer class="np-foot">
+  <div class="np-foot-stamps" aria-hidden="true"><div class="container"><svg class="np-stamp" viewBox="0 0 120 120" width="74" height="74" aria-hidden="true">
+  <defs><path id="fs0-t" d="M17 60a43 43 0 0 1 86 0" fill="none"/><path id="fs0-b" d="M14 60a46 46 0 0 0 92 0" fill="none"/></defs>
+  <g transform="rotate(-8 60 60)" opacity=".92">
+  <circle cx="60" cy="60" r="52" fill="none" stroke="var(--np-leaf)" stroke-width="3.2"/><circle cx="60" cy="60" r="37" fill="none" stroke="var(--np-leaf)" stroke-width="1.6"/>
+  <text font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="8.5" font-weight="800" letter-spacing="1.6" fill="var(--np-leaf)"><textPath href="#fs0-t" startOffset="50%" text-anchor="middle">BRASIL</textPath></text>
+  <text font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="7.5" font-weight="700" letter-spacing="1.2" fill="var(--np-leaf)"><textPath href="#fs0-b" startOffset="50%" text-anchor="middle" side="left">GRU · SÃO PAULO</textPath></text>
+  <text x="60" y="64" text-anchor="middle" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="34" font-weight="800" fill="var(--np-leaf)">R$</text>
+  <text x="60" y="80" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="7" font-weight="700" letter-spacing=".8" fill="var(--np-leaf)">13 OCT 2026</text>
+  </g>
+</svg><svg class="np-stamp" viewBox="0 0 120 120" width="74" height="74" aria-hidden="true">
+  <defs></defs>
+  <g transform="rotate(6 60 60)" opacity=".92">
+  <rect x="6" y="14" width="108" height="92" rx="8" fill="none" stroke="var(--np-ink)" stroke-width="3.2"/><rect x="13" y="30" width="94" height="60" rx="4" fill="none" stroke="var(--np-ink)" stroke-width="1.6"/>
+  <text x="60" y="25.5" text-anchor="middle" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="8.5" font-weight="800" letter-spacing="1.6" fill="var(--np-ink)">EUROPA</text>
+  <text x="60" y="101" text-anchor="middle" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="7.5" font-weight="700" letter-spacing="1.2" fill="var(--np-ink)">CDG · BER · MAD</text>
+  <text x="60" y="66" text-anchor="middle" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="44" font-weight="800" fill="var(--np-ink)">€</text>
+  <text x="60" y="82" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="7" font-weight="700" letter-spacing=".8" fill="var(--np-ink)">13 OCT 2026</text>
+  </g>
+</svg><svg class="np-stamp" viewBox="0 0 120 120" width="74" height="74" aria-hidden="true">
+  <defs><path id="fs2-t" d="M11 60a49 37 0 0 1 98 0" fill="none"/><path id="fs2-b" d="M8 60a52 40 0 0 0 104 0" fill="none"/></defs>
+  <g transform="rotate(-4 60 60)" opacity=".92">
+  <ellipse cx="60" cy="60" rx="56" ry="44" fill="none" stroke="var(--np-red)" stroke-width="3.2"/><ellipse cx="60" cy="60" rx="42" ry="30" fill="none" stroke="var(--np-red)" stroke-width="1.6"/>
+  <text font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="8.5" font-weight="800" letter-spacing="1.6" fill="var(--np-red)"><textPath href="#fs2-t" startOffset="50%" text-anchor="middle">BHARAT</textPath></text>
+  <text font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="7.5" font-weight="700" letter-spacing="1.2" fill="var(--np-red)"><textPath href="#fs2-b" startOffset="50%" text-anchor="middle" side="left">BOM · DEL</textPath></text>
+  <text x="60" y="64" text-anchor="middle" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="44" font-weight="800" fill="var(--np-red)">₹</text>
+  <text x="60" y="80" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="7" font-weight="700" letter-spacing=".8" fill="var(--np-red)">13 OCT 2026</text>
+  </g>
+</svg><svg class="np-stamp" viewBox="0 0 120 120" width="74" height="74" aria-hidden="true">
+  <defs><path id="fs3-t" d="M17 60a43 43 0 0 1 86 0" fill="none"/><path id="fs3-b" d="M14 60a46 46 0 0 0 92 0" fill="none"/></defs>
+  <g transform="rotate(10 60 60)" opacity=".92">
+  <circle cx="60" cy="60" r="52" fill="none" stroke="var(--np-red)" stroke-width="3.2"/><circle cx="60" cy="60" r="37" fill="none" stroke="var(--np-red)" stroke-width="1.6"/>
+  <text font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="8.5" font-weight="800" letter-spacing="1.6" fill="var(--np-red)"><textPath href="#fs3-t" startOffset="50%" text-anchor="middle">NIPPON</textPath></text>
+  <text font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="7.5" font-weight="700" letter-spacing="1.2" fill="var(--np-red)"><textPath href="#fs3-b" startOffset="50%" text-anchor="middle" side="left">HND · TOKYO</textPath></text>
+  <text x="60" y="64" text-anchor="middle" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="44" font-weight="800" fill="var(--np-red)">¥</text>
+  <text x="60" y="80" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="7" font-weight="700" letter-spacing=".8" fill="var(--np-red)">13 OCT 2026</text>
+  </g>
+</svg><svg class="np-stamp" viewBox="0 0 120 120" width="74" height="74" aria-hidden="true">
+  <defs></defs>
+  <g transform="rotate(-6 60 60)" opacity=".92">
+  <rect x="6" y="14" width="108" height="92" rx="8" fill="none" stroke="var(--np-leaf)" stroke-width="3.2"/><rect x="13" y="30" width="94" height="60" rx="4" fill="none" stroke="var(--np-leaf)" stroke-width="1.6"/>
+  <text x="60" y="25.5" text-anchor="middle" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="8.5" font-weight="800" letter-spacing="1.6" fill="var(--np-leaf)">SCHWEIZ</text>
+  <text x="60" y="101" text-anchor="middle" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="7.5" font-weight="700" letter-spacing="1.2" fill="var(--np-leaf)">ZRH · ZÜRICH</text>
+  <text x="60" y="66" text-anchor="middle" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="26" font-weight="800" fill="var(--np-leaf)">CHF</text>
+  <text x="60" y="82" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="7" font-weight="700" letter-spacing=".8" fill="var(--np-leaf)">13 OCT 2026</text>
+  </g>
+</svg><svg class="np-stamp" viewBox="0 0 120 120" width="74" height="74" aria-hidden="true">
+  <defs><path id="fs5-t" d="M11 60a49 37 0 0 1 98 0" fill="none"/><path id="fs5-b" d="M8 60a52 40 0 0 0 104 0" fill="none"/></defs>
+  <g transform="rotate(5 60 60)" opacity=".92">
+  <ellipse cx="60" cy="60" rx="56" ry="44" fill="none" stroke="var(--np-ink)" stroke-width="3.2"/><ellipse cx="60" cy="60" rx="42" ry="30" fill="none" stroke="var(--np-ink)" stroke-width="1.6"/>
+  <text font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="8.5" font-weight="800" letter-spacing="1.6" fill="var(--np-ink)"><textPath href="#fs5-t" startOffset="50%" text-anchor="middle">UNITED KINGDOM</textPath></text>
+  <text font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="7.5" font-weight="700" letter-spacing="1.2" fill="var(--np-ink)"><textPath href="#fs5-b" startOffset="50%" text-anchor="middle" side="left">LHR · LONDON</textPath></text>
+  <text x="60" y="64" text-anchor="middle" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="44" font-weight="800" fill="var(--np-ink)">£</text>
+  <text x="60" y="80" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="7" font-weight="700" letter-spacing=".8" fill="var(--np-ink)">13 OCT 2026</text>
+  </g>
+</svg><svg class="np-stamp" viewBox="0 0 120 120" width="74" height="74" aria-hidden="true">
+  <defs><path id="fs6-t" d="M17 60a43 43 0 0 1 86 0" fill="none"/><path id="fs6-b" d="M14 60a46 46 0 0 0 92 0" fill="none"/></defs>
+  <g transform="rotate(-10 60 60)" opacity=".92">
+  <circle cx="60" cy="60" r="52" fill="none" stroke="var(--np-ink)" stroke-width="3.2"/><circle cx="60" cy="60" r="37" fill="none" stroke="var(--np-ink)" stroke-width="1.6"/>
+  <text font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="8.5" font-weight="800" letter-spacing="1.6" fill="var(--np-ink)"><textPath href="#fs6-t" startOffset="50%" text-anchor="middle">MISR</textPath></text>
+  <text font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="7.5" font-weight="700" letter-spacing="1.2" fill="var(--np-ink)"><textPath href="#fs6-b" startOffset="50%" text-anchor="middle" side="left">CAI · CAIRO</textPath></text>
+  <text x="60" y="64" text-anchor="middle" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="26" font-weight="800" fill="var(--np-ink)">ج.م</text>
+  <text x="60" y="80" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="7" font-weight="700" letter-spacing=".8" fill="var(--np-ink)">13 OCT 2026</text>
+  </g>
+</svg><svg class="np-stamp" viewBox="0 0 120 120" width="74" height="74" aria-hidden="true">
+  <defs></defs>
+  <g transform="rotate(4 60 60)" opacity=".92">
+  <rect x="6" y="14" width="108" height="92" rx="8" fill="none" stroke="var(--np-red)" stroke-width="3.2"/><rect x="13" y="30" width="94" height="60" rx="4" fill="none" stroke="var(--np-red)" stroke-width="1.6"/>
+  <text x="60" y="25.5" text-anchor="middle" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="8.5" font-weight="800" letter-spacing="1.6" fill="var(--np-red)">UNITED STATES</text>
+  <text x="60" y="101" text-anchor="middle" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="7.5" font-weight="700" letter-spacing="1.2" fill="var(--np-red)">JFK · NEW YORK</text>
+  <text x="60" y="66" text-anchor="middle" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="44" font-weight="800" fill="var(--np-red)">$</text>
+  <text x="60" y="82" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="7" font-weight="700" letter-spacing=".8" fill="var(--np-red)">13 OCT 2026</text>
+  </g>
+</svg><svg class="np-stamp" viewBox="0 0 120 120" width="74" height="74" aria-hidden="true">
+  <defs><path id="fs8-t" d="M11 60a49 37 0 0 1 98 0" fill="none"/><path id="fs8-b" d="M8 60a52 40 0 0 0 104 0" fill="none"/></defs>
+  <g transform="rotate(-7 60 60)" opacity=".92">
+  <ellipse cx="60" cy="60" rx="56" ry="44" fill="none" stroke="var(--np-leaf)" stroke-width="3.2"/><ellipse cx="60" cy="60" rx="42" ry="30" fill="none" stroke="var(--np-leaf)" stroke-width="1.6"/>
+  <text font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="8.5" font-weight="800" letter-spacing="1.6" fill="var(--np-leaf)"><textPath href="#fs8-t" startOffset="50%" text-anchor="middle">KOREA</textPath></text>
+  <text font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="7.5" font-weight="700" letter-spacing="1.2" fill="var(--np-leaf)"><textPath href="#fs8-b" startOffset="50%" text-anchor="middle" side="left">ICN · SEOUL</textPath></text>
+  <text x="60" y="64" text-anchor="middle" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="44" font-weight="800" fill="var(--np-leaf)">₩</text>
+  <text x="60" y="80" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="7" font-weight="700" letter-spacing=".8" fill="var(--np-leaf)">13 OCT 2026</text>
+  </g>
+</svg><svg class="np-stamp" viewBox="0 0 120 120" width="74" height="74" aria-hidden="true">
+  <defs><path id="fs9-t" d="M17 60a43 43 0 0 1 86 0" fill="none"/><path id="fs9-b" d="M14 60a46 46 0 0 0 92 0" fill="none"/></defs>
+  <g transform="rotate(7 60 60)" opacity=".92">
+  <circle cx="60" cy="60" r="52" fill="none" stroke="var(--np-leaf)" stroke-width="3.2"/><circle cx="60" cy="60" r="37" fill="none" stroke="var(--np-leaf)" stroke-width="1.6"/>
+  <text font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="8.5" font-weight="800" letter-spacing="1.6" fill="var(--np-leaf)"><textPath href="#fs9-t" startOffset="50%" text-anchor="middle">TÜRKİYE</textPath></text>
+  <text font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="7.5" font-weight="700" letter-spacing="1.2" fill="var(--np-leaf)"><textPath href="#fs9-b" startOffset="50%" text-anchor="middle" side="left">IST · ISTANBUL</textPath></text>
+  <text x="60" y="64" text-anchor="middle" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="44" font-weight="800" fill="var(--np-leaf)">₺</text>
+  <text x="60" y="80" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="7" font-weight="700" letter-spacing=".8" fill="var(--np-leaf)">13 OCT 2026</text>
+  </g>
+</svg></div></div>
+  <div class="container np-foot-grid">
+    <div class="np-foot-brand">
+      <a class="np-brand" href="./"><img src="img/mascot.svg" width="56" height="56" alt="Pico, the numberparrot mascot"><span>number<b>parrot</b></span></a>
+      <p>Pico repeats every number back the way it was meant, in every locale your runtime knows. MIT licensed, zero dependencies.</p>
+      <div class="np-foot-social">
+        <a class="np-icon-btn" href="https://github.com/kwy404/numberparrot" aria-label="Source on GitHub"><svg class="np-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path stroke="none" fill="currentColor" d="M12 1.6a10.4 10.4 0 0 0-3.3 20.3c.5.1.7-.2.7-.5v-1.8c-2.9.6-3.5-1.2-3.5-1.2-.5-1.2-1.2-1.5-1.2-1.5-.9-.6.1-.6.1-.6 1 .1 1.6 1.1 1.6 1.1.9 1.6 2.4 1.1 3 .9.1-.7.4-1.1.7-1.4-2.3-.3-4.7-1.2-4.7-5.1 0-1.1.4-2 1.1-2.8-.1-.3-.5-1.3.1-2.7 0 0 .9-.3 2.9 1.1a9.9 9.9 0 0 1 5.2 0c2-1.4 2.9-1.1 2.9-1.1.6 1.4.2 2.4.1 2.7.7.8 1.1 1.7 1.1 2.8 0 4-2.4 4.8-4.7 5.1.4.3.7.9.7 1.9v2.8c0 .3.2.6.7.5A10.4 10.4 0 0 0 12 1.6Z"/></svg></a>
+        <a class="np-icon-btn" href="https://www.npmjs.com/package/numberparrot" aria-label="numberparrot on npm"><svg class="np-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2.8 20 7.3v9.4L12 21.2l-8-4.5V7.3Z"/><path d="M4 7.3 12 12l8-4.7M12 12v9.2"/></svg></a>
+        <a class="np-icon-btn" href="https://github.com/kwy404/numberparrot/blob/main/CHANGELOG.md" aria-label="Changelog"><svg class="np-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v15H6.5A2.5 2.5 0 0 0 4 20.5Z"/><path d="M4 20.5A2.5 2.5 0 0 0 6.5 23H20v-5"/></svg></a>
+      </div>
     </div>
-  </main>
-  <footer class="site">
-    <div class="container">
-      <img src="img/mascot.svg" width="32" height="32" alt="">
-      <span>numberparrot is MIT licensed, made by <a href="https://github.com/kwy404">Alexandre Kohler</a>.</span>
-      <a href="https://github.com/kwy404/numberparrot">Source on GitHub</a>
-      <a href="https://www.npmjs.com/package/numberparrot">npm</a>
-      <span>Interactive parts built with <a href="https://github.com/kwy404/Voodoo.js">Voodoo.js</a>.</span>
+    <nav aria-labelledby="ft-site"><p class="np-foot-title" id="ft-site">On this site</p><ul>
+      <li><a href="./#board">World board</a></li><li><a href="./#departures">Departures</a></li><li><a href="./#use-cases">Use cases</a></li><li><a href="api.html">API reference</a></li><li><a href="./#faq">FAQ</a></li><li><a href="https://github.com/kwy404/numberparrot/issues">Report an issue</a></li>
+    </ul></nav>
+    <nav aria-labelledby="ft-guides"><p class="np-foot-title" id="ft-guides">Guides</p><ul>
+      <li><a href="convert-string-with-comma-to-number-javascript.html">Comma to number</a></li><li><a href="parsefloat-comma-decimal-separator.html">parseFloat and commas</a></li><li><a href="parse-localized-number-javascript.html">Localized numbers</a></li><li><a href="parse-currency-string-javascript.html">Currency strings</a></li><li><a href="arabic-digits-to-number-javascript.html">Arabic digits</a></li><li><a href="intl-numberformat-parse.html">Intl parse</a></li><li><a href="numeral-js-alternative.html">numeral.js alternative</a></li>
+    </ul></nav>
+    <nav aria-labelledby="ft-more"><p class="np-foot-title" id="ft-more">More from kwy404</p><ul>
+      <li><a href="https://kwy404.github.io/monsoon/">Monsoon</a></li><li><a href="https://kwy404.github.io/Voodoo.js/">Voodoo.js</a></li><li><a href="https://kwy404.github.io/breakhound/">breakhound</a></li><li><a href="https://kwy404.github.io/vueleap/">vueleap</a></li><li><a href="https://kwy404.github.io/graphemely/">graphemely</a></li><li><a href="https://kwy404.github.io/edgegoat/">edgegoat</a></li>
+    </ul></nav>
+  </div>
+  <div class="container"><div class="np-foot-bottom">
+    <p>Made by <strong>Alexandre Kohler</strong> <a class="np-foot-me" href="https://github.com/kwy404" rel="me noopener" aria-label="Alexandre Kohler on GitHub"><svg class="np-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path stroke="none" fill="currentColor" d="M12 1.6a10.4 10.4 0 0 0-3.3 20.3c.5.1.7-.2.7-.5v-1.8c-2.9.6-3.5-1.2-3.5-1.2-.5-1.2-1.2-1.5-1.2-1.5-.9-.6.1-.6.1-.6 1 .1 1.6 1.1 1.6 1.1.9 1.6 2.4 1.1 3 .9.1-.7.4-1.1.7-1.4-2.3-.3-4.7-1.2-4.7-5.1 0-1.1.4-2 1.1-2.8-.1-.3-.5-1.3.1-2.7 0 0 .9-.3 2.9 1.1a9.9 9.9 0 0 1 5.2 0c2-1.4 2.9-1.1 2.9-1.1.6 1.4.2 2.4.1 2.7.7.8 1.1 1.7 1.1 2.8 0 4-2.4 4.8-4.7 5.1.4.3.7.9.7 1.9v2.8c0 .3.2.6.7.5A10.4 10.4 0 0 0 12 1.6Z"/></svg>GitHub</a> <a class="np-foot-me" href="https://www.linkedin.com/in/alexandre-silva-173687256/" rel="me noopener" aria-label="Alexandre Kohler on LinkedIn"><svg class="np-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M7.5 10.5v6M7.5 7.5v.01M11.5 16.5v-6M11.5 13c0-1.6 1-2.7 2.5-2.7s2.5 1 2.5 2.7v3.5"/></svg>LinkedIn</a></p>
+    <p><a href="https://kwy404.github.io/monsoon/">Built with Monsoon</a><span aria-hidden="true">/</span><a href="https://kwy404.github.io/Voodoo.js/">Interactive parts built with Voodoo.js</a></p>
+  </div></div>
+</footer>
+  <dialog id="np-search" class="modal modal-top np-search-dialog" aria-label="Search the docs">
+  <div class="command-palette">
+    <label class="command-palette-search"><span class="sr-only">Search the docs</span>
+      <input class="command-palette-input" type="search" placeholder="Search guides, functions and locales" autocomplete="off" spellcheck="false" v-model="q" @keydown.down.prevent="move(1)" @keydown.up.prevent="move(-1)" @keydown.enter.prevent="go()" @keydown.esc.prevent="closeSearch()">
+    </label>
+    <div class="command-palette-list" role="listbox" aria-label="Results">
+      <a class="command-palette-item" role="option" v-for="(hit, i) in hits" :key="hit.url" :href="hit.url" :aria-selected="i === sel ? 'true' : 'false'" @mouseenter="sel = i" @click="closeSearch()"><span class="np-hit-kind" v-text="hit.kind"></span><span class="np-hit-title" v-text="hit.title"></span><span class="np-hit-text" v-text="hit.text"></span></a>
+      <p class="command-palette-empty" v-show="!hits.length">No match. Try parse, currency, Arabic or pt-BR.</p>
     </div>
-    <div class="container more">
-      <span>More from kwy404:</span>
-      <a href="https://kwy404.github.io/graphemely/">graphemely</a>
-      <a href="https://kwy404.github.io/edgegoat/">edgegoat</a>
-      <a href="https://kwy404.github.io/vueleap/">vueleap</a>
-      <a href="https://github.com/kwy404/breakhound">breakhound</a>
-      <a href="https://github.com/kwy404/Voodoo.js">Voodoo.js</a>
-    </div>
-  </footer>
+    <div class="command-palette-footer"><span><kbd class="kbd kbd-xs">Enter</kbd> open</span><span><kbd class="kbd kbd-xs">Up</kbd> <kbd class="kbd kbd-xs">Down</kbd> move</span><span><kbd class="kbd kbd-xs">Esc</kbd> close</span></div>
+  </div>
+  <form method="dialog" class="modal-backdrop"><button aria-label="Close search">Close</button></form>
+</dialog>
 </body>
 </html>

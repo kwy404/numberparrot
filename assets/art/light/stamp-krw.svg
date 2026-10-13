@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" class="np-stamp" viewBox="0 0 120 120" width="120" height="120" aria-hidden="true">
+  <defs><path id="krw-t" d="M11 60a49 37 0 0 1 98 0" fill="none"/><path id="krw-b" d="M8 60a52 40 0 0 0 104 0" fill="none"/></defs>
+  <g transform="rotate(-7 60 60)" opacity=".92">
+  <ellipse cx="60" cy="60" rx="56" ry="44" fill="none" stroke="#1C9A5B" stroke-width="3.2"/><ellipse cx="60" cy="60" rx="42" ry="30" fill="none" stroke="#1C9A5B" stroke-width="1.6"/>
+  <text font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="8.5" font-weight="800" letter-spacing="1.6" fill="#1C9A5B"><textPath href="#krw-t" startOffset="50%" text-anchor="middle">KOREA</textPath></text>
+  <text font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="7.5" font-weight="700" letter-spacing="1.2" fill="#1C9A5B"><textPath href="#krw-b" startOffset="50%" text-anchor="middle" side="left">ICN · SEOUL</textPath></text>
+  <text x="60" y="64" text-anchor="middle" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="44" font-weight="800" fill="#1C9A5B">₩</text>
+  <text x="60" y="80" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="7" font-weight="700" letter-spacing=".8" fill="#1C9A5B">13 OCT 2026</text>
+  </g>
+</svg>

@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" class="np-art" viewBox="0 0 320 210" width="320" height="210" aria-hidden="true">
+  <rect x="4" y="4" width="312" height="202" rx="10" fill="#FFFDF6" stroke="#17324A" stroke-width="2"/>
+  <clipPath id="card-f"><rect x="14" y="14" width="150" height="182" rx="6"/></clipPath>
+  <g clip-path="url(#card-f)">
+    <rect x="14" y="14" width="150" height="182" fill="#D9F2E5"/>
+    <circle cx="142" cy="70" r="15" fill="#FFC83D"/>
+    <path d="M14 150c22-26 40-36 60-26s30-22 52-30 30 10 38 18v84H14Z" fill="#1C9A5B" fill-opacity=".85"/>
+    <path d="M14 172c26-14 52-16 78-6s46 6 72-4v34H14Z" fill="#1C9A5B"/>
+    <path d="M24 186c10-4 20-4 30 0s20 4 30 0M98 190c8-3 16-3 24 0" fill="none" stroke="#FFFDF6" stroke-width="2" stroke-linecap="round"/>
+    <text x="24" y="104" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="800" letter-spacing="2" fill="#17324A">GREETINGS FROM</text>
+    <text x="24" y="126" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="19" font-weight="800" fill="#17324A">SÃO PAULO</text>
+  </g>
+  <rect x="14" y="14" width="150" height="182" rx="6" fill="none" stroke="#17324A" stroke-width="1.5"/>
+  <text x="24" y="44" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="20" font-weight="800" fill="#17324A">1.234,56</text>
+  <path d="M178 26v160" stroke="#9DB0BF" stroke-width="1.5" stroke-dasharray="3 4"/>
+  <svg x="236" y="18" viewBox="0 0 120 120" width="58" height="58" aria-hidden="true">
+  <defs><path id="card-s-t" d="M17 60a43 43 0 0 1 86 0" fill="none"/><path id="card-s-b" d="M14 60a46 46 0 0 0 92 0" fill="none"/></defs>
+  <g transform="rotate(-8 60 60)" opacity=".92">
+  <circle cx="60" cy="60" r="52" fill="none" stroke="#1C9A5B" stroke-width="3.2"/><circle cx="60" cy="60" r="37" fill="none" stroke="#1C9A5B" stroke-width="1.6"/>
+  <text font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="8.5" font-weight="800" letter-spacing="1.6" fill="#1C9A5B"><textPath href="#card-s-t" startOffset="50%" text-anchor="middle">BRASIL</textPath></text>
+  <text font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="7.5" font-weight="700" letter-spacing="1.2" fill="#1C9A5B"><textPath href="#card-s-b" startOffset="50%" text-anchor="middle" side="left">GRU · SÃO PAULO</textPath></text>
+  <text x="60" y="64" text-anchor="middle" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="34" font-weight="800" fill="#1C9A5B">R$</text>
+  <text x="60" y="80" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="7" font-weight="700" letter-spacing=".8" fill="#1C9A5B">13 OCT 2026</text>
+  </g>
+</svg>
+  <g fill="none" stroke="#17324A" stroke-width="1.4" stroke-linecap="round" opacity=".55">
+    <circle cx="232" cy="52" r="20"/>
+    <path d="M196 84c8-5 16-5 24 0s16 5 24 0 16-5 24 0 16 5 24 0M196 94c8-5 16-5 24 0s16 5 24 0 16-5 24 0 16 5 24 0"/>
+  </g>
+  <path d="M194 130h108M194 152h108M194 174h72" stroke="#17324A" stroke-width="1.6" stroke-linecap="round" opacity=".7"/>
+  <text x="196" y="125" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="9.5" font-weight="700" fill="#1C9A5B">parse(text, locale)</text>
+</svg>

@@ -3,9 +3,11 @@
 //
 //   node scripts/build-assets.mjs
 //
-// Outputs: assets/*.svg, assets/icons/*.svg, docs/img/*.svg, docs/favicon.svg,
+// Outputs: assets/*.svg, assets/icons/*.svg, assets/art/{light,dark}/*.svg (the travel
+// line art from scripts/art.mjs), docs/img/mascot.svg, docs/favicon.svg,
 // plus .cache/*.html pages that are screenshotted into the PNG previews.
 import { mkdirSync, writeFileSync } from "node:fs";
+import { DARK, LIGHT, STAMPS, globe, iconFile, postcard, stamp, standalone } from "./art.mjs";
 
 const C = {
   green: "#2FBF71",
@@ -179,7 +181,6 @@ for (const [name, icon] of Object.entries(icons)) {
     ` role="img" aria-label="${icon.title} icon"`,
   );
   write(`assets/icons/${name}.svg`, content);
-  write(`docs/img/icons/${name}.svg`, content);
 }
 
 // Animated demo ------------------------------------------------------------------
@@ -249,7 +250,17 @@ const demo = svg(
   ' role="img" aria-label="Animated comparison of parseFloat and numberparrot"',
 );
 write("assets/demo.svg", demo);
-write("docs/img/demo.svg", demo);
+
+// Travel line art, light and dark ----------------------------------------------------
+// The docs site inlines the same drawings with CSS custom properties; these files carry
+// fixed colors for the README and anything outside the site.
+const ART_ICONS = ["globe", "coins", "digits", "parens", "detect", "shield", "input", "plane", "ticket", "stamp", "postcard", "compass"];
+for (const [mode, palette] of [["light", LIGHT], ["dark", DARK]]) {
+  for (const name of ART_ICONS) write(`assets/art/${mode}/icon-${name}.svg`, iconFile(name, palette));
+  write(`assets/art/${mode}/globe.svg`, standalone(globe(palette, { id: "globe", size: 360 })));
+  write(`assets/art/${mode}/postcard.svg`, standalone(postcard(palette, { id: "card", number: "1.234,56", place: "SÃO PAULO", stampKey: "brl" })));
+  for (const key of Object.keys(STAMPS)) write(`assets/art/${mode}/stamp-${key}.svg`, standalone(stamp(key, palette, { id: key, size: 120 })));
+}
 
 // Social preview pages (screenshotted with a headless browser) ---------------------
 function socialPage(w, h) {

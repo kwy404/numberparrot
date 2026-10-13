@@ -3,11 +3,15 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  <script>(function(){try{var t=localStorage.getItem("voodoo:theme");if(t&&t.charAt(0)==='"')t=JSON.parse(t);var r=document.documentElement;if(t==="light"||t==="dark"){r.setAttribute("data-theme",t);r.style.colorScheme=t}}catch(e){}})();</script>
   <title>numberparrot: parse localized numbers and currency strings in JavaScript</title>
   <meta name="description" content="parseFloat(&quot;1.234,56&quot;) returns 1.234. numberparrot returns 1234.56. Parse numbers and currency strings written in any locale, with Intl data and zero dependencies.">
   <link rel="canonical" href="https://kwy404.github.io/numberparrot/">
+  <meta name="author" content="Alexandre Kohler">
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
-  <meta name="theme-color" content="#2FBF71">
+  <meta name="theme-color" content="#F7FBF6" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0E1A14" media="(prefers-color-scheme: dark)">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="numberparrot">
   <meta property="og:title" content="numberparrot: parse localized numbers and currency strings in JavaScript">
@@ -16,185 +20,972 @@
   <meta property="og:image" content="https://kwy404.github.io/numberparrot/og.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
-  <meta property="og:image:alt" content="numberparrot: parse localized numbers and currency strings in JavaScript">
+  <meta property="og:image:alt" content="numberparrot: parse localized numbers and currency strings in JavaScript, with Pico the parrot">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="numberparrot: parse localized numbers and currency strings in JavaScript">
   <meta name="twitter:description" content="parseFloat(&quot;1.234,56&quot;) returns 1.234. numberparrot returns 1234.56. Parse numbers and currency strings written in any locale, with Intl data and zero dependencies.">
   <meta name="twitter:image" content="https://kwy404.github.io/numberparrot/og.png">
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"SoftwareSourceCode","name":"numberparrot","description":"Parse localized number and currency strings into JavaScript numbers for any locale, using Intl.NumberFormat data. Zero dependencies.","url":"https://kwy404.github.io/numberparrot/","codeRepository":"https://github.com/kwy404/numberparrot","programmingLanguage":["TypeScript","JavaScript"],"runtimePlatform":["Node.js","Deno","Bun","Web browsers"],"license":"https://opensource.org/licenses/MIT","author":{"@type":"Person","name":"Alexandre Kohler","url":"https://github.com/kwy404"},"version":"0.1.0","image":"https://kwy404.github.io/numberparrot/og.png","keywords":"parse localized number javascript, convert string with comma to number javascript, parse currency string to number javascript, parseFloat comma decimal, intl number parse, numeral.js alternative"}</script>
-  <script>try{var t=localStorage.getItem("np-theme");if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
-  <link rel="stylesheet" href="style.css">
+  <meta name="twitter:image:alt" content="numberparrot: parse localized numbers and currency strings in JavaScript, with Pico the parrot">
+  <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"SoftwareSourceCode","name":"numberparrot","description":"Parse localized number and currency strings into JavaScript numbers for any locale, using Intl.NumberFormat data. Zero dependencies.","url":"https://kwy404.github.io/numberparrot/","codeRepository":"https://github.com/kwy404/numberparrot","programmingLanguage":["TypeScript","JavaScript"],"runtimePlatform":["Node.js","Deno","Bun","Web browsers"],"license":"https://opensource.org/licenses/MIT","author":{"@type":"Person","name":"Alexandre Kohler","url":"https://github.com/kwy404","sameAs":["https://github.com/kwy404","https://www.linkedin.com/in/alexandre-silva-173687256/"]},"version":"1.0.0","image":"https://kwy404.github.io/numberparrot/og.png","keywords":"parse localized number javascript, convert string with comma to number javascript, parse currency string to number javascript, parseFloat comma decimal, intl number parse, numeral.js alternative"},{"@type":"WebSite","name":"numberparrot","url":"https://kwy404.github.io/numberparrot/","inLanguage":"en","author":{"@type":"Person","name":"Alexandre Kohler","url":"https://github.com/kwy404","sameAs":["https://github.com/kwy404","https://www.linkedin.com/in/alexandre-silva-173687256/"]}},{"@type":"FAQPage","mainEntity":[{"@type":"Question","name":"How do I convert a string with a comma to a number in JavaScript?","acceptedAnswer":{"@type":"Answer","text":"Call parse(text, locale) with the locale the number was written in: parse(\"1.234,56\", \"pt-BR\") is 1234.56 and parse(\"1,5\", \"de-DE\") is 1.5. Swapping commas for dots breaks as soon as a number has a group separator."}},{"@type":"Question","name":"Why does parseFloat return the wrong number?","acceptedAnswer":{"@type":"Answer","text":"parseFloat reads characters while they look like an English number and silently stops at the first one that does not, so parseFloat(\"1.234,56\") is 1.234. A wrong number passes every isNaN check, which makes it worse than an error."}},{"@type":"Question","name":"How do I parse a currency string like R$ 1.234,56?","acceptedAnswer":{"@type":"Answer","text":"parseCurrency(\"R$ 1.234,56\", \"pt-BR\") returns the amount 1234.56 and the currency \"BRL\". Add toMinorUnits: true to get exact integer cents for money."}},{"@type":"Question","name":"What if I do not know the locale of a number?","acceptedAnswer":{"@type":"Answer","text":"detect(text) works out the decimal separator from the string itself and tells you when it cannot be sure: detect(\"1,234\") is ambiguous, with the readings 1234 and 1.234. Switch the world board to Detect mode to see it live."}},{"@type":"Question","name":"Does numberparrot work in the browser, Node.js, Deno and Bun?","acceptedAnswer":{"@type":"Answer","text":"Yes. It has zero dependencies, ships ESM, CommonJS and TypeScript types, and is about 6.1 kB gzipped. It needs Intl.NumberFormat with full locale data, which every modern browser and Node.js 13 or newer provide."}}]}]}</script>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700;800&family=Space+Grotesk:wght@500;600;700&display=swap">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/monsooncss@0.2.0/dist/monsoon.min.css">
+  <link rel="stylesheet" href="site.css">
   <script src="https://cdn.jsdelivr.net/npm/voodoojs@1.0.0/dist/voodoo.full.min.js" data-manual defer></script>
   <script type="module" src="app.js"></script>
 </head>
-<body>
-  <a class="skip" href="#main">Skip to content</a>
-  <header class="site" v-data="{ open: false }" :class="{ 'menu-open': open }">
-    <div class="container">
-      <a class="brand" href="./"><img src="favicon.svg" width="32" height="32" alt=""><span>number<b>parrot</b></span></a>
-      <button class="menu-toggle" type="button" aria-controls="site-nav" :aria-expanded="open ? 'true' : 'false'" @click="open = !open" v-text="open ? 'Close' : 'Menu'">Menu</button>
-      <nav class="site" id="site-nav" aria-label="Main" :class="{ open: open }">
-        <a href="./" aria-current="page">Playground</a>
-        <a href="convert-string-with-comma-to-number-javascript.html">Comma to number</a>
-        <a href="parsefloat-comma-decimal-separator.html">parseFloat and commas</a>
-        <a href="parse-localized-number-javascript.html">Localized numbers</a>
-        <a href="parse-currency-string-javascript.html">Currency strings</a>
-        <a href="https://github.com/kwy404/numberparrot">GitHub</a>
-        <button class="theme-toggle" type="button" :aria-pressed="theme === 'dark' ? 'true' : 'false'" @click="toggleTheme()" v-text="theme === 'dark' ? 'Light theme' : 'Dark theme'">Theme</button>
-      </nav>
+<body class="bg-background text-foreground antialiased">
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="np-top">
+  <div class="container np-top-row">
+    <a class="np-brand" href="./" aria-label="numberparrot home"><img src="favicon.svg" width="30" height="30" alt=""><span>number<b>parrot</b></span></a>
+    <a class="badge badge-sm badge-outline np-ver" href="https://github.com/kwy404/numberparrot/blob/main/CHANGELOG.md" aria-label="Version 1.0.0, read the changelog">v1.0.0</a>
+    <nav class="np-nav" aria-label="Main"><a class="np-nav-link" href="./#board">World board</a><a class="np-nav-link" href="./#departures">Departures</a><a class="np-nav-link" href="./#use-cases">Use cases</a><a class="np-nav-link" href="api.html">API</a><a class="np-nav-link" href="./#guides">Guides</a></nav>
+    <div class="np-top-end">
+      <button type="button" class="np-search-btn" @click="openSearch()" aria-label="Search the docs" aria-haspopup="dialog"><svg class="np-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="m20 20-4.2-4.2"/></svg><span>Search</span><kbd class="kbd kbd-xs">Ctrl K</kbd></button>
+      <a class="np-icon-btn np-hide-sm" href="https://github.com/kwy404/numberparrot" aria-label="numberparrot on GitHub"><svg class="np-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path stroke="none" fill="currentColor" d="M12 1.6a10.4 10.4 0 0 0-3.3 20.3c.5.1.7-.2.7-.5v-1.8c-2.9.6-3.5-1.2-3.5-1.2-.5-1.2-1.2-1.5-1.2-1.5-.9-.6.1-.6.1-.6 1 .1 1.6 1.1 1.6 1.1.9 1.6 2.4 1.1 3 .9.1-.7.4-1.1.7-1.4-2.3-.3-4.7-1.2-4.7-5.1 0-1.1.4-2 1.1-2.8-.1-.3-.5-1.3.1-2.7 0 0 .9-.3 2.9 1.1a9.9 9.9 0 0 1 5.2 0c2-1.4 2.9-1.1 2.9-1.1.6 1.4.2 2.4.1 2.7.7.8 1.1 1.7 1.1 2.8 0 4-2.4 4.8-4.7 5.1.4.3.7.9.7 1.9v2.8c0 .3.2.6.7.5A10.4 10.4 0 0 0 12 1.6Z"/></svg></a>
+      <button type="button" class="np-icon-btn np-theme" v-theme-toggle.cycle aria-label="Color theme: follow the system, light or dark" title="Color theme"><svg class="np-icon np-t-system" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="12.5" rx="2"/><path d="M8.5 20.5h7M12 16.5v4"/></svg><svg class="np-icon np-t-light" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2.5v2M12 19.5v2M4.6 4.6 6 6M18 18l1.4 1.4M2.5 12h2M19.5 12h2M4.6 19.4 6 18M18 6l1.4-1.4"/></svg><svg class="np-icon np-t-dark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5Z"/></svg></button>
+      <button type="button" class="np-icon-btn np-menu-btn" aria-controls="np-menu" aria-expanded="false" :aria-expanded="menu ? 'true' : 'false'" @click="menu = !menu" aria-label="Menu"><svg class="np-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
     </div>
-  </header>
+  </div>
+  <nav id="np-menu" class="np-mobile" aria-label="Mobile" style="display:none" v-show="menu" @click="menu = false">
+    <div class="container"><a class="np-nav-link" href="./#board">World board</a><a class="np-nav-link" href="./#departures">Departures</a><a class="np-nav-link" href="./#use-cases">Use cases</a><a class="np-nav-link" href="api.html">API</a><a class="np-nav-link" href="./#guides">Guides</a><a class="np-nav-link" href="https://github.com/kwy404/numberparrot">GitHub</a><a class="np-nav-link" href="https://www.npmjs.com/package/numberparrot">npm</a></div>
+  </nav>
+</header>
   <main id="main">
-    <div class="container">
+<section id="board" class="np-hero" aria-labelledby="title">
+  <div class="container">
+    <div class="np-hero-grid">
+      <div>
+        <p class="np-eyebrow"><svg class="np-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c-3 3.2-3 14.8 0 18M12 3c3 3.2 3 14.8 0 18M4.6 7.5h14.8M4.6 16.5h14.8"/></svg>One number, 39 locales, read back right</p>
+        <h1 id="title">Parse localized numbers and currency strings in any locale</h1>
+        <p class="np-lead"><code>parseFloat("1.234,56")</code> returns <code class="np-bad">1.234</code>. numberparrot returns <code class="np-good">1234.56</code>. Type one number on the board below: every locale writes it its own way, and numberparrot reads every one back.</p>
+        <div class="np-hero-actions">
+          <button type="button" class="np-install" @click="copyText('npm i numberparrot', 'hero')" aria-label="Copy the install command: npm i numberparrot"><span class="np-install-prompt" aria-hidden="true">$</span><span>npm i numberparrot</span><svg class="np-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="11.5" height="11.5" rx="2"/><path d="M15 9V5.5A2 2 0 0 0 13 3.5H5.5a2 2 0 0 0-2 2V13a2 2 0 0 0 2 2H9"/></svg><span class="np-install-state" v-text="copied === 'hero' ? 'Copied' : 'Copy'">Copy</span></button>
+          <a class="btn btn-primary" href="api.html"><svg class="np-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v15H6.5A2.5 2.5 0 0 0 4 20.5Z"/><path d="M4 20.5A2.5 2.5 0 0 0 6.5 23H20v-5"/></svg>API reference</a>
+          <a class="btn btn-outline btn-neutral" href="https://github.com/kwy404/numberparrot"><svg class="np-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path stroke="none" fill="currentColor" d="M12 1.6a10.4 10.4 0 0 0-3.3 20.3c.5.1.7-.2.7-.5v-1.8c-2.9.6-3.5-1.2-3.5-1.2-.5-1.2-1.2-1.5-1.2-1.5-.9-.6.1-.6.1-.6 1 .1 1.6 1.1 1.6 1.1.9 1.6 2.4 1.1 3 .9.1-.7.4-1.1.7-1.4-2.3-.3-4.7-1.2-4.7-5.1 0-1.1.4-2 1.1-2.8-.1-.3-.5-1.3.1-2.7 0 0 .9-.3 2.9 1.1a9.9 9.9 0 0 1 5.2 0c2-1.4 2.9-1.1 2.9-1.1.6 1.4.2 2.4.1 2.7.7.8 1.1 1.7 1.1 2.8 0 4-2.4 4.8-4.7 5.1.4.3.7.9.7 1.9v2.8c0 .3.2.6.7.5A10.4 10.4 0 0 0 12 1.6Z"/></svg>GitHub</a>
+        </div>
+      </div>
+      <div class="np-hero-art" aria-hidden="true">
+        <svg class="np-art" viewBox="0 0 360 380" width="300" height="317" role="img" aria-label="A globe whose meridians are made of numbers written in different locales">
+  <defs><path id="hero-globe-m0e" d="M180 68 A112.6 128 0 0 1 180 324" fill="none"/><path id="hero-globe-m0w" d="M180 68 A112.6 128 0 0 0 180 324" fill="none"/><path id="hero-globe-m1e" d="M180 68 A53.8 128 0 0 1 180 324" fill="none"/><path id="hero-globe-m1w" d="M180 68 A53.8 128 0 0 0 180 324" fill="none"/><clipPath id="hero-globe-clip"><circle cx="180" cy="196" r="127"/></clipPath></defs>
+  <circle cx="276" cy="86" r="50" fill="var(--np-sun)"/>
+  <path d="M276 18v-10M276 164v-8M208 86h-10M354 86h-8M228 38l-7-7M324 134l6 6M324 38l7-7" stroke="var(--np-sun)" stroke-width="3" stroke-linecap="round"/>
+  <circle cx="180" cy="196" r="128" fill="var(--np-paper)"/>
+  <circle cx="180" cy="196" r="128" fill="var(--np-sky)" fill-opacity=".55"/>
+  <g clip-path="url(#hero-globe-clip)"><ellipse cx="180" cy="116" rx="99.9" ry="16.0" fill="none" stroke="var(--np-soft)" stroke-width="1.25" stroke-dasharray="2 5"/><ellipse cx="180" cy="156" rx="121.6" ry="19.5" fill="none" stroke="var(--np-soft)" stroke-width="1.25" stroke-dasharray="2 5"/><ellipse cx="180" cy="196" rx="128.0" ry="20.5" fill="none" stroke="var(--np-soft)" stroke-width="1.25" stroke-dasharray="0"/><ellipse cx="180" cy="236" rx="121.6" ry="19.5" fill="none" stroke="var(--np-soft)" stroke-width="1.25" stroke-dasharray="2 5"/><ellipse cx="180" cy="276" rx="99.9" ry="16.0" fill="none" stroke="var(--np-soft)" stroke-width="1.25" stroke-dasharray="2 5"/><text font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="12" font-weight="600" fill="var(--np-leaf)" fill-opacity="1"><textPath href="#hero-globe-m0e" startOffset="3%">1.234.567,89   12,34,567.89   1 234 567,89   1'234'567.89   1.234.567,89   12,34,567.89   1 234 567,89   1'234'567.89   </textPath></text><text font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="12" font-weight="600" fill="var(--np-leaf)" fill-opacity="1"><textPath href="#hero-globe-m0w" startOffset="9%">1.234.567,89   12,34,567.89   1 234 567,89   1'234'567.89   1.234.567,89   12,34,567.89   1 234 567,89   1'234'567.89   </textPath></text><text font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="12" font-weight="600" fill="var(--np-ink)" fill-opacity="0.8"><textPath href="#hero-globe-m1e" startOffset="3%">١٬٢٣٤٫٥٦   1,234.56   ۱۲۳٫۴۵   1.234,56   ١٬٢٣٤٫٥٦   1,234.56   ۱۲۳٫۴۵   1.234,56   </textPath></text><text font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="12" font-weight="600" fill="var(--np-ink)" fill-opacity="0.8"><textPath href="#hero-globe-m1w" startOffset="9%">١٬٢٣٤٫٥٦   1,234.56   ۱۲۳٫۴۵   1.234,56   ١٬٢٣٤٫٥٦   1,234.56   ۱۲۳٫۴۵   1.234,56   </textPath></text></g>
+  <circle cx="180" cy="196" r="128" fill="none" stroke="var(--np-ink)" stroke-width="2.5"/>
+  <ellipse cx="180" cy="202" rx="172" ry="46" transform="rotate(-14 180 196)" fill="none" stroke="var(--np-sun)" stroke-width="2.5" stroke-dasharray="1 9" stroke-linecap="round"/>
+  <g transform="translate(330 140) rotate(-38) scale(1.35)" fill="var(--np-paper)" stroke="var(--np-ink)" stroke-width="1.6" stroke-linejoin="round">
+    <path d="M-2 4-9 2-10 .5-8.4-.1-1.8 1.1 3-3.8C3.9-4.7 5.6-5.2 6.3-4.5 7-3.8 6.5-2.1 5.6-1.2L.7 3.6 1.9 10.2 1.3 11.8-.3 10.8-2.1 4.1-5.1 7-4.8 9.3-6 10.5-7.2 7.7-10 6.5-8.8 5.3-6.5 5.6Z"/>
+  </g>
+  <path d="M146 328 h68" stroke="var(--np-ink)" stroke-width="2.5" stroke-linecap="round"/>
+  <path d="M180 328 v18 M134 346 h92" stroke="var(--np-ink)" stroke-width="2.5" stroke-linecap="round"/>
+</svg>
+        <img class="np-hero-pico" src="img/mascot.svg" width="132" height="132" alt="">
+        <p class="np-bubble" v-text="B.b.bubble">1234567.891!</p>
+      </div>
+    </div>
 
-<section class="hero" aria-labelledby="title">
-  <div>
-    <h1 id="title">Parse localized numbers and currency strings in JavaScript</h1>
-    <p class="lead"><code>parseFloat("1.234,56")</code> returns <code class="bad">1.234</code>. numberparrot returns <code class="good">1234.56</code>. It is the missing parser for <code>Intl.NumberFormat</code>: zero dependencies, every locale.</p>
-    <div class="cta">
-      <a class="button primary" href="#playground">Try it</a>
-      <a class="button" href="https://github.com/kwy404/numberparrot#readme">Read the docs</a>
-      <a class="button" href="https://www.npmjs.com/package/numberparrot">npm install numberparrot</a>
+    <div class="np-board" data-mode="number" :data-mode="B.mode" v-effect="B.b = computeBoard(B.text, B.mode)">
+      <div class="np-board-bar">
+        <div>
+          <label class="np-board-label" for="np-board-text" v-text="B.mode === 'detect' ? 'Paste a number as you found it' : (B.mode === 'currency' ? 'Type an amount' : 'Type a number')">Type a number</label>
+          <input id="np-board-text" class="np-board-field" value="1234567.891" v-model="B.text" autocomplete="off" spellcheck="false" aria-describedby="np-board-hint">
+          <div class="np-examples" v-show="B.mode === 'number'" role="group" aria-label="Examples"><span class="np-examples-label">Try</span><button type="button" class="np-chip" dir="ltr" @click="B.text = '1234567.891'">1234567.891</button><button type="button" class="np-chip" dir="ltr" @click="B.text = '-98765.4321'">-98765.4321</button><button type="button" class="np-chip" dir="ltr" @click="B.text = '0.5'">0.5</button><button type="button" class="np-chip" dir="ltr" @click="B.text = '1.234,56'">1.234,56</button></div><div class="np-examples" style="display:none" v-show="B.mode === 'currency'" role="group" aria-label="Examples"><span class="np-examples-label">Try</span><button type="button" class="np-chip" dir="ltr" @click="B.text = '1234.56'">1234.56</button><button type="button" class="np-chip" dir="ltr" @click="B.text = '19.99'">19.99</button><button type="button" class="np-chip" dir="ltr" @click="B.text = '-250'">-250</button><button type="button" class="np-chip" dir="ltr" @click="B.text = '1000000'">1000000</button></div><div class="np-examples" style="display:none" v-show="B.mode === 'detect'" role="group" aria-label="Examples"><span class="np-examples-label">Try</span><button type="button" class="np-chip" dir="ltr" @click="B.text = '1,234'">1,234</button><button type="button" class="np-chip" dir="ltr" @click="B.text = '1.234,56'">1.234,56</button><button type="button" class="np-chip" dir="ltr" @click="B.text = '1 234,5'">1 234,5</button><button type="button" class="np-chip" dir="ltr" @click="B.text = '12,34,567.89'">12,34,567.89</button><button type="button" class="np-chip" dir="ltr" @click="B.text = '١٬٢٣٤٫٥٦'">١٬٢٣٤٫٥٦</button><button type="button" class="np-chip" dir="ltr" @click="B.text = '(1.234,56)'">(1.234,56)</button><button type="button" class="np-chip" dir="ltr" @click="B.text = '1\'234.5'">1'234.5</button></div>
+        </div>
+        <div class="np-board-side">
+          <div class="segmented segmented-sm np-modes" role="radiogroup" aria-label="Board mode"><label class="segmented-item"><input type="radio" name="np-mode" value="number" checked @change="setMode('number')"><svg class="np-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c-3 3.2-3 14.8 0 18M12 3c3 3.2 3 14.8 0 18M4.6 7.5h14.8M4.6 16.5h14.8"/></svg>Number</label><label class="segmented-item"><input type="radio" name="np-mode" value="currency" @change="setMode('currency')"><svg class="np-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><ellipse cx="12" cy="7" rx="7" ry="3" fill="var(--np-sun)" fill-opacity=".35"/><path d="M5 7v5c0 1.7 3.1 3 7 3s7-1.3 7-3V7M5 12v5c0 1.7 3.1 3 7 3s7-1.3 7-3v-5"/><ellipse cx="12" cy="7" rx="7" ry="3"/></svg>Currency</label><label class="segmented-item"><input type="radio" name="np-mode" value="detect" @change="setMode('detect')"><svg class="np-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 5 5"/><path d="M8.5 12.5c.8 0 1.2-.5 1.2-1.1v-.9M12.5 12.5c.8 0 1.2-.5 1.2-1.1v-.9" stroke="var(--np-leaf)" stroke-width="2"/></svg>Detect</label></div>
+          <div class="np-score">
+            <p class="np-score-item np-score-bad"><strong v-text="B.b.wrong">39</strong><span v-text="B.mode === 'detect' ? 'read it another way' : 'wrong with parseFloat'">wrong with parseFloat</span></p>
+            <p class="np-score-item np-score-good"><strong v-text="B.b.right">39</strong><span v-text="B.mode === 'detect' ? 'agree with detect()' : (B.mode === 'currency' ? 'right with parseCurrency' : 'right with numberparrot')">right with numberparrot</span></p>
+          </div>
+        </div>
+      </div>
+      <p class="np-board-hint" id="np-board-hint"><span v-text="B.b.labels.hint">Type a number in any format. Every tile writes it the local way, then reads it back.</span> <strong v-text="B.b.note"></strong></p>
+
+      <div class="np-detect" style="display:none" v-show="B.mode === 'detect'">
+        <div>
+          <p class="np-detect-label">detect() picks</p>
+          <p class="np-detect-value"><span v-text="B.b.detect ? B.b.detect.value : ''"></span><span class="badge" :class="B.b.detect && B.b.detect.ambiguous ? 'badge-warning' : 'badge-success'" v-text="B.b.detect ? B.b.detect.verdict : ''"></span></p>
+          <div class="np-confidence"><span>Confidence</span><span class="np-meter"><i :style="{ width: (B.b.detect ? B.b.detect.confidence : 0) + '%' }"></i></span><strong v-text="(B.b.detect ? B.b.detect.confidence : 0) + '%'"></strong></div>
+        </div>
+        <div>
+          <p class="np-detect-reason" v-text="B.b.detect ? B.b.detect.reason : ''"></p>
+          <ul class="np-readings" aria-label="Readings across the board">
+            <li v-for="r in (B.b.detect ? B.b.detect.readings : [])" :key="r.value" :data-best="r.best ? 'true' : 'false'"><code v-text="r.value"></code><span v-text="r.count + (r.count === 1 ? ' locale' : ' locales')"></span></li>
+          </ul>
+        </div>
+      </div>
+
+      <p class="np-summary" role="status" v-text="B.b.summary">parseFloat is wrong in 39 of 39 locales. numberparrot reads every one back.</p>
+      <div class="np-regions">
+<section class="np-region" aria-labelledby="rg-americas">
+  <header class="np-region-head"><svg class="np-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c-3 3.2-3 14.8 0 18M12 3c3 3.2 3 14.8 0 18M4.6 7.5h14.8M4.6 16.5h14.8"/></svg><h3 id="rg-americas">The Americas</h3><span>8 locales</span></header>
+  <ol class="np-tiles" aria-label="The Americas">
+<li class="np-tile" data-a="bad" data-b="ok" :data-a="B.b.tiles[0].as" :data-b="B.b.tiles[0].bs">
+  <div class="np-tile-head"><span class="np-tile-code">en-US</span><span class="np-tile-iata">JFK</span></div>
+  <p class="np-tile-city">New York</p>
+  <p class="np-tile-val" dir="auto" v-text="B.b.tiles[0].s">1,234,567.891</p>
+  <p class="np-tile-row np-tile-a"><span class="np-tile-label" v-text="B.b.labels.a">parseFloat</span><span class="np-tile-out" dir="auto" v-text="B.b.tiles[0].a">1</span></p>
+  <p class="np-tile-row np-tile-b"><span class="np-tile-label" v-text="B.b.labels.b">numberparrot</span><span class="np-tile-out" dir="auto" v-text="B.b.tiles[0].b">1234567.891</span></p>
+</li>
+<li class="np-tile" data-a="bad" data-b="ok" :data-a="B.b.tiles[1].as" :data-b="B.b.tiles[1].bs">
+  <div class="np-tile-head"><span class="np-tile-code">en-CA</span><span class="np-tile-iata">YYZ</span></div>
+  <p class="np-tile-city">Toronto</p>
+  <p class="np-tile-val" dir="auto" v-text="B.b.tiles[1].s">1,234,567.891</p>
+  <p class="np-tile-row np-tile-a"><span class="np-tile-label" v-text="B.b.labels.a">parseFloat</span><span class="np-tile-out" dir="auto" v-text="B.b.tiles[1].a">1</span></p>
+  <p class="np-tile-row np-tile-b"><span class="np-tile-label" v-text="B.b.labels.b">numberparrot</span><span class="np-tile-out" dir="auto" v-text="B.b.tiles[1].b">1234567.891</span></p>
+</li>
+<li class="np-tile" data-a="bad" data-b="ok" :data-a="B.b.tiles[2].as" :data-b="B.b.tiles[2].bs">
+  <div class="np-tile-head"><span class="np-tile-code">fr-CA</span><span class="np-tile-iata">YUL</span></div>
+  <p class="np-tile-city">Montréal</p>
+  <p class="np-tile-val" dir="auto" v-text="B.b.tiles[2].s">1 234 567,891</p>
+  <p class="np-tile-row np-tile-a"><span class="np-tile-label" v-text="B.b.labels.a">parseFloat</span><span class="np-tile-out" dir="auto" v-text="B.b.tiles[2].a">1</span></p>
+  <p class="np-tile-row np-tile-b"><span class="np-tile-label" v-text="B.b.labels.b">numberparrot</span><span class="np-tile-out" dir="auto" v-text="B.b.tiles[2].b">1234567.891</span></p>
+</li>
+<li class="np-tile" data-a="bad" data-b="ok" :data-a="B.b.tiles[3].as" :data-b="B.b.tiles[3].bs">
+  <div class="np-tile-head"><span class="np-tile-code">es-MX</span><span class="np-tile-iata">MEX</span></div>
+  <p class="np-tile-city">Mexico City</p>
+  <p class="np-tile-val" dir="auto" v-text="B.b.tiles[3].s">1,234,567.891</p>
+  <p class="np-tile-row np-tile-a"><span class="np-tile-label" v-text="B.b.labels.a">parseFloat</span><span class="np-tile-out" dir="auto" v-text="B.b.tiles[3].a">1</span></p>
+  <p class="np-tile-row np-tile-b"><span class="np-tile-label" v-text="B.b.labels.b">numberparrot</span><span class="np-tile-out" dir="auto" v-text="B.b.tiles[3].b">1234567.891</span></p>
+</li>
+<li class="np-tile" data-a="bad" data-b="ok" :data-a="B.b.tiles[4].as" :data-b="B.b.tiles[4].bs">
+  <div class="np-tile-head"><span class="np-tile-code">pt-BR</span><span class="np-tile-iata">GRU</span></div>
+  <p class="np-tile-city">São Paulo</p>
+  <p class="np-tile-val" dir="auto" v-text="B.b.tiles[4].s">1.234.567,891</p>
+  <p class="np-tile-row np-tile-a"><span class="np-tile-label" v-text="B.b.labels.a">parseFloat</span><span class="np-tile-out" dir="auto" v-text="B.b.tiles[4].a">1.234</span></p>
+  <p class="np-tile-row np-tile-b"><span class="np-tile-label" v-text="B.b.labels.b">numberparrot</span><span class="np-tile-out" dir="auto" v-text="B.b.tiles[4].b">1234567.891</span></p>
+</li>
+<li class="np-tile" data-a="bad" data-b="ok" :data-a="B.b.tiles[5].as" :data-b="B.b.tiles[5].bs">
+  <div class="np-tile-head"><span class="np-tile-code">es-AR</span><span class="np-tile-iata">EZE</span></div>
+  <p class="np-tile-city">Buenos Aires</p>
+  <p class="np-tile-val" dir="auto" v-text="B.b.tiles[5].s">1.234.567,891</p>
+  <p class="np-tile-row np-tile-a"><span class="np-tile-label" v-text="B.b.labels.a">parseFloat</span><span class="np-tile-out" dir="auto" v-text="B.b.tiles[5].a">1.234</span></p>
+  <p class="np-tile-row np-tile-b"><span class="np-tile-label" v-text="B.b.labels.b">numberparrot</span><span class="np-tile-out" dir="auto" v-text="B.b.tiles[5].b">1234567.891</span></p>
+</li>
+<li class="np-tile" data-a="bad" data-b="ok" :data-a="B.b.tiles[6].as" :data-b="B.b.tiles[6].bs">
+  <div class="np-tile-head"><span class="np-tile-code">es-CO</span><span class="np-tile-iata">BOG</span></div>
+  <p class="np-tile-city">Bogotá</p>
+  <p class="np-tile-val" dir="auto" v-text="B.b.tiles[6].s">1.234.567,891</p>
+  <p class="np-tile-row np-tile-a"><span class="np-tile-label" v-text="B.b.labels.a">parseFloat</span><span class="np-tile-out" dir="auto" v-text="B.b.tiles[6].a">1.234</span></p>
+  <p class="np-tile-row np-tile-b"><span class="np-tile-label" v-text="B.b.labels.b">numberparrot</span><span class="np-tile-out" dir="auto" v-text="B.b.tiles[6].b">1234567.891</span></p>
+</li>
+<li class="np-tile" data-a="bad" data-b="ok" :data-a="B.b.tiles[7].as" :data-b="B.b.tiles[7].bs">
+  <div class="np-tile-head"><span class="np-tile-code">es-CL</span><span class="np-tile-iata">SCL</span></div>
+  <p class="np-tile-city">Santiago</p>
+  <p class="np-tile-val" dir="auto" v-text="B.b.tiles[7].s">1.234.567,891</p>
+  <p class="np-tile-row np-tile-a"><span class="np-tile-label" v-text="B.b.labels.a">parseFloat</span><span class="np-tile-out" dir="auto" v-text="B.b.tiles[7].a">1.234</span></p>
+  <p class="np-tile-row np-tile-b"><span class="np-tile-label" v-text="B.b.labels.b">numberparrot</span><span class="np-tile-out" dir="auto" v-text="B.b.tiles[7].b">1234567.891</span></p>
+</li>
+  </ol>
+</section>
+<section class="np-region" aria-labelledby="rg-europe">
+  <header class="np-region-head"><svg class="np-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c-3 3.2-3 14.8 0 18M12 3c3 3.2 3 14.8 0 18M4.6 7.5h14.8M4.6 16.5h14.8"/></svg><h3 id="rg-europe">Europe</h3><span>14 locales</span></header>
+  <ol class="np-tiles" aria-label="Europe">
+<li class="np-tile" data-a="bad" data-b="ok" :data-a="B.b.tiles[8].as" :data-b="B.b.tiles[8].bs">
+  <div class="np-tile-head"><span class="np-tile-code">en-GB</span><span class="np-tile-iata">LHR</span></div>
+  <p class="np-tile-city">London</p>
+  <p class="np-tile-val" dir="auto" v-text="B.b.tiles[8].s">1,234,567.891</p>
+  <p class="np-tile-row np-tile-a"><span class="np-tile-label" v-text="B.b.labels.a">parseFloat</span><span class="np-tile-out" dir="auto" v-text="B.b.tiles[8].a">1</span></p>
+  <p class="np-tile-row np-tile-b"><span class="np-tile-label" v-text="B.b.labels.b">numberparrot</span><span class="np-tile-out" dir="auto" v-text="B.b.tiles[8].b">1234567.891</span></p>
+</li>
+<li class="np-tile" data-a="bad" data-b="ok" :data-a="B.b.tiles[9].as" :data-b="B.b.tiles[9].bs">
+  <div class="np-tile-head"><span class="np-tile-code">de-DE</span><span class="np-tile-iata">BER</span></div>
+  <p class="np-tile-city">Berlin</p>
+  <p class="np-tile-val" dir="auto" v-text="B.b.tiles[9].s">1.234.567,891</p>
+  <p class="np-tile-row np-tile-a"><span class="np-tile-label" v-text="B.b.labels.a">parseFloat</span><span class="np-tile-out" dir="auto" v-text="B.b.tiles[9].a">1.234</span></p>
+  <p class="np-tile-row np-tile-b"><span class="np-tile-label" v-text="B.b.labels.b">numberparrot</span><span class="np-tile-out" dir="auto" v-text="B.b.tiles[9].b">1234567.891</span></p>
+</li>
+<li class="np-tile" data-a="bad" data-b="ok" :data-a="B.b.tiles[10].as" :data-b="B.b.tiles[10].bs">
+  <div class="np-tile-head"><span class="np-tile-code">fr-FR</span><span class="np-tile-iata">CDG</span></div>
+  <p class="np-tile-city">Paris</p>
+  <p class="np-tile-val" dir="auto" v-text="B.b.tiles[10].s">1 234 567,891</p>
+  <p class="np-tile-row np-tile-a"><span class="np-tile-label" v-text="B.b.labels.a">parseFloat</span><span class="np-tile-out" dir="auto" v-text="B.b.tiles[10].a">1</span></p>
+  <p class="np-tile-row np-tile-b"><span class="np-tile-label" v-text="B.b.labels.b">numberparrot</span><span class="np-tile-out" dir="auto" v-text="B.b.tiles[10].b">1234567.891</span></p>
+</li>
+<li class="np-tile" data-a="bad" data-b="ok" :data-a="B.b.tiles[11].as" :data-b="B.b.tiles[11].bs">
+  <div class="np-tile-head"><span class="np-tile-code">es-ES</span><span class="np-tile-iata">MAD</span></div>
+  <p class="np-tile-city">Madrid</p>
+  <p class="np-tile-val" dir="auto" v-text="B.b.tiles[11].s">1.234.567,891</p>
+  <p class="np-tile-row np-tile-a"><span class="np-tile-label" v-text="B.b.labels.a">parseFloat</span><span class="np-tile-out" dir="auto" v-text="B.b.tiles[11].a">1.234</span></p>
+  <p class="np-tile-row np-tile-b"><span class="np-tile-label" v-text="B.b.labels.b">numberparrot</span><span class="np-tile-out" dir="auto" v-text="B.b.tiles[11].b">1234567.891</span></p>
+</li>
+<li class="np-tile" data-a="bad" data-b="ok" :data-a="B.b.tiles[12].as" :data-b="B.b.tiles[12].bs">
+  <div class="np-tile-head"><span class="np-tile-code">it-IT</span><span class="np-tile-iata">FCO</span></div>
+  <p class="np-tile-city">Rome</p>
+  <p class="np-tile-val" dir="auto" v-text="B.b.tiles[12].s">1.234.567,891</p>
+  <p class="np-tile-row np-tile-a"><span class="np-tile-label" v-text="B.b.labels.a">parseFloat</span><span class="np-tile-out" dir="auto" v-text="B.b.tiles[12].a">1.234</span></p>
+  <p class="np-tile-row np-tile-b"><span class="np-tile-label" v-text="B.b.labels.b">numberparrot</span><span class="np-tile-out" dir="auto" v-text="B.b.tiles[12].b">1234567.891</span></p>
+</li>
+<li class="np-tile" data-a="bad" data-b="ok" :data-a="B.b.tiles[13].as" :data-b="B.b.tiles[13].bs">
+  <div class="np-tile-head"><span class="np-tile-code">nl-NL</span><span class="np-tile-iata">AMS</span></div>
+  <p class="np-tile-city">Amsterdam</p>
+  <p class="np-tile-val" dir="auto" v-text="B.b.tiles[13].s">1.234.567,891</p>
+  <p class="np-tile-row np-tile-a"><span class="np-tile-label" v-text="B.b.labels.a">parseFloat</span><span class="np-tile-out" dir="auto" v-text="B.b.tiles[13].a">1.234</span></p>
+  <p class="np-tile-row np-tile-b"><span class="np-tile-label" v-text="B.b.labels.b">numberparrot</span><span class="np-tile-out" dir="auto" v-text="B.b.tiles[13].b">1234567.891</span></p>
+</li>
+<li class="np-tile" data-a="bad" data-b="ok" :data-a="B.b.tiles[14].as" :data-b="B.b.tiles[14].bs">
+  <div class="np-tile-head"><span class="np-tile-code">pt-PT</span><span class="np-tile-iata">LIS</span></div>
+  <p class="np-tile-city">Lisbon</p>
+  <p class="np-tile-val" dir="auto" v-text="B.b.tiles[14].s">1 234 567,891</p>
+  <p class="np-tile-row np-tile-a"><span class="np-tile-label" v-text="B.b.labels.a">parseFloat</span><span class="np-tile-out" dir="auto" v-text="B.b.tiles[14].a">1</span></p>
+  <p class="np-tile-row np-tile-b"><span class="np-tile-label" v-text="B.b.labels.b">numberparrot</span><span class="np-tile-out" dir="auto" v-text="B.b.tiles[14].b">1234567.891</span></p>
+</li>
+<li class="np-tile" data-a="bad" data-b="ok" :data-a="B.b.tiles[15].as" :data-b="B.b.tiles[15].bs">
+  <div class="np-tile-head"><span class="np-tile-code">de-CH</span><span class="np-tile-iata">ZRH</span></div>
+  <p class="np-tile-city">Zürich</p>
+  <p class="np-tile-val" dir="auto" v-text="B.b.tiles[15].s">1'234'567.891</p>
+  <p class="np-tile-row np-tile-a"><span class="np-tile-label" v-text="B.b.labels.a">parseFloat</span><span class="np-tile-out" dir="auto" v-text="B.b.tiles[15].a">1</span></p>
+  <p class="np-tile-row np-tile-b"><span class="np-tile-label" v-text="B.b.labels.b">numberparrot</span><span class="np-tile-out" dir="auto" v-text="B.b.tiles[15].b">1234567.891</span></p>
+</li>
+<li class="np-tile" data-a="bad" data-b="ok" :data-a="B.b.tiles[16].as" :data-b="B.b.tiles[16].bs">
+  <div class="np-tile-head"><span class="np-tile-code">sv-SE</span><span class="np-tile-iata">ARN</span></div>
+  <p class="np-tile-city">Stockholm</p>
+  <p class="np-tile-val" dir="auto" v-text="B.b.tiles[16].s">1 234 567,891</p>
+  <p class="np-tile-row np-tile-a"><span class="np-tile-label" v-text="B.b.labels.a">parseFloat</span><span class="np-tile-out" dir="auto" v-text="B.b.tiles[16].a">1</span></p>
+  <p class="np-tile-row np-tile-b"><span class="np-tile-label" v-text="B.b.labels.b">numberparrot</span><span class="np-tile-out" dir="auto" v-text="B.b.tiles[16].b">1234567.891</span></p>
+</li>
+<li class="np-tile" data-a="bad" data-b="ok" :data-a="B.b.tiles[17].as" :data-b="B.b.tiles[17].bs">
+  <div class="np-tile-head"><span class="np-tile-code">pl-PL</span><span class="np-tile-iata">WAW</span></div>
+  <p class="np-tile-city">Warsaw</p>
+  <p class="np-tile-val" dir="auto" v-text="B.b.tiles[17].s">1 234 567,891</p>
+  <p class="np-tile-row np-tile-a"><span class="np-tile-label" v-text="B.b.labels.a">parseFloat</span><span class="np-tile-out" dir="auto" v-text="B.b.tiles[17].a">1</span></p>
+  <p class="np-tile-row np-tile-b"><span class="np-tile-label" v-text="B.b.labels.b">numberparrot</span><span class="np-tile-out" dir="auto" v-text="B.b.tiles[17].b">1234567.891</span></p>
+</li>
+<li class="np-tile" data-a="bad" data-b="ok" :data-a="B.b.tiles[18].as" :data-b="B.b.tiles[18].bs">
+  <div class="np-tile-head"><span class="np-tile-code">cs-CZ</span><span class="np-tile-iata">PRG</span></div>
+  <p class="np-tile-city">Prague</p>
+  <p class="np-tile-val" dir="auto" v-text="B.b.tiles[18].s">1 234 567,891</p>
+  <p class="np-tile-row np-tile-a"><span class="np-tile-label" v-text="B.b.labels.a">parseFloat</span><span class="np-tile-out" dir="auto" v-text="B.b.tiles[18].a">1</span></p>
+  <p class="np-tile-row np-tile-b"><span class="np-tile-label" v-text="B.b.labels.b">numberparrot</span><span class="np-tile-out" dir="auto" v-text="B.b.tiles[18].b">1234567.891</span></p>
+</li>
+<li class="np-tile" data-a="bad" data-b="ok" :data-a="B.b.tiles[19].as" :data-b="B.b.tiles[19].bs">
+  <div class="np-tile-head"><span class="np-tile-code">uk-UA</span><span class="np-tile-iata">KBP</span></div>
+  <p class="np-tile-city">Kyiv</p>
+  <p class="np-tile-val" dir="auto" v-text="B.b.tiles[19].s">1 234 567,891</p>
+  <p class="np-tile-row np-tile-a"><span class="np-tile-label" v-text="B.b.labels.a">parseFloat</span><span class="np-tile-out" dir="auto" v-text="B.b.tiles[19].a">1</span></p>
+  <p class="np-tile-row np-tile-b"><span class="np-tile-label" v-text="B.b.labels.b">numberparrot</span><span class="np-tile-out" dir="auto" v-text="B.b.tiles[19].b">1234567.891</span></p>
+</li>
+<li class="np-tile" data-a="bad" data-b="ok" :data-a="B.b.tiles[20].as" :data-b="B.b.tiles[20].bs">
+  <div class="np-tile-head"><span class="np-tile-code">ru-RU</span><span class="np-tile-iata">SVO</span></div>
+  <p class="np-tile-city">Moscow</p>
+  <p class="np-tile-val" dir="auto" v-text="B.b.tiles[20].s">1 234 567,891</p>
+  <p class="np-tile-row np-tile-a"><span class="np-tile-label" v-text="B.b.labels.a">parseFloat</span><span class="np-tile-out" dir="auto" v-text="B.b.tiles[20].a">1</span></p>
+  <p class="np-tile-row np-tile-b"><span class="np-tile-label" v-text="B.b.labels.b">numberparrot</span><span class="np-tile-out" dir="auto" v-text="B.b.tiles[20].b">1234567.891</span></p>
+</li>
+<li class="np-tile" data-a="bad" data-b="ok" :data-a="B.b.tiles[21].as" :data-b="B.b.tiles[21].bs">
+  <div class="np-tile-head"><span class="np-tile-code">tr-TR</span><span class="np-tile-iata">IST</span></div>
+  <p class="np-tile-city">Istanbul</p>
+  <p class="np-tile-val" dir="auto" v-text="B.b.tiles[21].s">1.234.567,891</p>
+  <p class="np-tile-row np-tile-a"><span class="np-tile-label" v-text="B.b.labels.a">parseFloat</span><span class="np-tile-out" dir="auto" v-text="B.b.tiles[21].a">1.234</span></p>
+  <p class="np-tile-row np-tile-b"><span class="np-tile-label" v-text="B.b.labels.b">numberparrot</span><span class="np-tile-out" dir="auto" v-text="B.b.tiles[21].b">1234567.891</span></p>
+</li>
+  </ol>
+</section>
+<section class="np-region" aria-labelledby="rg-mea">
+  <header class="np-region-head"><svg class="np-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c-3 3.2-3 14.8 0 18M12 3c3 3.2 3 14.8 0 18M4.6 7.5h14.8M4.6 16.5h14.8"/></svg><h3 id="rg-mea">Middle East and Africa</h3><span>6 locales</span></header>
+  <ol class="np-tiles" aria-label="Middle East and Africa">
+<li class="np-tile" data-a="bad" data-b="ok" :data-a="B.b.tiles[22].as" :data-b="B.b.tiles[22].bs">
+  <div class="np-tile-head"><span class="np-tile-code">ar-EG</span><span class="np-tile-iata">CAI</span></div>
+  <p class="np-tile-city">Cairo</p>
+  <p class="np-tile-val" dir="auto" v-text="B.b.tiles[22].s">١٬٢٣٤٬٥٦٧٫٨٩١</p>
+  <p class="np-tile-row np-tile-a"><span class="np-tile-label" v-text="B.b.labels.a">parseFloat</span><span class="np-tile-out" dir="auto" v-text="B.b.tiles[22].a">NaN</span></p>
+  <p class="np-tile-row np-tile-b"><span class="np-tile-label" v-text="B.b.labels.b">numberparrot</span><span class="np-tile-out" dir="auto" v-text="B.b.tiles[22].b">1234567.891</span></p>
+</li>
+<li class="np-tile" data-a="bad" data-b="ok" :data-a="B.b.tiles[23].as" :data-b="B.b.tiles[23].bs">
+  <div class="np-tile-head"><span class="np-tile-code">ar-SA</span><span class="np-tile-iata">RUH</span></div>
+  <p class="np-tile-city">Riyadh</p>
+  <p class="np-tile-val" dir="auto" v-text="B.b.tiles[23].s">١٬٢٣٤٬٥٦٧٫٨٩١</p>
+  <p class="np-tile-row np-tile-a"><span class="np-tile-label" v-text="B.b.labels.a">parseFloat</span><span class="np-tile-out" dir="auto" v-text="B.b.tiles[23].a">NaN</span></p>
+  <p class="np-tile-row np-tile-b"><span class="np-tile-label" v-text="B.b.labels.b">numberparrot</span><span class="np-tile-out" dir="auto" v-text="B.b.tiles[23].b">1234567.891</span></p>
+</li>
+<li class="np-tile" data-a="bad" data-b="ok" :data-a="B.b.tiles[24].as" :data-b="B.b.tiles[24].bs">
+  <div class="np-tile-head"><span class="np-tile-code">fa-IR</span><span class="np-tile-iata">IKA</span></div>
+  <p class="np-tile-city">Tehran</p>
+  <p class="np-tile-val" dir="auto" v-text="B.b.tiles[24].s">۱٬۲۳۴٬۵۶۷٫۸۹۱</p>
+  <p class="np-tile-row np-tile-a"><span class="np-tile-label" v-text="B.b.labels.a">parseFloat</span><span class="np-tile-out" dir="auto" v-text="B.b.tiles[24].a">NaN</span></p>
+  <p class="np-tile-row np-tile-b"><span class="np-tile-label" v-text="B.b.labels.b">numberparrot</span><span class="np-tile-out" dir="auto" v-text="B.b.tiles[24].b">1234567.891</span></p>
+</li>
+<li class="np-tile" data-a="bad" data-b="ok" :data-a="B.b.tiles[25].as" :data-b="B.b.tiles[25].bs">
+  <div class="np-tile-head"><span class="np-tile-code">he-IL</span><span class="np-tile-iata">TLV</span></div>
+  <p class="np-tile-city">Tel Aviv</p>
+  <p class="np-tile-val" dir="auto" v-text="B.b.tiles[25].s">1,234,567.891</p>
+  <p class="np-tile-row np-tile-a"><span class="np-tile-label" v-text="B.b.labels.a">parseFloat</span><span class="np-tile-out" dir="auto" v-text="B.b.tiles[25].a">1</span></p>
+  <p class="np-tile-row np-tile-b"><span class="np-tile-label" v-text="B.b.labels.b">numberparrot</span><span class="np-tile-out" dir="auto" v-text="B.b.tiles[25].b">1234567.891</span></p>
+</li>
+<li class="np-tile" data-a="bad" data-b="ok" :data-a="B.b.tiles[26].as" :data-b="B.b.tiles[26].bs">
+  <div class="np-tile-head"><span class="np-tile-code">sw-KE</span><span class="np-tile-iata">NBO</span></div>
+  <p class="np-tile-city">Nairobi</p>
+  <p class="np-tile-val" dir="auto" v-text="B.b.tiles[26].s">1,234,567.891</p>
+  <p class="np-tile-row np-tile-a"><span class="np-tile-label" v-text="B.b.labels.a">parseFloat</span><span class="np-tile-out" dir="auto" v-text="B.b.tiles[26].a">1</span></p>
+  <p class="np-tile-row np-tile-b"><span class="np-tile-label" v-text="B.b.labels.b">numberparrot</span><span class="np-tile-out" dir="auto" v-text="B.b.tiles[26].b">1234567.891</span></p>
+</li>
+<li class="np-tile" data-a="bad" data-b="ok" :data-a="B.b.tiles[27].as" :data-b="B.b.tiles[27].bs">
+  <div class="np-tile-head"><span class="np-tile-code">en-ZA</span><span class="np-tile-iata">JNB</span></div>
+  <p class="np-tile-city">Johannesburg</p>
+  <p class="np-tile-val" dir="auto" v-text="B.b.tiles[27].s">1 234 567,891</p>
+  <p class="np-tile-row np-tile-a"><span class="np-tile-label" v-text="B.b.labels.a">parseFloat</span><span class="np-tile-out" dir="auto" v-text="B.b.tiles[27].a">1</span></p>
+  <p class="np-tile-row np-tile-b"><span class="np-tile-label" v-text="B.b.labels.b">numberparrot</span><span class="np-tile-out" dir="auto" v-text="B.b.tiles[27].b">1234567.891</span></p>
+</li>
+  </ol>
+</section>
+<section class="np-region" aria-labelledby="rg-south-asia">
+  <header class="np-region-head"><svg class="np-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c-3 3.2-3 14.8 0 18M12 3c3 3.2 3 14.8 0 18M4.6 7.5h14.8M4.6 16.5h14.8"/></svg><h3 id="rg-south-asia">South Asia</h3><span>4 locales</span></header>
+  <ol class="np-tiles" aria-label="South Asia">
+<li class="np-tile" data-a="bad" data-b="ok" :data-a="B.b.tiles[28].as" :data-b="B.b.tiles[28].bs">
+  <div class="np-tile-head"><span class="np-tile-code">en-IN</span><span class="np-tile-iata">BOM</span></div>
+  <p class="np-tile-city">Mumbai</p>
+  <p class="np-tile-val" dir="auto" v-text="B.b.tiles[28].s">12,34,567.891</p>
+  <p class="np-tile-row np-tile-a"><span class="np-tile-label" v-text="B.b.labels.a">parseFloat</span><span class="np-tile-out" dir="auto" v-text="B.b.tiles[28].a">12</span></p>
+  <p class="np-tile-row np-tile-b"><span class="np-tile-label" v-text="B.b.labels.b">numberparrot</span><span class="np-tile-out" dir="auto" v-text="B.b.tiles[28].b">1234567.891</span></p>
+</li>
+<li class="np-tile" data-a="bad" data-b="ok" :data-a="B.b.tiles[29].as" :data-b="B.b.tiles[29].bs">
+  <div class="np-tile-head"><span class="np-tile-code">hi-IN</span><span class="np-tile-iata">DEL</span></div>
+  <p class="np-tile-city">Delhi</p>
+  <p class="np-tile-val" dir="auto" v-text="B.b.tiles[29].s">12,34,567.891</p>
+  <p class="np-tile-row np-tile-a"><span class="np-tile-label" v-text="B.b.labels.a">parseFloat</span><span class="np-tile-out" dir="auto" v-text="B.b.tiles[29].a">12</span></p>
+  <p class="np-tile-row np-tile-b"><span class="np-tile-label" v-text="B.b.labels.b">numberparrot</span><span class="np-tile-out" dir="auto" v-text="B.b.tiles[29].b">1234567.891</span></p>
+</li>
+<li class="np-tile" data-a="bad" data-b="ok" :data-a="B.b.tiles[30].as" :data-b="B.b.tiles[30].bs">
+  <div class="np-tile-head"><span class="np-tile-code">bn-BD</span><span class="np-tile-iata">DAC</span></div>
+  <p class="np-tile-city">Dhaka</p>
+  <p class="np-tile-val" dir="auto" v-text="B.b.tiles[30].s">১২,৩৪,৫৬৭.৮৯১</p>
+  <p class="np-tile-row np-tile-a"><span class="np-tile-label" v-text="B.b.labels.a">parseFloat</span><span class="np-tile-out" dir="auto" v-text="B.b.tiles[30].a">NaN</span></p>
+  <p class="np-tile-row np-tile-b"><span class="np-tile-label" v-text="B.b.labels.b">numberparrot</span><span class="np-tile-out" dir="auto" v-text="B.b.tiles[30].b">1234567.891</span></p>
+</li>
+<li class="np-tile" data-a="bad" data-b="ok" :data-a="B.b.tiles[31].as" :data-b="B.b.tiles[31].bs">
+  <div class="np-tile-head"><span class="np-tile-code">ur-PK</span><span class="np-tile-iata">KHI</span></div>
+  <p class="np-tile-city">Karachi</p>
+  <p class="np-tile-val" dir="auto" v-text="B.b.tiles[31].s">1,234,567.891</p>
+  <p class="np-tile-row np-tile-a"><span class="np-tile-label" v-text="B.b.labels.a">parseFloat</span><span class="np-tile-out" dir="auto" v-text="B.b.tiles[31].a">1</span></p>
+  <p class="np-tile-row np-tile-b"><span class="np-tile-label" v-text="B.b.labels.b">numberparrot</span><span class="np-tile-out" dir="auto" v-text="B.b.tiles[31].b">1234567.891</span></p>
+</li>
+  </ol>
+</section>
+<section class="np-region" aria-labelledby="rg-asia-pacific">
+  <header class="np-region-head"><svg class="np-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c-3 3.2-3 14.8 0 18M12 3c3 3.2 3 14.8 0 18M4.6 7.5h14.8M4.6 16.5h14.8"/></svg><h3 id="rg-asia-pacific">East Asia and Pacific</h3><span>7 locales</span></header>
+  <ol class="np-tiles" aria-label="East Asia and Pacific">
+<li class="np-tile" data-a="bad" data-b="ok" :data-a="B.b.tiles[32].as" :data-b="B.b.tiles[32].bs">
+  <div class="np-tile-head"><span class="np-tile-code">ja-JP</span><span class="np-tile-iata">HND</span></div>
+  <p class="np-tile-city">Tokyo</p>
+  <p class="np-tile-val" dir="auto" v-text="B.b.tiles[32].s">1,234,567.891</p>
+  <p class="np-tile-row np-tile-a"><span class="np-tile-label" v-text="B.b.labels.a">parseFloat</span><span class="np-tile-out" dir="auto" v-text="B.b.tiles[32].a">1</span></p>
+  <p class="np-tile-row np-tile-b"><span class="np-tile-label" v-text="B.b.labels.b">numberparrot</span><span class="np-tile-out" dir="auto" v-text="B.b.tiles[32].b">1234567.891</span></p>
+</li>
+<li class="np-tile" data-a="bad" data-b="ok" :data-a="B.b.tiles[33].as" :data-b="B.b.tiles[33].bs">
+  <div class="np-tile-head"><span class="np-tile-code">zh-CN</span><span class="np-tile-iata">PVG</span></div>
+  <p class="np-tile-city">Shanghai</p>
+  <p class="np-tile-val" dir="auto" v-text="B.b.tiles[33].s">1,234,567.891</p>
+  <p class="np-tile-row np-tile-a"><span class="np-tile-label" v-text="B.b.labels.a">parseFloat</span><span class="np-tile-out" dir="auto" v-text="B.b.tiles[33].a">1</span></p>
+  <p class="np-tile-row np-tile-b"><span class="np-tile-label" v-text="B.b.labels.b">numberparrot</span><span class="np-tile-out" dir="auto" v-text="B.b.tiles[33].b">1234567.891</span></p>
+</li>
+<li class="np-tile" data-a="bad" data-b="ok" :data-a="B.b.tiles[34].as" :data-b="B.b.tiles[34].bs">
+  <div class="np-tile-head"><span class="np-tile-code">ko-KR</span><span class="np-tile-iata">ICN</span></div>
+  <p class="np-tile-city">Seoul</p>
+  <p class="np-tile-val" dir="auto" v-text="B.b.tiles[34].s">1,234,567.891</p>
+  <p class="np-tile-row np-tile-a"><span class="np-tile-label" v-text="B.b.labels.a">parseFloat</span><span class="np-tile-out" dir="auto" v-text="B.b.tiles[34].a">1</span></p>
+  <p class="np-tile-row np-tile-b"><span class="np-tile-label" v-text="B.b.labels.b">numberparrot</span><span class="np-tile-out" dir="auto" v-text="B.b.tiles[34].b">1234567.891</span></p>
+</li>
+<li class="np-tile" data-a="bad" data-b="ok" :data-a="B.b.tiles[35].as" :data-b="B.b.tiles[35].bs">
+  <div class="np-tile-head"><span class="np-tile-code">th-TH</span><span class="np-tile-iata">BKK</span></div>
+  <p class="np-tile-city">Bangkok</p>
+  <p class="np-tile-val" dir="auto" v-text="B.b.tiles[35].s">1,234,567.891</p>
+  <p class="np-tile-row np-tile-a"><span class="np-tile-label" v-text="B.b.labels.a">parseFloat</span><span class="np-tile-out" dir="auto" v-text="B.b.tiles[35].a">1</span></p>
+  <p class="np-tile-row np-tile-b"><span class="np-tile-label" v-text="B.b.labels.b">numberparrot</span><span class="np-tile-out" dir="auto" v-text="B.b.tiles[35].b">1234567.891</span></p>
+</li>
+<li class="np-tile" data-a="bad" data-b="ok" :data-a="B.b.tiles[36].as" :data-b="B.b.tiles[36].bs">
+  <div class="np-tile-head"><span class="np-tile-code">vi-VN</span><span class="np-tile-iata">HAN</span></div>
+  <p class="np-tile-city">Hanoi</p>
+  <p class="np-tile-val" dir="auto" v-text="B.b.tiles[36].s">1.234.567,891</p>
+  <p class="np-tile-row np-tile-a"><span class="np-tile-label" v-text="B.b.labels.a">parseFloat</span><span class="np-tile-out" dir="auto" v-text="B.b.tiles[36].a">1.234</span></p>
+  <p class="np-tile-row np-tile-b"><span class="np-tile-label" v-text="B.b.labels.b">numberparrot</span><span class="np-tile-out" dir="auto" v-text="B.b.tiles[36].b">1234567.891</span></p>
+</li>
+<li class="np-tile" data-a="bad" data-b="ok" :data-a="B.b.tiles[37].as" :data-b="B.b.tiles[37].bs">
+  <div class="np-tile-head"><span class="np-tile-code">id-ID</span><span class="np-tile-iata">CGK</span></div>
+  <p class="np-tile-city">Jakarta</p>
+  <p class="np-tile-val" dir="auto" v-text="B.b.tiles[37].s">1.234.567,891</p>
+  <p class="np-tile-row np-tile-a"><span class="np-tile-label" v-text="B.b.labels.a">parseFloat</span><span class="np-tile-out" dir="auto" v-text="B.b.tiles[37].a">1.234</span></p>
+  <p class="np-tile-row np-tile-b"><span class="np-tile-label" v-text="B.b.labels.b">numberparrot</span><span class="np-tile-out" dir="auto" v-text="B.b.tiles[37].b">1234567.891</span></p>
+</li>
+<li class="np-tile" data-a="bad" data-b="ok" :data-a="B.b.tiles[38].as" :data-b="B.b.tiles[38].bs">
+  <div class="np-tile-head"><span class="np-tile-code">en-AU</span><span class="np-tile-iata">SYD</span></div>
+  <p class="np-tile-city">Sydney</p>
+  <p class="np-tile-val" dir="auto" v-text="B.b.tiles[38].s">1,234,567.891</p>
+  <p class="np-tile-row np-tile-a"><span class="np-tile-label" v-text="B.b.labels.a">parseFloat</span><span class="np-tile-out" dir="auto" v-text="B.b.tiles[38].a">1</span></p>
+  <p class="np-tile-row np-tile-b"><span class="np-tile-label" v-text="B.b.labels.b">numberparrot</span><span class="np-tile-out" dir="auto" v-text="B.b.tiles[38].b">1234567.891</span></p>
+</li>
+  </ol>
+</section>
+      </div>
+      <div class="np-legend">
+        <span><i class="np-swatch np-swatch-bad"></i>Wrong number or NaN</span>
+        <span><i class="np-swatch np-swatch-good"></i>Exactly right</span>
+        <span><i class="np-swatch np-swatch-alt"></i>Another valid reading</span>
+        <span class="np-legend-note">Written live by <code>Intl.NumberFormat</code> in your browser and read back by numberparrot 1.0.0.</span>
+      </div>
     </div>
   </div>
-  <img src="img/mascot.svg" width="180" height="180" alt="Pico, the numberparrot mascot: a friendly green parrot that repeats numbers in any language">
 </section>
 
-<section id="playground" class="card playground" aria-labelledby="pg-title" v-data="playground()" v-effect="r = analyze(text, locale)">
-  <h2 id="pg-title" style="margin-top:0">Playground: parseFloat vs numberparrot</h2>
-  <form id="pg-form" @submit.prevent="">
-    <div>
-      <label for="pg-value">Number as text</label>
-      <input id="pg-value" value="1.234,56" v-model="text" autocomplete="off" spellcheck="false">
+<section id="departures" class="dark np-departures" aria-labelledby="dep-title">
+  <div class="container">
+    <div class="np-dep-head">
+      <div>
+        <p class="np-eyebrow np-eyebrow-sun"><svg class="np-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.2 13.8 3.5 12l-1-1.6 1.6-.6 6.6 1.2 4.8-4.9c.9-.9 2.6-1.4 3.3-.7.7.7.2 2.4-.7 3.3l-4.9 4.8 1.2 6.6-.6 1.6-1.6-1-1.8-6.7-3 2.9.3 2.3-1.2 1.2-1.2-2.8-2.8-1.2 1.2-1.2 2.3.3Z"/></svg>Departures</p>
+        <h2 id="dep-title">Numbers leaving home</h2>
+        <p>Each flight is a number written the local way. The status is what <code>parseFloat</code> did with it on arrival. numberparrot lands every one.</p>
+      </div>
+      <div class="np-dep-clock"><svg class="np-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><span id="np-clock">09:41</span><small>Local time</small></div>
     </div>
-    <div>
-      <label for="pg-locale">Locale</label>
-      <select id="pg-locale" v-model="locale">
-        <option value="auto">Detect automatically</option>
-        <option value="en-US">en-US English (US)</option>
-        <option value="pt-BR" selected>pt-BR Portuguese (Brazil)</option>
-        <option value="de-DE">de-DE German</option>
-        <option value="fr-FR">fr-FR French</option>
-        <option value="de-CH">de-CH German (Switzerland)</option>
-        <option value="en-IN">en-IN English (India)</option>
-        <option value="hi-IN">hi-IN Hindi</option>
-        <option value="ar-EG">ar-EG Arabic (Egypt)</option>
-        <option value="fa-IR">fa-IR Persian</option>
-        <option value="th-TH">th-TH Thai</option>
-        <option value="ja-JP">ja-JP Japanese</option>
-        <option value="es-ES">es-ES Spanish</option>
-        <option value="it-IT">it-IT Italian</option>
-        <option value="ru-RU">ru-RU Russian</option>
-        <option value="pl-PL">pl-PL Polish</option>
-        <option value="sv-SE">sv-SE Swedish</option>
-        <option value="tr-TR">tr-TR Turkish</option>
-        <option value="en-CA">en-CA English (Canada)</option>
-        <option value="es-MX">es-MX Spanish (Mexico)</option>
-      </select>
+    <div class="np-flapboard" role="table" aria-label="Departures: numbers written in different locales and how they parse">
+      <div class="np-flap-row np-flap-headrow" role="row"><span class="np-flap-th np-col-time" role="columnheader">Time</span><span class="np-flap-th np-col-flight" role="columnheader">Flight</span><span class="np-flap-th np-col-from" role="columnheader">From</span><span class="np-flap-th np-col-written" role="columnheader">As written</span><span class="np-flap-th np-col-pf" role="columnheader">parseFloat</span><span class="np-flap-th np-col-np" role="columnheader">numberparrot</span><span class="np-flap-th np-col-status" role="columnheader">Status</span></div>
+<div class="np-flap-row" role="row" data-status="diverted"><span class="np-flap np-col-time" role="cell" data-w="5" aria-label="06:00"><span class="np-chars" aria-hidden="true"><span class="np-ch">0</span><span class="np-ch">6</span><span class="np-ch">:</span><span class="np-ch">0</span><span class="np-ch">0</span></span></span><span class="np-flap np-col-flight" role="cell" data-w="7" aria-label="GRU 100"><span class="np-chars" aria-hidden="true"><span class="np-ch">G</span><span class="np-ch">R</span><span class="np-ch">U</span><span class="np-ch">&nbsp;</span><span class="np-ch">1</span><span class="np-ch">0</span><span class="np-ch">0</span></span></span><span class="np-flap np-col-from" role="cell" data-w="12" aria-label="SÃO PAULO"><span class="np-chars" aria-hidden="true"><span class="np-ch">S</span><span class="np-ch">Ã</span><span class="np-ch">O</span><span class="np-ch">&nbsp;</span><span class="np-ch">P</span><span class="np-ch">A</span><span class="np-ch">U</span><span class="np-ch">L</span><span class="np-ch">O</span><span class="np-ch">&nbsp;</span><span class="np-ch">&nbsp;</span><span class="np-ch">&nbsp;</span></span></span><span class="np-flap np-col-written" role="cell" data-w="13" aria-label="1.234,56"><span class="np-chars" aria-hidden="true"><span class="np-ch">1</span><span class="np-ch">.</span><span class="np-ch">2</span><span class="np-ch">3</span><span class="np-ch">4</span><span class="np-ch">,</span><span class="np-ch">5</span><span class="np-ch">6</span><span class="np-ch">&nbsp;</span><span class="np-ch">&nbsp;</span><span class="np-ch">&nbsp;</span><span class="np-ch">&nbsp;</span><span class="np-ch">&nbsp;</span></span></span><span class="np-flap np-col-pf" role="cell" data-w="9" aria-label="1.234"><span class="np-chars" aria-hidden="true"><span class="np-ch">1</span><span class="np-ch">.</span><span class="np-ch">2</span><span class="np-ch">3</span><span class="np-ch">4</span><span class="np-ch">&nbsp;</span><span class="np-ch">&nbsp;</span><span class="np-ch">&nbsp;</span><span class="np-ch">&nbsp;</span></span></span><span class="np-flap np-col-np" role="cell" data-w="10" aria-label="1234.56"><span class="np-chars" aria-hidden="true"><span class="np-ch">1</span><span class="np-ch">2</span><span class="np-ch">3</span><span class="np-ch">4</span><span class="np-ch">.</span><span class="np-ch">5</span><span class="np-ch">6</span><span class="np-ch">&nbsp;</span><span class="np-ch">&nbsp;</span><span class="np-ch">&nbsp;</span></span></span><span class="np-flap np-col-status" role="cell" data-w="9" aria-label="DIVERTED"><span class="np-chars" aria-hidden="true"><span class="np-ch">D</span><span class="np-ch">I</span><span class="np-ch">V</span><span class="np-ch">E</span><span class="np-ch">R</span><span class="np-ch">T</span><span class="np-ch">E</span><span class="np-ch">D</span><span class="np-ch">&nbsp;</span></span></span></div>
+<div class="np-flap-row" role="row" data-status="diverted"><span class="np-flap np-col-time" role="cell" data-w="5" aria-label="06:37"><span class="np-chars" aria-hidden="true"><span class="np-ch">0</span><span class="np-ch">6</span><span class="np-ch">:</span><span class="np-ch">3</span><span class="np-ch">7</span></span></span><span class="np-flap np-col-flight" role="cell" data-w="7" aria-label="ZRH 147"><span class="np-chars" aria-hidden="true"><span class="np-ch">Z</span><span class="np-ch">R</span><span class="np-ch">H</span><span class="np-ch">&nbsp;</span><span class="np-ch">1</span><span class="np-ch">4</span><span class="np-ch">7</span></span></span><span class="np-flap np-col-from" role="cell" data-w="12" aria-label="ZÜRICH"><span class="np-chars" aria-hidden="true"><span class="np-ch">Z</span><span class="np-ch">Ü</span><span class="np-ch">R</span><span class="np-ch">I</span><span class="np-ch">C</span><span class="np-ch">H</span><span class="np-ch">&nbsp;</span><span class="np-ch">&nbsp;</span><span class="np-ch">&nbsp;</span><span class="np-ch">&nbsp;</span><span class="np-ch">&nbsp;</span><span class="np-ch">&nbsp;</span></span></span><span class="np-flap np-col-written" role="cell" data-w="13" aria-label="1'234'567.89"><span class="np-chars" aria-hidden="true"><span class="np-ch">1</span><span class="np-ch">'</span><span class="np-ch">2</span><span class="np-ch">3</span><span class="np-ch">4</span><span class="np-ch">'</span><span class="np-ch">5</span><span class="np-ch">6</span><span class="np-ch">7</span><span class="np-ch">.</span><span class="np-ch">8</span><span class="np-ch">9</span><span class="np-ch">&nbsp;</span></span></span><span class="np-flap np-col-pf" role="cell" data-w="9" aria-label="1"><span class="np-chars" aria-hidden="true"><span class="np-ch">1</span><span class="np-ch">&nbsp;</span><span class="np-ch">&nbsp;</span><span class="np-ch">&nbsp;</span><span class="np-ch">&nbsp;</span><span class="np-ch">&nbsp;</span><span class="np-ch">&nbsp;</span><span class="np-ch">&nbsp;</span><span class="np-ch">&nbsp;</span></span></span><span class="np-flap np-col-np" role="cell" data-w="10" aria-label="1234567.89"><span class="np-chars" aria-hidden="true"><span class="np-ch">1</span><span class="np-ch">2</span><span class="np-ch">3</span><span class="np-ch">4</span><span class="np-ch">5</span><span class="np-ch">6</span><span class="np-ch">7</span><span class="np-ch">.</span><span class="np-ch">8</span><span class="np-ch">9</span></span></span><span class="np-flap np-col-status" role="cell" data-w="9" aria-label="DIVERTED"><span class="np-chars" aria-hidden="true"><span class="np-ch">D</span><span class="np-ch">I</span><span class="np-ch">V</span><span class="np-ch">E</span><span class="np-ch">R</span><span class="np-ch">T</span><span class="np-ch">E</span><span class="np-ch">D</span><span class="np-ch">&nbsp;</span></span></span></div>
+<div class="np-flap-row" role="row" data-status="diverted"><span class="np-flap np-col-time" role="cell" data-w="5" aria-label="07:14"><span class="np-chars" aria-hidden="true"><span class="np-ch">0</span><span class="np-ch">7</span><span class="np-ch">:</span><span class="np-ch">1</span><span class="np-ch">4</span></span></span><span class="np-flap np-col-flight" role="cell" data-w="7" aria-label="BOM 194"><span class="np-chars" aria-hidden="true"><span class="np-ch">B</span><span class="np-ch">O</span><span class="np-ch">M</span><span class="np-ch">&nbsp;</span><span class="np-ch">1</span><span class="np-ch">9</span><span class="np-ch">4</span></span></span><span class="np-flap np-col-from" role="cell" data-w="12" aria-label="MUMBAI"><span class="np-chars" aria-hidden="true"><span class="np-ch">M</span><span class="np-ch">U</span><span class="np-ch">M</span><span class="np-ch">B</span><span class="np-ch">A</span><span class="np-ch">I</span><span class="np-ch">&nbsp;</span><span class="np-ch">&nbsp;</span><span class="np-ch">&nbsp;</span><span class="np-ch">&nbsp;</span><span class="np-ch">&nbsp;</span><span class="np-ch">&nbsp;</span></span></span><span class="np-flap np-col-written" role="cell" data-w="13" aria-label="12,34,567.89"><span class="np-chars" aria-hidden="true"><span class="np-ch">1</span><span class="np-ch">2</span><span class="np-ch">,</span><span class="np-ch">3</span><span class="np-ch">4</span><span class="np-ch">,</span><span class="np-ch">5</span><span class="np-ch">6</span><span class="np-ch">7</span><span class="np-ch">.</span><span class="np-ch">8</span><span class="np-ch">9</span><span class="np-ch">&nbsp;</span></span></span><span class="np-flap np-col-pf" role="cell" data-w="9" aria-label="12"><span class="np-chars" aria-hidden="true"><span class="np-ch">1</span><span class="np-ch">2</span><span class="np-ch">&nbsp;</span><span class="np-ch">&nbsp;</span><span class="np-ch">&nbsp;</span><span class="np-ch">&nbsp;</span><span class="np-ch">&nbsp;</span><span class="np-ch">&nbsp;</span><span class="np-ch">&nbsp;</span></span></span><span class="np-flap np-col-np" role="cell" data-w="10" aria-label="1234567.89"><span class="np-chars" aria-hidden="true"><span class="np-ch">1</span><span class="np-ch">2</span><span class="np-ch">3</span><span class="np-ch">4</span><span class="np-ch">5</span><span class="np-ch">6</span><span class="np-ch">7</span><span class="np-ch">.</span><span class="np-ch">8</span><span class="np-ch">9</span></span></span><span class="np-flap np-col-status" role="cell" data-w="9" aria-label="DIVERTED"><span class="np-chars" aria-hidden="true"><span class="np-ch">D</span><span class="np-ch">I</span><span class="np-ch">V</span><span class="np-ch">E</span><span class="np-ch">R</span><span class="np-ch">T</span><span class="np-ch">E</span><span class="np-ch">D</span><span class="np-ch">&nbsp;</span></span></span></div>
+<div class="np-flap-row" role="row" data-status="diverted"><span class="np-flap np-col-time" role="cell" data-w="5" aria-label="07:51"><span class="np-chars" aria-hidden="true"><span class="np-ch">0</span><span class="np-ch">7</span><span class="np-ch">:</span><span class="np-ch">5</span><span class="np-ch">1</span></span></span><span class="np-flap np-col-flight" role="cell" data-w="7" aria-label="CDG 241"><span class="np-chars" aria-hidden="true"><span class="np-ch">C</span><span class="np-ch">D</span><span class="np-ch">G</span><span class="np-ch">&nbsp;</span><span class="np-ch">2</span><span class="np-ch">4</span><span class="np-ch">1</span></span></span><span class="np-flap np-col-from" role="cell" data-w="12" aria-label="PARIS"><span class="np-chars" aria-hidden="true"><span class="np-ch">P</span><span class="np-ch">A</span><span class="np-ch">R</span><span class="np-ch">I</span><span class="np-ch">S</span><span class="np-ch">&nbsp;</span><span class="np-ch">&nbsp;</span><span class="np-ch">&nbsp;</span><span class="np-ch">&nbsp;</span><span class="np-ch">&nbsp;</span><span class="np-ch">&nbsp;</span><span class="np-ch">&nbsp;</span></span></span><span class="np-flap np-col-written" role="cell" data-w="13" aria-label="1 234,50 €"><span class="np-chars" aria-hidden="true"><span class="np-ch">1</span><span class="np-ch"> </span><span class="np-ch">2</span><span class="np-ch">3</span><span class="np-ch">4</span><span class="np-ch">,</span><span class="np-ch">5</span><span class="np-ch">0</span><span class="np-ch"> </span><span class="np-ch">€</span><span class="np-ch">&nbsp;</span><span class="np-ch">&nbsp;</span><span class="np-ch">&nbsp;</span></span></span><span class="np-flap np-col-pf" role="cell" data-w="9" aria-label="1"><span class="np-chars" aria-hidden="true"><span class="np-ch">1</span><span class="np-ch">&nbsp;</span><span class="np-ch">&nbsp;</span><span class="np-ch">&nbsp;</span><span class="np-ch">&nbsp;</span><span class="np-ch">&nbsp;</span><span class="np-ch">&nbsp;</span><span class="np-ch">&nbsp;</span><span class="np-ch">&nbsp;</span></span></span><span class="np-flap np-col-np" role="cell" data-w="10" aria-label="1234.5"><span class="np-chars" aria-hidden="true"><span class="np-ch">1</span><span class="np-ch">2</span><span class="np-ch">3</span><span class="np-ch">4</span><span class="np-ch">.</span><span class="np-ch">5</span><span class="np-ch">&nbsp;</span><span class="np-ch">&nbsp;</span><span class="np-ch">&nbsp;</span><span class="np-ch">&nbsp;</span></span></span><span class="np-flap np-col-status" role="cell" data-w="9" aria-label="DIVERTED"><span class="np-chars" aria-hidden="true"><span class="np-ch">D</span><span class="np-ch">I</span><span class="np-ch">V</span><span class="np-ch">E</span><span class="np-ch">R</span><span class="np-ch">T</span><span class="np-ch">E</span><span class="np-ch">D</span><span class="np-ch">&nbsp;</span></span></span></div>
+<div class="np-flap-row" role="row" data-status="cancelled"><span class="np-flap np-col-time" role="cell" data-w="5" aria-label="08:28"><span class="np-chars" aria-hidden="true"><span class="np-ch">0</span><span class="np-ch">8</span><span class="np-ch">:</span><span class="np-ch">2</span><span class="np-ch">8</span></span></span><span class="np-flap np-col-flight" role="cell" data-w="7" aria-label="CAI 288"><span class="np-chars" aria-hidden="true"><span class="np-ch">C</span><span class="np-ch">A</span><span class="np-ch">I</span><span class="np-ch">&nbsp;</span><span class="np-ch">2</span><span class="np-ch">8</span><span class="np-ch">8</span></span></span><span class="np-flap np-col-from" role="cell" data-w="12" aria-label="CAIRO"><span class="np-chars" aria-hidden="true"><span class="np-ch">C</span><span class="np-ch">A</span><span class="np-ch">I</span><span class="np-ch">R</span><span class="np-ch">O</span><span class="np-ch">&nbsp;</span><span class="np-ch">&nbsp;</span><span class="np-ch">&nbsp;</span><span class="np-ch">&nbsp;</span><span class="np-ch">&nbsp;</span><span class="np-ch">&nbsp;</span><span class="np-ch">&nbsp;</span></span></span><span class="np-flap np-col-written" role="cell" data-w="13" aria-label="١٬٢٣٤٫٥٦"><span class="np-chars" aria-hidden="true"><span class="np-ch">١</span><span class="np-ch">٬</span><span class="np-ch">٢</span><span class="np-ch">٣</span><span class="np-ch">٤</span><span class="np-ch">٫</span><span class="np-ch">٥</span><span class="np-ch">٦</span><span class="np-ch">&nbsp;</span><span class="np-ch">&nbsp;</span><span class="np-ch">&nbsp;</span><span class="np-ch">&nbsp;</span><span class="np-ch">&nbsp;</span></span></span><span class="np-flap np-col-pf" role="cell" data-w="9" aria-label="NaN"><span class="np-chars" aria-hidden="true"><span class="np-ch">N</span><span class="np-ch">a</span><span class="np-ch">N</span><span class="np-ch">&nbsp;</span><span class="np-ch">&nbsp;</span><span class="np-ch">&nbsp;</span><span class="np-ch">&nbsp;</span><span class="np-ch">&nbsp;</span><span class="np-ch">&nbsp;</span></span></span><span class="np-flap np-col-np" role="cell" data-w="10" aria-label="1234.56"><span class="np-chars" aria-hidden="true"><span class="np-ch">1</span><span class="np-ch">2</span><span class="np-ch">3</span><span class="np-ch">4</span><span class="np-ch">.</span><span class="np-ch">5</span><span class="np-ch">6</span><span class="np-ch">&nbsp;</span><span class="np-ch">&nbsp;</span><span class="np-ch">&nbsp;</span></span></span><span class="np-flap np-col-status" role="cell" data-w="9" aria-label="CANCELLED"><span class="np-chars" aria-hidden="true"><span class="np-ch">C</span><span class="np-ch">A</span><span class="np-ch">N</span><span class="np-ch">C</span><span class="np-ch">E</span><span class="np-ch">L</span><span class="np-ch">L</span><span class="np-ch">E</span><span class="np-ch">D</span></span></span></div>
+<div class="np-flap-row" role="row" data-status="cancelled"><span class="np-flap np-col-time" role="cell" data-w="5" aria-label="09:05"><span class="np-chars" aria-hidden="true"><span class="np-ch">0</span><span class="np-ch">9</span><span class="np-ch">:</span><span class="np-ch">0</span><span class="np-ch">5</span></span></span><span class="np-flap np-col-flight" role="cell" data-w="7" aria-label="JFK 335"><span class="np-chars" aria-hidden="true"><span class="np-ch">J</span><span class="np-ch">F</span><span class="np-ch">K</span><span class="np-ch">&nbsp;</span><span class="np-ch">3</span><span class="np-ch">3</span><span class="np-ch">5</span></span></span><span class="np-flap np-col-from" role="cell" data-w="12" aria-label="NEW YORK"><span class="np-chars" aria-hidden="true"><span class="np-ch">N</span><span class="np-ch">E</span><span class="np-ch">W</span><span class="np-ch">&nbsp;</span><span class="np-ch">Y</span><span class="np-ch">O</span><span class="np-ch">R</span><span class="np-ch">K</span><span class="np-ch">&nbsp;</span><span class="np-ch">&nbsp;</span><span class="np-ch">&nbsp;</span><span class="np-ch">&nbsp;</span></span></span><span class="np-flap np-col-written" role="cell" data-w="13" aria-label="$1,234.56"><span class="np-chars" aria-hidden="true"><span class="np-ch">$</span><span class="np-ch">1</span><span class="np-ch">,</span><span class="np-ch">2</span><span class="np-ch">3</span><span class="np-ch">4</span><span class="np-ch">.</span><span class="np-ch">5</span><span class="np-ch">6</span><span class="np-ch">&nbsp;</span><span class="np-ch">&nbsp;</span><span class="np-ch">&nbsp;</span><span class="np-ch">&nbsp;</span></span></span><span class="np-flap np-col-pf" role="cell" data-w="9" aria-label="NaN"><span class="np-chars" aria-hidden="true"><span class="np-ch">N</span><span class="np-ch">a</span><span class="np-ch">N</span><span class="np-ch">&nbsp;</span><span class="np-ch">&nbsp;</span><span class="np-ch">&nbsp;</span><span class="np-ch">&nbsp;</span><span class="np-ch">&nbsp;</span><span class="np-ch">&nbsp;</span></span></span><span class="np-flap np-col-np" role="cell" data-w="10" aria-label="1234.56"><span class="np-chars" aria-hidden="true"><span class="np-ch">1</span><span class="np-ch">2</span><span class="np-ch">3</span><span class="np-ch">4</span><span class="np-ch">.</span><span class="np-ch">5</span><span class="np-ch">6</span><span class="np-ch">&nbsp;</span><span class="np-ch">&nbsp;</span><span class="np-ch">&nbsp;</span></span></span><span class="np-flap np-col-status" role="cell" data-w="9" aria-label="CANCELLED"><span class="np-chars" aria-hidden="true"><span class="np-ch">C</span><span class="np-ch">A</span><span class="np-ch">N</span><span class="np-ch">C</span><span class="np-ch">E</span><span class="np-ch">L</span><span class="np-ch">L</span><span class="np-ch">E</span><span class="np-ch">D</span></span></span></div>
     </div>
-  </form>
-  <div class="examples" aria-label="Examples">
-    <button type="button" data-example="1.234,56" data-locale="pt-BR" @click="text = $el.dataset.example; locale = $el.dataset.locale">1.234,56</button>
-    <button type="button" data-example="R$ 1.234,56" data-locale="pt-BR" @click="text = $el.dataset.example; locale = $el.dataset.locale">R$ 1.234,56</button>
-    <button type="button" data-example="1 234,56 €" data-locale="fr-FR" @click="text = $el.dataset.example; locale = $el.dataset.locale">1 234,56 €</button>
-    <button type="button" data-example="CHF 1'234.50" data-locale="de-CH" @click="text = $el.dataset.example; locale = $el.dataset.locale">CHF 1'234.50</button>
-    <button type="button" data-example="₹12,34,567.89" data-locale="en-IN" @click="text = $el.dataset.example; locale = $el.dataset.locale">₹12,34,567.89</button>
-    <button type="button" data-example="١٬٢٣٤٫٥٦" data-locale="ar-EG" @click="text = $el.dataset.example; locale = $el.dataset.locale">١٬٢٣٤٫٥٦</button>
-    <button type="button" data-example="۱۲۳٫۴۵" data-locale="fa-IR" @click="text = $el.dataset.example; locale = $el.dataset.locale">۱۲۳٫۴۵</button>
-    <button type="button" data-example="(1.234,56)" data-locale="de-DE" @click="text = $el.dataset.example; locale = $el.dataset.locale">(1.234,56)</button>
-    <button type="button" data-example="−1 234,56 kr" data-locale="sv-SE" @click="text = $el.dataset.example; locale = $el.dataset.locale">−1 234,56 kr</button>
-    <button type="button" data-example="%15" data-locale="tr-TR" @click="text = $el.dataset.example; locale = $el.dataset.locale">%15</button>
-    <button type="button" data-example="1,234" data-locale="auto" @click="text = $el.dataset.example; locale = $el.dataset.locale">1,234</button>
-  </div>
-  <div class="results" aria-live="polite">
-    <div class="result" data-state="wrong" :data-state="r.pf.state"><span class="label">parseFloat(text)</span><output v-text="r.pf.value">1.234</output><small v-text="r.pf.note">wrong number</small></div>
-    <div class="result" data-state="wrong" :data-state="r.num.state"><span class="label">Number(text)</span><output v-text="r.num.value">NaN</output><small v-text="r.num.note">wrong number</small></div>
-    <div class="result" data-state="right" :data-state="r.parse.state"><span class="label">parse(text, locale)</span><output v-text="r.parse.value">1234.56</output><small v-text="r.parse.note">locale pt-BR: decimal &quot;,&quot;, group &quot;.&quot;</small></div>
-    <div class="result" data-state="right" :data-state="r.currency.state"><span class="label">parseCurrency(text, locale)</span><output v-text="r.currency.value">1234.56</output><small v-text="r.currency.note">no currency in the input</small></div>
-    <div class="result" data-state="right" :data-state="r.detect.state"><span class="label">detect(text)</span><output v-text="r.detect.value">1234.56</output><small v-text="r.detect.note">confidence 0.95. Both &quot;.&quot; and &quot;,&quot; appear; the last one, &quot;,&quot;, is the decimal separator</small></div>
-    <div class="result"><span class="label">round trip with Intl</span><output v-text="r.format.value">1.234,56</output><small v-text="r.format.note">Intl.NumberFormat(&quot;pt-BR&quot;).format(result)</small></div>
+    <div class="np-dep-foot">
+      <p><span><i class="np-dot np-dot-on-time"></i>On time: parseFloat got it right</span><span><i class="np-dot np-dot-diverted"></i>Diverted: a wrong number</span><span><i class="np-dot np-dot-cancelled"></i>Cancelled: NaN</span></p>
+      <button type="button" class="btn btn-sm btn-outline btn-neutral" id="np-dep-next"><svg class="np-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 12h15M13.5 6l6 6-6 6"/></svg>Next departures</button>
+    </div>
   </div>
 </section>
 
-<h2>Features</h2>
-<div class="features">
-  <div class="feature"><img src="img/icons/locales.svg" width="48" height="48" alt=""><div><h3>Any locale</h3><p>Separators, digits and symbols come from Intl.NumberFormat for every locale your runtime knows.</p></div></div>
-  <div class="feature"><img src="img/icons/currency.svg" width="48" height="48" alt=""><div><h3>Currency</h3><p>Symbols and ISO codes on either side: R$ 1.234,56, 1 234,56 €, CHF 1'234.50.</p></div></div>
-  <div class="feature"><img src="img/icons/digits.svg" width="48" height="48" alt=""><div><h3>Any digits</h3><p>Arabic-Indic, Persian, Devanagari, Bengali, Thai, full width and every Unicode digit.</p></div></div>
-  <div class="feature"><img src="img/icons/accounting.svg" width="48" height="48" alt=""><div><h3>Accounting negatives</h3><p>(1.234,56), trailing minus and every minus sign look alike.</p></div></div>
-  <div class="feature"><img src="img/icons/detection.svg" width="48" height="48" alt=""><div><h3>Detection</h3><p>detect() finds the decimal separator and flags real ambiguity like 1,234.</p></div></div>
-  <div class="feature"><img src="img/icons/money.svg" width="48" height="48" alt=""><div><h3>Money safety</h3><p>toMinorUnits gives exact integer cents: 0,29 is 29, never 28.999999999999996.</p></div></div>
-  <div class="feature"><img src="img/icons/input.svg" width="48" height="48" alt=""><div><h3>Form input</h3><p>normalizeInput() cleans fields while typing and keeps partial values like 1.234, valid.</p></div></div>
+<section id="use-cases" class="np-section" aria-labelledby="uc-title">
+  <div class="container">
+    <div class="np-section-head">
+      <p class="np-eyebrow"><svg class="np-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2.5" y="5" width="19" height="14" rx="2"/><path d="M12.5 8v8M5.5 9h4M5.5 12h4M5.5 15h3"/><rect x="15.5" y="8" width="3.5" height="4" rx=".5"/></svg>Use cases</p>
+      <h2 id="uc-title">Postcards from where numbers come from</h2>
+      <p>Numbers rarely start in your code. They arrive from shoppers, banks, scrapers and spreadsheets, written the way their sender writes them.</p>
+    </div>
+    <div class="np-postcards">
+<article class="np-postcard">
+  <div class="np-postcard-text">
+    <p class="np-postcard-from"><svg class="np-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-6.5-5.6-6.5-11a6.5 6.5 0 0 1 13 0C18.5 15.4 12 21 12 21Z"/><circle cx="12" cy="10" r="2.3" fill="var(--np-sun)"/></svg>From São Paulo</p>
+    <h3>Checkout and price fields</h3>
+    <p>A shopper types 1.234,56 into your price field. normalizeInput keeps partial input valid while they type and hands you the number on blur.</p>
+  </div>
+  <div class="np-postcard-back" aria-hidden="true">
+    <svg class="np-stamp" viewBox="0 0 120 120" width="88" height="88" aria-hidden="true">
+  <defs><path id="uc0-t" d="M17 60a43 43 0 0 1 86 0" fill="none"/><path id="uc0-b" d="M14 60a46 46 0 0 0 92 0" fill="none"/></defs>
+  <g transform="rotate(-8 60 60)" opacity=".92">
+  <circle cx="60" cy="60" r="52" fill="none" stroke="var(--np-leaf)" stroke-width="3.2"/><circle cx="60" cy="60" r="37" fill="none" stroke="var(--np-leaf)" stroke-width="1.6"/>
+  <text font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="8.5" font-weight="800" letter-spacing="1.6" fill="var(--np-leaf)"><textPath href="#uc0-t" startOffset="50%" text-anchor="middle">BRASIL</textPath></text>
+  <text font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="7.5" font-weight="700" letter-spacing="1.2" fill="var(--np-leaf)"><textPath href="#uc0-b" startOffset="50%" text-anchor="middle" side="left">GRU · SÃO PAULO</textPath></text>
+  <text x="60" y="64" text-anchor="middle" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="34" font-weight="800" fill="var(--np-leaf)">R$</text>
+  <text x="60" y="80" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="7" font-weight="700" letter-spacing=".8" fill="var(--np-leaf)">13 OCT 2026</text>
+  </g>
+</svg>
+    <span class="np-postcard-lines"><i></i><i></i><i></i></span>
+  </div>
+  <div class="np-postcard-code"><figure class="np-code np-code-mini" id="code-1" data-lang="ts"><div class="np-code-bar"><span class="np-dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="np-code-tab"><span class="np-code-badge" data-lang="ts" aria-hidden="true">TS</span>checkout.ts</span><button type="button" class="np-code-copy" aria-label="Copy code from checkout.ts" @click="copy($el)"><svg class="np-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="11.5" height="11.5" rx="2"/><path d="M15 9V5.5A2 2 0 0 0 13 3.5H5.5a2 2 0 0 0-2 2V13a2 2 0 0 0 2 2H9"/></svg><span v-text="copied === 'code-1' ? 'Copied' : 'Copy'">Copy</span></button></div><pre class="shiki shiki-themes light-plus dark-plus" style="--shiki-light:#000000;--shiki-dark:#D4D4D4;--shiki-light-bg:#FFFFFF;--shiki-dark-bg:#1E1E1E" tabindex="0" aria-label="checkout.ts code example"><code><span class="line"><span style="--shiki-light:#795E26;--shiki-dark:#DCDCAA">normalizeInput</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">(</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178">"1.234,"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">, </span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178">"pt-BR"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">).</span><span style="--shiki-light:#001080;--shiki-dark:#9CDCFE">value</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">;</span></span>
+<span class="line"><span style="--shiki-light:#008000;--shiki-dark:#6A9955">// 1234</span></span></code></pre></figure></div>
+</article>
+<article class="np-postcard">
+  <div class="np-postcard-text">
+    <p class="np-postcard-from"><svg class="np-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-6.5-5.6-6.5-11a6.5 6.5 0 0 1 13 0C18.5 15.4 12 21 12 21Z"/><circle cx="12" cy="10" r="2.3" fill="var(--np-sun)"/></svg>From Berlin</p>
+    <h3>CSV and bank exports</h3>
+    <p>A bank export has 1.234,56 in one column and 1,5 in the next. createParser reads every row in one pass, and detect() takes files with no locale.</p>
+  </div>
+  <div class="np-postcard-back" aria-hidden="true">
+    <svg class="np-stamp" viewBox="0 0 120 120" width="88" height="88" aria-hidden="true">
+  <defs></defs>
+  <g transform="rotate(6 60 60)" opacity=".92">
+  <rect x="6" y="14" width="108" height="92" rx="8" fill="none" stroke="var(--np-ink)" stroke-width="3.2"/><rect x="13" y="30" width="94" height="60" rx="4" fill="none" stroke="var(--np-ink)" stroke-width="1.6"/>
+  <text x="60" y="25.5" text-anchor="middle" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="8.5" font-weight="800" letter-spacing="1.6" fill="var(--np-ink)">EUROPA</text>
+  <text x="60" y="101" text-anchor="middle" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="7.5" font-weight="700" letter-spacing="1.2" fill="var(--np-ink)">CDG · BER · MAD</text>
+  <text x="60" y="66" text-anchor="middle" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="44" font-weight="800" fill="var(--np-ink)">€</text>
+  <text x="60" y="82" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="7" font-weight="700" letter-spacing=".8" fill="var(--np-ink)">13 OCT 2026</text>
+  </g>
+</svg>
+    <span class="np-postcard-lines"><i></i><i></i><i></i></span>
+  </div>
+  <div class="np-postcard-code"><figure class="np-code np-code-mini" id="code-2" data-lang="ts"><div class="np-code-bar"><span class="np-dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="np-code-tab"><span class="np-code-badge" data-lang="ts" aria-hidden="true">TS</span>import.ts</span><button type="button" class="np-code-copy" aria-label="Copy code from import.ts" @click="copy($el)"><svg class="np-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="11.5" height="11.5" rx="2"/><path d="M15 9V5.5A2 2 0 0 0 13 3.5H5.5a2 2 0 0 0-2 2V13a2 2 0 0 0 2 2H9"/></svg><span v-text="copied === 'code-2' ? 'Copied' : 'Copy'">Copy</span></button></div><pre class="shiki shiki-themes light-plus dark-plus" style="--shiki-light:#000000;--shiki-dark:#D4D4D4;--shiki-light-bg:#FFFFFF;--shiki-dark-bg:#1E1E1E" tabindex="0" aria-label="import.ts code example"><code><span class="line"><span style="--shiki-light:#795E26;--shiki-dark:#DCDCAA">createParser</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">(</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178">"de-DE"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">).</span><span style="--shiki-light:#795E26;--shiki-dark:#DCDCAA">parse</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">(</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178">"1.234,56"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">);</span></span>
+<span class="line"><span style="--shiki-light:#008000;--shiki-dark:#6A9955">// 1234.56</span></span></code></pre></figure></div>
+</article>
+<article class="np-postcard">
+  <div class="np-postcard-text">
+    <p class="np-postcard-from"><svg class="np-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-6.5-5.6-6.5-11a6.5 6.5 0 0 1 13 0C18.5 15.4 12 21 12 21Z"/><circle cx="12" cy="10" r="2.3" fill="var(--np-sun)"/></svg>From Tokyo</p>
+    <h3>Scraped and pasted prices</h3>
+    <p>Prices arrive with symbols and codes on either side. parseCurrency returns the amount and the ISO code, so you know what you are adding up.</p>
+  </div>
+  <div class="np-postcard-back" aria-hidden="true">
+    <svg class="np-stamp" viewBox="0 0 120 120" width="88" height="88" aria-hidden="true">
+  <defs><path id="uc2-t" d="M17 60a43 43 0 0 1 86 0" fill="none"/><path id="uc2-b" d="M14 60a46 46 0 0 0 92 0" fill="none"/></defs>
+  <g transform="rotate(10 60 60)" opacity=".92">
+  <circle cx="60" cy="60" r="52" fill="none" stroke="var(--np-red)" stroke-width="3.2"/><circle cx="60" cy="60" r="37" fill="none" stroke="var(--np-red)" stroke-width="1.6"/>
+  <text font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="8.5" font-weight="800" letter-spacing="1.6" fill="var(--np-red)"><textPath href="#uc2-t" startOffset="50%" text-anchor="middle">NIPPON</textPath></text>
+  <text font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="7.5" font-weight="700" letter-spacing="1.2" fill="var(--np-red)"><textPath href="#uc2-b" startOffset="50%" text-anchor="middle" side="left">HND · TOKYO</textPath></text>
+  <text x="60" y="64" text-anchor="middle" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="44" font-weight="800" fill="var(--np-red)">¥</text>
+  <text x="60" y="80" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="7" font-weight="700" letter-spacing=".8" fill="var(--np-red)">13 OCT 2026</text>
+  </g>
+</svg>
+    <span class="np-postcard-lines"><i></i><i></i><i></i></span>
+  </div>
+  <div class="np-postcard-code"><figure class="np-code np-code-mini" id="code-3" data-lang="ts"><div class="np-code-bar"><span class="np-dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="np-code-tab"><span class="np-code-badge" data-lang="ts" aria-hidden="true">TS</span>prices.ts</span><button type="button" class="np-code-copy" aria-label="Copy code from prices.ts" @click="copy($el)"><svg class="np-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="11.5" height="11.5" rx="2"/><path d="M15 9V5.5A2 2 0 0 0 13 3.5H5.5a2 2 0 0 0-2 2V13a2 2 0 0 0 2 2H9"/></svg><span v-text="copied === 'code-3' ? 'Copied' : 'Copy'">Copy</span></button></div><pre class="shiki shiki-themes light-plus dark-plus" style="--shiki-light:#000000;--shiki-dark:#D4D4D4;--shiki-light-bg:#FFFFFF;--shiki-dark-bg:#1E1E1E" tabindex="0" aria-label="prices.ts code example"><code><span class="line"><span style="--shiki-light:#795E26;--shiki-dark:#DCDCAA">parseCurrency</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">(</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178">"￥1,235"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">, </span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178">"ja-JP"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">).</span><span style="--shiki-light:#001080;--shiki-dark:#9CDCFE">currency</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">;</span></span>
+<span class="line"><span style="--shiki-light:#008000;--shiki-dark:#6A9955">// "JPY"</span></span></code></pre></figure></div>
+</article>
+<article class="np-postcard">
+  <div class="np-postcard-text">
+    <p class="np-postcard-from"><svg class="np-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-6.5-5.6-6.5-11a6.5 6.5 0 0 1 13 0C18.5 15.4 12 21 12 21Z"/><circle cx="12" cy="10" r="2.3" fill="var(--np-sun)"/></svg>From London</p>
+    <h3>Accounting reports</h3>
+    <p>Negatives in parentheses, a trailing minus or the Unicode minus sign all read as negative, the way an accountant meant them.</p>
+  </div>
+  <div class="np-postcard-back" aria-hidden="true">
+    <svg class="np-stamp" viewBox="0 0 120 120" width="88" height="88" aria-hidden="true">
+  <defs><path id="uc3-t" d="M11 60a49 37 0 0 1 98 0" fill="none"/><path id="uc3-b" d="M8 60a52 40 0 0 0 104 0" fill="none"/></defs>
+  <g transform="rotate(5 60 60)" opacity=".92">
+  <ellipse cx="60" cy="60" rx="56" ry="44" fill="none" stroke="var(--np-ink)" stroke-width="3.2"/><ellipse cx="60" cy="60" rx="42" ry="30" fill="none" stroke="var(--np-ink)" stroke-width="1.6"/>
+  <text font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="8.5" font-weight="800" letter-spacing="1.6" fill="var(--np-ink)"><textPath href="#uc3-t" startOffset="50%" text-anchor="middle">UNITED KINGDOM</textPath></text>
+  <text font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="7.5" font-weight="700" letter-spacing="1.2" fill="var(--np-ink)"><textPath href="#uc3-b" startOffset="50%" text-anchor="middle" side="left">LHR · LONDON</textPath></text>
+  <text x="60" y="64" text-anchor="middle" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="44" font-weight="800" fill="var(--np-ink)">£</text>
+  <text x="60" y="80" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="7" font-weight="700" letter-spacing=".8" fill="var(--np-ink)">13 OCT 2026</text>
+  </g>
+</svg>
+    <span class="np-postcard-lines"><i></i><i></i><i></i></span>
+  </div>
+  <div class="np-postcard-code"><figure class="np-code np-code-mini" id="code-4" data-lang="ts"><div class="np-code-bar"><span class="np-dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="np-code-tab"><span class="np-code-badge" data-lang="ts" aria-hidden="true">TS</span>ledger.ts</span><button type="button" class="np-code-copy" aria-label="Copy code from ledger.ts" @click="copy($el)"><svg class="np-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="11.5" height="11.5" rx="2"/><path d="M15 9V5.5A2 2 0 0 0 13 3.5H5.5a2 2 0 0 0-2 2V13a2 2 0 0 0 2 2H9"/></svg><span v-text="copied === 'code-4' ? 'Copied' : 'Copy'">Copy</span></button></div><pre class="shiki shiki-themes light-plus dark-plus" style="--shiki-light:#000000;--shiki-dark:#D4D4D4;--shiki-light-bg:#FFFFFF;--shiki-dark-bg:#1E1E1E" tabindex="0" aria-label="ledger.ts code example"><code><span class="line"><span style="--shiki-light:#795E26;--shiki-dark:#DCDCAA">parse</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">(</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178">"(1,234.56)"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">, </span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178">"en-GB"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">);</span></span>
+<span class="line"><span style="--shiki-light:#008000;--shiki-dark:#6A9955">// -1234.56</span></span></code></pre></figure></div>
+</article>
+<article class="np-postcard">
+  <div class="np-postcard-text">
+    <p class="np-postcard-from"><svg class="np-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-6.5-5.6-6.5-11a6.5 6.5 0 0 1 13 0C18.5 15.4 12 21 12 21Z"/><circle cx="12" cy="10" r="2.3" fill="var(--np-sun)"/></svg>From Mumbai</p>
+    <h3>Money in integer cents</h3>
+    <p>toMinorUnits shifts the decimal digits as text, so 0,29 is 29 cents and never 28.999999999999996. Lakh and crore grouping included.</p>
+  </div>
+  <div class="np-postcard-back" aria-hidden="true">
+    <svg class="np-stamp" viewBox="0 0 120 120" width="88" height="88" aria-hidden="true">
+  <defs><path id="uc4-t" d="M11 60a49 37 0 0 1 98 0" fill="none"/><path id="uc4-b" d="M8 60a52 40 0 0 0 104 0" fill="none"/></defs>
+  <g transform="rotate(-4 60 60)" opacity=".92">
+  <ellipse cx="60" cy="60" rx="56" ry="44" fill="none" stroke="var(--np-red)" stroke-width="3.2"/><ellipse cx="60" cy="60" rx="42" ry="30" fill="none" stroke="var(--np-red)" stroke-width="1.6"/>
+  <text font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="8.5" font-weight="800" letter-spacing="1.6" fill="var(--np-red)"><textPath href="#uc4-t" startOffset="50%" text-anchor="middle">BHARAT</textPath></text>
+  <text font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="7.5" font-weight="700" letter-spacing="1.2" fill="var(--np-red)"><textPath href="#uc4-b" startOffset="50%" text-anchor="middle" side="left">BOM · DEL</textPath></text>
+  <text x="60" y="64" text-anchor="middle" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="44" font-weight="800" fill="var(--np-red)">₹</text>
+  <text x="60" y="80" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="7" font-weight="700" letter-spacing=".8" fill="var(--np-red)">13 OCT 2026</text>
+  </g>
+</svg>
+    <span class="np-postcard-lines"><i></i><i></i><i></i></span>
+  </div>
+  <div class="np-postcard-code"><figure class="np-code np-code-mini" id="code-5" data-lang="ts"><div class="np-code-bar"><span class="np-dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="np-code-tab"><span class="np-code-badge" data-lang="ts" aria-hidden="true">TS</span>cents.ts</span><button type="button" class="np-code-copy" aria-label="Copy code from cents.ts" @click="copy($el)"><svg class="np-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="11.5" height="11.5" rx="2"/><path d="M15 9V5.5A2 2 0 0 0 13 3.5H5.5a2 2 0 0 0-2 2V13a2 2 0 0 0 2 2H9"/></svg><span v-text="copied === 'code-5' ? 'Copied' : 'Copy'">Copy</span></button></div><pre class="shiki shiki-themes light-plus dark-plus" style="--shiki-light:#000000;--shiki-dark:#D4D4D4;--shiki-light-bg:#FFFFFF;--shiki-dark-bg:#1E1E1E" tabindex="0" aria-label="cents.ts code example"><code><span class="line"><span style="--shiki-light:#795E26;--shiki-dark:#DCDCAA">parseCurrency</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">(</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178">"₹19.99"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">, </span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178">"en-IN"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">, {</span></span>
+<span class="line"><span style="--shiki-light:#001080;--shiki-dark:#9CDCFE">  toMinorUnits:</span><span style="--shiki-light:#0000FF;--shiki-dark:#569CD6"> true</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">,</span></span>
+<span class="line"><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">}).</span><span style="--shiki-light:#001080;--shiki-dark:#9CDCFE">amount</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">;</span></span>
+<span class="line"><span style="--shiki-light:#008000;--shiki-dark:#6A9955">// 1999</span></span></code></pre></figure></div>
+</article>
+<article class="np-postcard">
+  <div class="np-postcard-text">
+    <p class="np-postcard-from"><svg class="np-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-6.5-5.6-6.5-11a6.5 6.5 0 0 1 13 0C18.5 15.4 12 21 12 21Z"/><circle cx="12" cy="10" r="2.3" fill="var(--np-sun)"/></svg>From Cairo</p>
+    <h3>Every script</h3>
+    <p>Arabic-Indic, Persian, Devanagari, Bengali, Thai and full width digits read like Latin ones, with their own separators.</p>
+  </div>
+  <div class="np-postcard-back" aria-hidden="true">
+    <svg class="np-stamp" viewBox="0 0 120 120" width="88" height="88" aria-hidden="true">
+  <defs><path id="uc5-t" d="M17 60a43 43 0 0 1 86 0" fill="none"/><path id="uc5-b" d="M14 60a46 46 0 0 0 92 0" fill="none"/></defs>
+  <g transform="rotate(-10 60 60)" opacity=".92">
+  <circle cx="60" cy="60" r="52" fill="none" stroke="var(--np-ink)" stroke-width="3.2"/><circle cx="60" cy="60" r="37" fill="none" stroke="var(--np-ink)" stroke-width="1.6"/>
+  <text font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="8.5" font-weight="800" letter-spacing="1.6" fill="var(--np-ink)"><textPath href="#uc5-t" startOffset="50%" text-anchor="middle">MISR</textPath></text>
+  <text font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="7.5" font-weight="700" letter-spacing="1.2" fill="var(--np-ink)"><textPath href="#uc5-b" startOffset="50%" text-anchor="middle" side="left">CAI · CAIRO</textPath></text>
+  <text x="60" y="64" text-anchor="middle" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="26" font-weight="800" fill="var(--np-ink)">ج.م</text>
+  <text x="60" y="80" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="7" font-weight="700" letter-spacing=".8" fill="var(--np-ink)">13 OCT 2026</text>
+  </g>
+</svg>
+    <span class="np-postcard-lines"><i></i><i></i><i></i></span>
+  </div>
+  <div class="np-postcard-code"><figure class="np-code np-code-mini" id="code-6" data-lang="ts"><div class="np-code-bar"><span class="np-dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="np-code-tab"><span class="np-code-badge" data-lang="ts" aria-hidden="true">TS</span>digits.ts</span><button type="button" class="np-code-copy" aria-label="Copy code from digits.ts" @click="copy($el)"><svg class="np-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="11.5" height="11.5" rx="2"/><path d="M15 9V5.5A2 2 0 0 0 13 3.5H5.5a2 2 0 0 0-2 2V13a2 2 0 0 0 2 2H9"/></svg><span v-text="copied === 'code-6' ? 'Copied' : 'Copy'">Copy</span></button></div><pre class="shiki shiki-themes light-plus dark-plus" style="--shiki-light:#000000;--shiki-dark:#D4D4D4;--shiki-light-bg:#FFFFFF;--shiki-dark-bg:#1E1E1E" tabindex="0" aria-label="digits.ts code example"><code><span class="line"><span style="--shiki-light:#795E26;--shiki-dark:#DCDCAA">parse</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">(</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178">"١٬٢٣٤٫٥٦"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">, </span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178">"ar-EG"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">);</span></span>
+<span class="line"><span style="--shiki-light:#008000;--shiki-dark:#6A9955">// 1234.56</span></span></code></pre></figure></div>
+</article>
+    </div>
+  </div>
+</section>
+
+<section id="api" class="np-section np-section-tint" aria-labelledby="api-title">
+  <div class="container">
+    <div class="np-section-head">
+      <p class="np-eyebrow"><svg class="np-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m8.5 7-5 5 5 5M15.5 7l5 5-5 5M13.5 4.5l-3 15"/></svg>API</p>
+      <h2 id="api-title">Seven functions, one passport each</h2>
+      <p>Every function takes the locale as an argument, so data from Berlin, Mumbai and Cairo can sit side by side. No global state, nothing to register.</p>
+    </div>
+    <div class="np-api">
+      <div class="np-api-list" role="tablist" aria-label="Functions" aria-orientation="vertical">
+<button type="button" class="np-api-item" role="tab" id="api-tab-parse" aria-controls="api-panel-parse" aria-selected="true" :aria-selected="api === 'parse' ? 'true' : 'false'" @click="api = 'parse'"><code>parse</code><span>Read a number written in a locale. NaN when it is not a valid number there.</span></button>
+<button type="button" class="np-api-item" role="tab" id="api-tab-parse-currency" aria-controls="api-panel-parse-currency" aria-selected="false" :aria-selected="api === 'parse-currency' ? 'true' : 'false'" @click="api = 'parse-currency'"><code>parseCurrency</code><span>Amount, ISO code and symbol from a price, with exact integer cents on request.</span></button>
+<button type="button" class="np-api-item" role="tab" id="api-tab-detect" aria-controls="api-panel-detect" aria-selected="false" :aria-selected="api === 'detect' ? 'true' : 'false'" @click="api = 'detect'"><code>detect</code><span>Work out the decimal separator of an unknown string, and say when it cannot be sure.</span></button>
+<button type="button" class="np-api-item" role="tab" id="api-tab-is-valid" aria-controls="api-panel-is-valid" aria-selected="false" :aria-selected="api === 'is-valid' ? 'true' : 'false'" @click="api = 'is-valid'"><code>isValid</code><span>True when parse would return a number. Never throws.</span></button>
+<button type="button" class="np-api-item" role="tab" id="api-tab-create-parser" aria-controls="api-panel-create-parser" aria-selected="false" :aria-selected="api === 'create-parser' ? 'true' : 'false'" @click="api = 'create-parser'"><code>createParser</code><span>Resolve a locale once and get every function bound to it.</span></button>
+<button type="button" class="np-api-item" role="tab" id="api-tab-normalize-input" aria-controls="api-panel-normalize-input" aria-selected="false" :aria-selected="api === 'normalize-input' ? 'true' : 'false'" @click="api = 'normalize-input'"><code>normalizeInput</code><span>Clean a form field on every keystroke and keep partial values valid.</span></button>
+<button type="button" class="np-api-item" role="tab" id="api-tab-get-locale-info" aria-controls="api-panel-get-locale-info" aria-selected="false" :aria-selected="api === 'get-locale-info' ? 'true' : 'false'" @click="api = 'get-locale-info'"><code>getLocaleInfo</code><span>The symbols numberparrot uses for a locale, straight from Intl.</span></button>
+<button type="button" class="np-api-item" role="tab" id="api-tab-number-parse-error" aria-controls="api-panel-number-parse-error" aria-selected="false" :aria-selected="api === 'number-parse-error' ? 'true' : 'false'" @click="api = 'number-parse-error'"><code>NumberParseError</code><span>Thrown in strict mode, with a machine readable code.</span></button>
+      </div>
+      <div class="np-api-panel">
+<div role="tabpanel" id="api-panel-parse" aria-labelledby="api-tab-parse" v-show="api === 'parse'">
+<p class="np-sig"><code>parse(input, locale?, options?): number</code></p>
+<figure class="np-code" id="code-7" data-lang="ts"><div class="np-code-bar"><span class="np-dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="np-code-tab"><span class="np-code-badge" data-lang="ts" aria-hidden="true">TS</span>parse.ts</span><button type="button" class="np-code-copy" aria-label="Copy code from parse.ts" @click="copy($el)"><svg class="np-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="11.5" height="11.5" rx="2"/><path d="M15 9V5.5A2 2 0 0 0 13 3.5H5.5a2 2 0 0 0-2 2V13a2 2 0 0 0 2 2H9"/></svg><span v-text="copied === 'code-7' ? 'Copied' : 'Copy'">Copy</span></button></div><pre class="shiki shiki-themes light-plus dark-plus" style="--shiki-light:#000000;--shiki-dark:#D4D4D4;--shiki-light-bg:#FFFFFF;--shiki-dark-bg:#1E1E1E" tabindex="0" aria-label="parse.ts code example"><code><span class="line"><span style="--shiki-light:#AF00DB;--shiki-dark:#C586C0">import</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4"> { </span><span style="--shiki-light:#001080;--shiki-dark:#9CDCFE">parse</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4"> } </span><span style="--shiki-light:#AF00DB;--shiki-dark:#C586C0">from</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178"> "numberparrot"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#795E26;--shiki-dark:#DCDCAA">parse</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">(</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178">"1.234,56"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">, </span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178">"pt-BR"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">);      </span><span style="--shiki-light:#008000;--shiki-dark:#6A9955">// 1234.56</span></span>
+<span class="line"><span style="--shiki-light:#795E26;--shiki-dark:#DCDCAA">parse</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">(</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178">"1'234.56"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">, </span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178">"de-CH"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">);      </span><span style="--shiki-light:#008000;--shiki-dark:#6A9955">// 1234.56</span></span>
+<span class="line"><span style="--shiki-light:#795E26;--shiki-dark:#DCDCAA">parse</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">(</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178">"12,34,567.89"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">, </span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178">"en-IN"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">);  </span><span style="--shiki-light:#008000;--shiki-dark:#6A9955">// 1234567.89</span></span>
+<span class="line"><span style="--shiki-light:#795E26;--shiki-dark:#DCDCAA">parse</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">(</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178">"(1.234,56)"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">, </span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178">"de-DE"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">);    </span><span style="--shiki-light:#008000;--shiki-dark:#6A9955">// -1234.56</span></span>
+<span class="line"><span style="--shiki-light:#795E26;--shiki-dark:#DCDCAA">parse</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">(</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178">"15%"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">, </span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178">"en-US"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">);           </span><span style="--shiki-light:#008000;--shiki-dark:#6A9955">// 0.15</span></span>
+<span class="line"><span style="--shiki-light:#795E26;--shiki-dark:#DCDCAA">parse</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">(</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178">"1.234,56"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">, </span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178">"en-US"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">);      </span><span style="--shiki-light:#008000;--shiki-dark:#6A9955">// NaN, not an en-US number</span></span></code></pre><div class="np-code-status" aria-hidden="true"><span><svg class="np-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg>numberparrot</span><span>TypeScript</span><span>UTF-8</span><span>8 lines</span></div></figure>
+<p class="np-api-more"><a class="link link-primary" href="api.html#parse">parse in the API reference</a></p>
 </div>
-
-<h2>parseFloat vs numberparrot, side by side</h2>
-<img class="demo" src="img/demo.svg" width="900" height="420" loading="lazy" alt="Animated comparison: 1.234.567,89 in pt-BR, 1'234'567.89 in de-CH, 12,34,567.89 in en-IN and Arabic-Indic digits in ar-EG all parse to 1234567.89 with numberparrot, while parseFloat returns 1.234, 1, 12 and NaN">
-
-<h2>Install</h2>
-<div class="install">
-  <div class="tabs" role="tablist" aria-label="Package manager">
-    <button type="button" role="tab" id="pm-8-npm" aria-controls="pm-8-npm-panel" aria-selected="true" :aria-selected="pm === 'npm' ? 'true' : 'false'" @click="setPm('npm')">npm</button>
-    <button type="button" role="tab" id="pm-8-pnpm" aria-controls="pm-8-pnpm-panel" aria-selected="false" :aria-selected="pm === 'pnpm' ? 'true' : 'false'" @click="setPm('pnpm')">pnpm</button>
-    <button type="button" role="tab" id="pm-8-yarn" aria-controls="pm-8-yarn-panel" aria-selected="false" :aria-selected="pm === 'yarn' ? 'true' : 'false'" @click="setPm('yarn')">yarn</button>
-    <button type="button" role="tab" id="pm-8-bun" aria-controls="pm-8-bun-panel" aria-selected="false" :aria-selected="pm === 'bun' ? 'true' : 'false'" @click="setPm('bun')">bun</button>
-  </div>
-  <div role="tabpanel" id="pm-8-npm-panel" aria-labelledby="pm-8-npm" v-show="pm === 'npm'">
-<div class="code-frame" id="code-1" data-lang="sh"><div class="code-bar"><span class="code-tab">Terminal</span><button type="button" class="code-copy" aria-label="Copy code" @click="copy($el)" v-text="copied === 'code-1' ? 'Copied' : 'Copy'">Copy</button></div><pre class="shiki shiki-themes light-plus dark-plus" style="--shiki-light:#000000;--shiki-dark:#D4D4D4;--shiki-light-bg:#FFFFFF;--shiki-dark-bg:#1E1E1E" tabindex="0" aria-label="Terminal code example"><code><span class="line"><span style="--shiki-light:#795E26;--shiki-dark:#DCDCAA">npm</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178"> install</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178"> numberparrot</span></span></code></pre></div>
-  </div>
-  <div role="tabpanel" id="pm-8-pnpm-panel" aria-labelledby="pm-8-pnpm" style="display:none" v-show="pm === 'pnpm'">
-<div class="code-frame" id="code-2" data-lang="sh"><div class="code-bar"><span class="code-tab">Terminal</span><button type="button" class="code-copy" aria-label="Copy code" @click="copy($el)" v-text="copied === 'code-2' ? 'Copied' : 'Copy'">Copy</button></div><pre class="shiki shiki-themes light-plus dark-plus" style="--shiki-light:#000000;--shiki-dark:#D4D4D4;--shiki-light-bg:#FFFFFF;--shiki-dark-bg:#1E1E1E" tabindex="0" aria-label="Terminal code example"><code><span class="line"><span style="--shiki-light:#795E26;--shiki-dark:#DCDCAA">pnpm</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178"> add</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178"> numberparrot</span></span></code></pre></div>
-  </div>
-  <div role="tabpanel" id="pm-8-yarn-panel" aria-labelledby="pm-8-yarn" style="display:none" v-show="pm === 'yarn'">
-<div class="code-frame" id="code-3" data-lang="sh"><div class="code-bar"><span class="code-tab">Terminal</span><button type="button" class="code-copy" aria-label="Copy code" @click="copy($el)" v-text="copied === 'code-3' ? 'Copied' : 'Copy'">Copy</button></div><pre class="shiki shiki-themes light-plus dark-plus" style="--shiki-light:#000000;--shiki-dark:#D4D4D4;--shiki-light-bg:#FFFFFF;--shiki-dark-bg:#1E1E1E" tabindex="0" aria-label="Terminal code example"><code><span class="line"><span style="--shiki-light:#795E26;--shiki-dark:#DCDCAA">yarn</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178"> add</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178"> numberparrot</span></span></code></pre></div>
-  </div>
-  <div role="tabpanel" id="pm-8-bun-panel" aria-labelledby="pm-8-bun" style="display:none" v-show="pm === 'bun'">
-<div class="code-frame" id="code-4" data-lang="sh"><div class="code-bar"><span class="code-tab">Terminal</span><button type="button" class="code-copy" aria-label="Copy code" @click="copy($el)" v-text="copied === 'code-4' ? 'Copied' : 'Copy'">Copy</button></div><pre class="shiki shiki-themes light-plus dark-plus" style="--shiki-light:#000000;--shiki-dark:#D4D4D4;--shiki-light-bg:#FFFFFF;--shiki-dark-bg:#1E1E1E" tabindex="0" aria-label="Terminal code example"><code><span class="line"><span style="--shiki-light:#795E26;--shiki-dark:#DCDCAA">bun</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178"> add</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178"> numberparrot</span></span></code></pre></div>
-  </div>
+<div role="tabpanel" id="api-panel-parse-currency" aria-labelledby="api-tab-parse-currency" style="display:none" v-show="api === 'parse-currency'">
+<p class="np-sig"><code>parseCurrency(input, locale?, options?): CurrencyResult</code></p>
+<figure class="np-code" id="code-8" data-lang="ts"><div class="np-code-bar"><span class="np-dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="np-code-tab"><span class="np-code-badge" data-lang="ts" aria-hidden="true">TS</span>parseCurrency.ts</span><button type="button" class="np-code-copy" aria-label="Copy code from parseCurrency.ts" @click="copy($el)"><svg class="np-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="11.5" height="11.5" rx="2"/><path d="M15 9V5.5A2 2 0 0 0 13 3.5H5.5a2 2 0 0 0-2 2V13a2 2 0 0 0 2 2H9"/></svg><span v-text="copied === 'code-8' ? 'Copied' : 'Copy'">Copy</span></button></div><pre class="shiki shiki-themes light-plus dark-plus" style="--shiki-light:#000000;--shiki-dark:#D4D4D4;--shiki-light-bg:#FFFFFF;--shiki-dark-bg:#1E1E1E" tabindex="0" aria-label="parseCurrency.ts code example"><code><span class="line"><span style="--shiki-light:#AF00DB;--shiki-dark:#C586C0">import</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4"> { </span><span style="--shiki-light:#001080;--shiki-dark:#9CDCFE">parseCurrency</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4"> } </span><span style="--shiki-light:#AF00DB;--shiki-dark:#C586C0">from</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178"> "numberparrot"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#795E26;--shiki-dark:#DCDCAA">parseCurrency</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">(</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178">"R$ 1.234,56"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">, </span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178">"pt-BR"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">);</span></span>
+<span class="line"><span style="--shiki-light:#008000;--shiki-dark:#6A9955">// { amount: 1234.56, currency: "BRL", symbol: "R$", fractionDigits: 2 }</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#795E26;--shiki-dark:#DCDCAA">parseCurrency</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">(</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178">"1 234,56 €"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">, </span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178">"fr-FR"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">).</span><span style="--shiki-light:#001080;--shiki-dark:#9CDCFE">currency</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">;  </span><span style="--shiki-light:#008000;--shiki-dark:#6A9955">// "EUR"</span></span>
+<span class="line"><span style="--shiki-light:#795E26;--shiki-dark:#DCDCAA">parseCurrency</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">(</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178">"($1,234.56)"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">, </span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178">"en-US"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">).</span><span style="--shiki-light:#001080;--shiki-dark:#9CDCFE">amount</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">;   </span><span style="--shiki-light:#008000;--shiki-dark:#6A9955">// -1234.56</span></span>
+<span class="line"><span style="--shiki-light:#795E26;--shiki-dark:#DCDCAA">parseCurrency</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">(</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178">"R$ 19,99"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">, </span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178">"pt-BR"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">, { </span><span style="--shiki-light:#001080;--shiki-dark:#9CDCFE">toMinorUnits:</span><span style="--shiki-light:#0000FF;--shiki-dark:#569CD6"> true</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4"> }).</span><span style="--shiki-light:#001080;--shiki-dark:#9CDCFE">amount</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">; </span><span style="--shiki-light:#008000;--shiki-dark:#6A9955">// 1999</span></span></code></pre><div class="np-code-status" aria-hidden="true"><span><svg class="np-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg>numberparrot</span><span>TypeScript</span><span>UTF-8</span><span>8 lines</span></div></figure>
+<p class="np-api-more"><a class="link link-primary" href="api.html#parsecurrency">parseCurrency in the API reference</a></p>
 </div>
-<div class="code-frame" id="code-5" data-lang="ts"><div class="code-bar"><span class="code-tab">example.ts</span><button type="button" class="code-copy" aria-label="Copy code" @click="copy($el)" v-text="copied === 'code-5' ? 'Copied' : 'Copy'">Copy</button></div><pre class="shiki shiki-themes light-plus dark-plus" style="--shiki-light:#000000;--shiki-dark:#D4D4D4;--shiki-light-bg:#FFFFFF;--shiki-dark-bg:#1E1E1E" tabindex="0" aria-label="example.ts code example"><code><span class="line"><span style="--shiki-light:#AF00DB;--shiki-dark:#C586C0">import</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4"> { </span><span style="--shiki-light:#001080;--shiki-dark:#9CDCFE">parse</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">, </span><span style="--shiki-light:#001080;--shiki-dark:#9CDCFE">parseCurrency</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">, </span><span style="--shiki-light:#001080;--shiki-dark:#9CDCFE">detect</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">, </span><span style="--shiki-light:#001080;--shiki-dark:#9CDCFE">normalizeInput</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4"> } </span><span style="--shiki-light:#AF00DB;--shiki-dark:#C586C0">from</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178"> "numberparrot"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">;</span></span>
+<div role="tabpanel" id="api-panel-detect" aria-labelledby="api-tab-detect" style="display:none" v-show="api === 'detect'">
+<p class="np-sig"><code>detect(input, candidates?): DetectResult</code></p>
+<figure class="np-code" id="code-9" data-lang="ts"><div class="np-code-bar"><span class="np-dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="np-code-tab"><span class="np-code-badge" data-lang="ts" aria-hidden="true">TS</span>detect.ts</span><button type="button" class="np-code-copy" aria-label="Copy code from detect.ts" @click="copy($el)"><svg class="np-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="11.5" height="11.5" rx="2"/><path d="M15 9V5.5A2 2 0 0 0 13 3.5H5.5a2 2 0 0 0-2 2V13a2 2 0 0 0 2 2H9"/></svg><span v-text="copied === 'code-9' ? 'Copied' : 'Copy'">Copy</span></button></div><pre class="shiki shiki-themes light-plus dark-plus" style="--shiki-light:#000000;--shiki-dark:#D4D4D4;--shiki-light-bg:#FFFFFF;--shiki-dark-bg:#1E1E1E" tabindex="0" aria-label="detect.ts code example"><code><span class="line"><span style="--shiki-light:#AF00DB;--shiki-dark:#C586C0">import</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4"> { </span><span style="--shiki-light:#001080;--shiki-dark:#9CDCFE">detect</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4"> } </span><span style="--shiki-light:#AF00DB;--shiki-dark:#C586C0">from</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178"> "numberparrot"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">;</span></span>
 <span class="line"></span>
-<span class="line"><span style="--shiki-light:#795E26;--shiki-dark:#DCDCAA">parse</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">(</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178">"1.234,56"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">, </span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178">"pt-BR"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">);             </span><span style="--shiki-light:#008000;--shiki-dark:#6A9955">// 1234.56</span></span>
-<span class="line"><span style="--shiki-light:#795E26;--shiki-dark:#DCDCAA">parse</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">(</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178">"1'234.56"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">, </span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178">"de-CH"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">);             </span><span style="--shiki-light:#008000;--shiki-dark:#6A9955">// 1234.56</span></span>
-<span class="line"><span style="--shiki-light:#795E26;--shiki-dark:#DCDCAA">parse</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">(</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178">"12,34,567.89"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">, </span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178">"en-IN"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">);         </span><span style="--shiki-light:#008000;--shiki-dark:#6A9955">// 1234567.89</span></span>
-<span class="line"><span style="--shiki-light:#795E26;--shiki-dark:#DCDCAA">parse</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">(</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178">"١٬٢٣٤٫٥٦"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">, </span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178">"ar-EG"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">);             </span><span style="--shiki-light:#008000;--shiki-dark:#6A9955">// 1234.56</span></span>
-<span class="line"><span style="--shiki-light:#795E26;--shiki-dark:#DCDCAA">parse</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">(</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178">"(1.234,56)"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">, </span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178">"de-DE"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">);           </span><span style="--shiki-light:#008000;--shiki-dark:#6A9955">// -1234.56</span></span>
-<span class="line"><span style="--shiki-light:#795E26;--shiki-dark:#DCDCAA">parse</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">(</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178">"15%"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">, </span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178">"en-US"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">);                  </span><span style="--shiki-light:#008000;--shiki-dark:#6A9955">// 0.15</span></span>
+<span class="line"><span style="--shiki-light:#795E26;--shiki-dark:#DCDCAA">detect</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">(</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178">"1.234,56"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">);</span></span>
+<span class="line"><span style="--shiki-light:#008000;--shiki-dark:#6A9955">// { value: 1234.56, decimal: ",", group: ".", ambiguous: false, confidence: 0.95, ... }</span></span>
 <span class="line"></span>
-<span class="line"><span style="--shiki-light:#795E26;--shiki-dark:#DCDCAA">parseCurrency</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">(</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178">"R$ 1.234,56"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">, </span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178">"pt-BR"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">);  </span><span style="--shiki-light:#008000;--shiki-dark:#6A9955">// { amount: 1234.56, currency: "BRL", ... }</span></span>
-<span class="line"><span style="--shiki-light:#795E26;--shiki-dark:#DCDCAA">parseCurrency</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">(</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178">"0,29"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">, </span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178">"pt-BR"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">, { </span><span style="--shiki-light:#001080;--shiki-dark:#9CDCFE">toMinorUnits:</span><span style="--shiki-light:#0000FF;--shiki-dark:#569CD6"> true</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4"> }).</span><span style="--shiki-light:#001080;--shiki-dark:#9CDCFE">amount</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">; </span><span style="--shiki-light:#008000;--shiki-dark:#6A9955">// 29</span></span>
+<span class="line"><span style="--shiki-light:#795E26;--shiki-dark:#DCDCAA">detect</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">(</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178">"1,234"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">);</span></span>
+<span class="line"><span style="--shiki-light:#008000;--shiki-dark:#6A9955">// { value: 1234, ambiguous: true, confidence: 0.5, alternatives: [1234, 1.234], ... }</span></span></code></pre><div class="np-code-status" aria-hidden="true"><span><svg class="np-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg>numberparrot</span><span>TypeScript</span><span>UTF-8</span><span>7 lines</span></div></figure>
+<p class="np-api-more"><a class="link link-primary" href="api.html#detect">detect in the API reference</a></p>
+</div>
+<div role="tabpanel" id="api-panel-is-valid" aria-labelledby="api-tab-is-valid" style="display:none" v-show="api === 'is-valid'">
+<p class="np-sig"><code>isValid(input, locale?, options?): boolean</code></p>
+<figure class="np-code" id="code-10" data-lang="ts"><div class="np-code-bar"><span class="np-dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="np-code-tab"><span class="np-code-badge" data-lang="ts" aria-hidden="true">TS</span>isValid.ts</span><button type="button" class="np-code-copy" aria-label="Copy code from isValid.ts" @click="copy($el)"><svg class="np-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="11.5" height="11.5" rx="2"/><path d="M15 9V5.5A2 2 0 0 0 13 3.5H5.5a2 2 0 0 0-2 2V13a2 2 0 0 0 2 2H9"/></svg><span v-text="copied === 'code-10' ? 'Copied' : 'Copy'">Copy</span></button></div><pre class="shiki shiki-themes light-plus dark-plus" style="--shiki-light:#000000;--shiki-dark:#D4D4D4;--shiki-light-bg:#FFFFFF;--shiki-dark-bg:#1E1E1E" tabindex="0" aria-label="isValid.ts code example"><code><span class="line"><span style="--shiki-light:#AF00DB;--shiki-dark:#C586C0">import</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4"> { </span><span style="--shiki-light:#001080;--shiki-dark:#9CDCFE">isValid</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4"> } </span><span style="--shiki-light:#AF00DB;--shiki-dark:#C586C0">from</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178"> "numberparrot"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">;</span></span>
 <span class="line"></span>
-<span class="line"><span style="--shiki-light:#795E26;--shiki-dark:#DCDCAA">detect</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">(</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178">"1,234"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">);                        </span><span style="--shiki-light:#008000;--shiki-dark:#6A9955">// { ambiguous: true, alternatives: [1234, 1.234], ... }</span></span>
-<span class="line"><span style="--shiki-light:#795E26;--shiki-dark:#DCDCAA">normalizeInput</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">(</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178">"1.234,"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">, </span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178">"pt-BR"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">);      </span><span style="--shiki-light:#008000;--shiki-dark:#6A9955">// { text: "1.234,", value: 1234, valid: true, complete: false }</span></span></code></pre></div>
-<p>Works in Node.js 18+, Deno, Bun and every modern browser. ESM and CommonJS builds, TypeScript types, about 6 kB gzipped for the whole library. The full API reference is in the <a href="https://github.com/kwy404/numberparrot#api-reference">README</a>.</p>
+<span class="line"><span style="--shiki-light:#795E26;--shiki-dark:#DCDCAA">isValid</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">(</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178">"1.234,56"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">, </span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178">"pt-BR"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">);                 </span><span style="--shiki-light:#008000;--shiki-dark:#6A9955">// true</span></span>
+<span class="line"><span style="--shiki-light:#795E26;--shiki-dark:#DCDCAA">isValid</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">(</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178">"1,23"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">, </span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178">"en-US"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">);                     </span><span style="--shiki-light:#008000;--shiki-dark:#6A9955">// false, misplaced group</span></span>
+<span class="line"><span style="--shiki-light:#795E26;--shiki-dark:#DCDCAA">isValid</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">(</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178">"1,23"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">, </span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178">"en-US"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">, { </span><span style="--shiki-light:#001080;--shiki-dark:#9CDCFE">strict:</span><span style="--shiki-light:#0000FF;--shiki-dark:#569CD6"> true</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4"> });   </span><span style="--shiki-light:#008000;--shiki-dark:#6A9955">// false, no exception</span></span></code></pre><div class="np-code-status" aria-hidden="true"><span><svg class="np-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg>numberparrot</span><span>TypeScript</span><span>UTF-8</span><span>5 lines</span></div></figure>
+<p class="np-api-more"><a class="link link-primary" href="api.html#isvalid">isValid in the API reference</a></p>
+</div>
+<div role="tabpanel" id="api-panel-create-parser" aria-labelledby="api-tab-create-parser" style="display:none" v-show="api === 'create-parser'">
+<p class="np-sig"><code>createParser(locale?, options?): Parser</code></p>
+<figure class="np-code" id="code-11" data-lang="ts"><div class="np-code-bar"><span class="np-dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="np-code-tab"><span class="np-code-badge" data-lang="ts" aria-hidden="true">TS</span>createParser.ts</span><button type="button" class="np-code-copy" aria-label="Copy code from createParser.ts" @click="copy($el)"><svg class="np-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="11.5" height="11.5" rx="2"/><path d="M15 9V5.5A2 2 0 0 0 13 3.5H5.5a2 2 0 0 0-2 2V13a2 2 0 0 0 2 2H9"/></svg><span v-text="copied === 'code-11' ? 'Copied' : 'Copy'">Copy</span></button></div><pre class="shiki shiki-themes light-plus dark-plus" style="--shiki-light:#000000;--shiki-dark:#D4D4D4;--shiki-light-bg:#FFFFFF;--shiki-dark-bg:#1E1E1E" tabindex="0" aria-label="createParser.ts code example"><code><span class="line"><span style="--shiki-light:#AF00DB;--shiki-dark:#C586C0">import</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4"> { </span><span style="--shiki-light:#001080;--shiki-dark:#9CDCFE">createParser</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4"> } </span><span style="--shiki-light:#AF00DB;--shiki-dark:#C586C0">from</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178"> "numberparrot"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#0000FF;--shiki-dark:#569CD6">const</span><span style="--shiki-light:#0070C1;--shiki-dark:#4FC1FF"> brl</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4"> = </span><span style="--shiki-light:#795E26;--shiki-dark:#DCDCAA">createParser</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">(</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178">"pt-BR"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">);</span></span>
+<span class="line"><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">[</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178">"1.234,56"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">, </span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178">"R$ 10,00"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">, </span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178">"(5,25)"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">].</span><span style="--shiki-light:#795E26;--shiki-dark:#DCDCAA">map</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">(</span><span style="--shiki-light:#001080;--shiki-dark:#9CDCFE">brl</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">.</span><span style="--shiki-light:#001080;--shiki-dark:#9CDCFE">parse</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">); </span><span style="--shiki-light:#008000;--shiki-dark:#6A9955">// [1234.56, 10, -5.25]</span></span>
+<span class="line"><span style="--shiki-light:#001080;--shiki-dark:#9CDCFE">brl</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">.</span><span style="--shiki-light:#001080;--shiki-dark:#9CDCFE">info</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">.</span><span style="--shiki-light:#001080;--shiki-dark:#9CDCFE">decimal</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">; </span><span style="--shiki-light:#008000;--shiki-dark:#6A9955">// ","</span></span></code></pre><div class="np-code-status" aria-hidden="true"><span><svg class="np-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg>numberparrot</span><span>TypeScript</span><span>UTF-8</span><span>5 lines</span></div></figure>
+<p class="np-api-more"><a class="link link-primary" href="api.html#createparser">createParser in the API reference</a></p>
+</div>
+<div role="tabpanel" id="api-panel-normalize-input" aria-labelledby="api-tab-normalize-input" style="display:none" v-show="api === 'normalize-input'">
+<p class="np-sig"><code>normalizeInput(value, locale?, options?): InputState</code></p>
+<figure class="np-code" id="code-12" data-lang="ts"><div class="np-code-bar"><span class="np-dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="np-code-tab"><span class="np-code-badge" data-lang="ts" aria-hidden="true">TS</span>normalizeInput.ts</span><button type="button" class="np-code-copy" aria-label="Copy code from normalizeInput.ts" @click="copy($el)"><svg class="np-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="11.5" height="11.5" rx="2"/><path d="M15 9V5.5A2 2 0 0 0 13 3.5H5.5a2 2 0 0 0-2 2V13a2 2 0 0 0 2 2H9"/></svg><span v-text="copied === 'code-12' ? 'Copied' : 'Copy'">Copy</span></button></div><pre class="shiki shiki-themes light-plus dark-plus" style="--shiki-light:#000000;--shiki-dark:#D4D4D4;--shiki-light-bg:#FFFFFF;--shiki-dark-bg:#1E1E1E" tabindex="0" aria-label="normalizeInput.ts code example"><code><span class="line"><span style="--shiki-light:#AF00DB;--shiki-dark:#C586C0">import</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4"> { </span><span style="--shiki-light:#001080;--shiki-dark:#9CDCFE">normalizeInput</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4"> } </span><span style="--shiki-light:#AF00DB;--shiki-dark:#C586C0">from</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178"> "numberparrot"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#795E26;--shiki-dark:#DCDCAA">normalizeInput</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">(</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178">"1.234,"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">, </span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178">"pt-BR"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">);</span></span>
+<span class="line"><span style="--shiki-light:#008000;--shiki-dark:#6A9955">// { text: "1.234,", value: 1234, valid: true, complete: false }</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#795E26;--shiki-dark:#DCDCAA">normalizeInput</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">(</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178">"١٢٫٥"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">, </span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178">"ar-EG"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">);</span></span>
+<span class="line"><span style="--shiki-light:#008000;--shiki-dark:#6A9955">// { text: "12٫5", value: 12.5, valid: true, complete: true }</span></span></code></pre><div class="np-code-status" aria-hidden="true"><span><svg class="np-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg>numberparrot</span><span>TypeScript</span><span>UTF-8</span><span>7 lines</span></div></figure>
+<p class="np-api-more"><a class="link link-primary" href="api.html#normalizeinput">normalizeInput in the API reference</a></p>
+</div>
+<div role="tabpanel" id="api-panel-get-locale-info" aria-labelledby="api-tab-get-locale-info" style="display:none" v-show="api === 'get-locale-info'">
+<p class="np-sig"><code>getLocaleInfo(locale?): LocaleInfo</code></p>
+<figure class="np-code" id="code-13" data-lang="ts"><div class="np-code-bar"><span class="np-dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="np-code-tab"><span class="np-code-badge" data-lang="ts" aria-hidden="true">TS</span>getLocaleInfo.ts</span><button type="button" class="np-code-copy" aria-label="Copy code from getLocaleInfo.ts" @click="copy($el)"><svg class="np-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="11.5" height="11.5" rx="2"/><path d="M15 9V5.5A2 2 0 0 0 13 3.5H5.5a2 2 0 0 0-2 2V13a2 2 0 0 0 2 2H9"/></svg><span v-text="copied === 'code-13' ? 'Copied' : 'Copy'">Copy</span></button></div><pre class="shiki shiki-themes light-plus dark-plus" style="--shiki-light:#000000;--shiki-dark:#D4D4D4;--shiki-light-bg:#FFFFFF;--shiki-dark-bg:#1E1E1E" tabindex="0" aria-label="getLocaleInfo.ts code example"><code><span class="line"><span style="--shiki-light:#AF00DB;--shiki-dark:#C586C0">import</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4"> { </span><span style="--shiki-light:#001080;--shiki-dark:#9CDCFE">getLocaleInfo</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4"> } </span><span style="--shiki-light:#AF00DB;--shiki-dark:#C586C0">from</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178"> "numberparrot"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#795E26;--shiki-dark:#DCDCAA">getLocaleInfo</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">(</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178">"de-CH"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">);</span></span>
+<span class="line"><span style="--shiki-light:#008000;--shiki-dark:#6A9955">// { locale: "de-CH", decimal: ".", group: "'", minusSign: "-",</span></span>
+<span class="line"><span style="--shiki-light:#008000;--shiki-dark:#6A9955">//   percentSign: "%", exponent: "E", digits: "0123456789", numberingSystem: "latn" }</span></span></code></pre><div class="np-code-status" aria-hidden="true"><span><svg class="np-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg>numberparrot</span><span>TypeScript</span><span>UTF-8</span><span>5 lines</span></div></figure>
+<p class="np-api-more"><a class="link link-primary" href="api.html#getlocaleinfo">getLocaleInfo in the API reference</a></p>
+</div>
+<div role="tabpanel" id="api-panel-number-parse-error" aria-labelledby="api-tab-number-parse-error" style="display:none" v-show="api === 'number-parse-error'">
+<p class="np-sig"><code>class NumberParseError extends Error</code></p>
+<figure class="np-code" id="code-14" data-lang="ts"><div class="np-code-bar"><span class="np-dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="np-code-tab"><span class="np-code-badge" data-lang="ts" aria-hidden="true">TS</span>NumberParseError.ts</span><button type="button" class="np-code-copy" aria-label="Copy code from NumberParseError.ts" @click="copy($el)"><svg class="np-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="11.5" height="11.5" rx="2"/><path d="M15 9V5.5A2 2 0 0 0 13 3.5H5.5a2 2 0 0 0-2 2V13a2 2 0 0 0 2 2H9"/></svg><span v-text="copied === 'code-14' ? 'Copied' : 'Copy'">Copy</span></button></div><pre class="shiki shiki-themes light-plus dark-plus" style="--shiki-light:#000000;--shiki-dark:#D4D4D4;--shiki-light-bg:#FFFFFF;--shiki-dark-bg:#1E1E1E" tabindex="0" aria-label="NumberParseError.ts code example"><code><span class="line"><span style="--shiki-light:#AF00DB;--shiki-dark:#C586C0">import</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4"> { </span><span style="--shiki-light:#001080;--shiki-dark:#9CDCFE">parse</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">, </span><span style="--shiki-light:#001080;--shiki-dark:#9CDCFE">NumberParseError</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4"> } </span><span style="--shiki-light:#AF00DB;--shiki-dark:#C586C0">from</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178"> "numberparrot"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#AF00DB;--shiki-dark:#C586C0">try</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4"> {</span></span>
+<span class="line"><span style="--shiki-light:#795E26;--shiki-dark:#DCDCAA">  parse</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">(</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178">"1,23"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">, </span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178">"en-US"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">, { </span><span style="--shiki-light:#001080;--shiki-dark:#9CDCFE">strict:</span><span style="--shiki-light:#0000FF;--shiki-dark:#569CD6"> true</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4"> });</span></span>
+<span class="line"><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">} </span><span style="--shiki-light:#AF00DB;--shiki-dark:#C586C0">catch</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4"> (</span><span style="--shiki-light:#001080;--shiki-dark:#9CDCFE">error</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">) {</span></span>
+<span class="line"><span style="--shiki-light:#AF00DB;--shiki-dark:#C586C0">  if</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4"> (</span><span style="--shiki-light:#001080;--shiki-dark:#9CDCFE">error</span><span style="--shiki-light:#0000FF;--shiki-dark:#569CD6"> instanceof</span><span style="--shiki-light:#267F99;--shiki-dark:#4EC9B0"> NumberParseError</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">) </span><span style="--shiki-light:#001080;--shiki-dark:#9CDCFE">console</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">.</span><span style="--shiki-light:#795E26;--shiki-dark:#DCDCAA">log</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">(</span><span style="--shiki-light:#001080;--shiki-dark:#9CDCFE">error</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">.</span><span style="--shiki-light:#001080;--shiki-dark:#9CDCFE">code</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">); </span><span style="--shiki-light:#008000;--shiki-dark:#6A9955">// "INVALID_GROUPING"</span></span>
+<span class="line"><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">}</span></span></code></pre><div class="np-code-status" aria-hidden="true"><span><svg class="np-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg>numberparrot</span><span>TypeScript</span><span>UTF-8</span><span>7 lines</span></div></figure>
+<p class="np-api-more"><a class="link link-primary" href="api.html#numberparseerror">NumberParseError in the API reference</a></p>
+</div>
+      </div>
+    </div>
+    <div class="np-install-row">
+      <div>
+        <h3>Install</h3>
+        <p>Node.js 18+, Deno, Bun and every modern browser. ESM, CommonJS and TypeScript types, about 6.1 kB gzipped.</p>
+      </div>
+      <div class="np-install-tabs">
+<div class="np-pms" role="tablist" aria-label="Package manager"><button type="button" role="tab" class="np-pm" id="pm-9-npm" aria-controls="pm-9-npm-panel" aria-selected="true" :aria-selected="pm === 'npm' ? 'true' : 'false'" @click="pm = 'npm'">npm</button><button type="button" role="tab" class="np-pm" id="pm-9-pnpm" aria-controls="pm-9-pnpm-panel" aria-selected="false" :aria-selected="pm === 'pnpm' ? 'true' : 'false'" @click="pm = 'pnpm'">pnpm</button><button type="button" role="tab" class="np-pm" id="pm-9-yarn" aria-controls="pm-9-yarn-panel" aria-selected="false" :aria-selected="pm === 'yarn' ? 'true' : 'false'" @click="pm = 'yarn'">yarn</button><button type="button" role="tab" class="np-pm" id="pm-9-bun" aria-controls="pm-9-bun-panel" aria-selected="false" :aria-selected="pm === 'bun' ? 'true' : 'false'" @click="pm = 'bun'">bun</button></div>
+<div role="tabpanel" id="pm-9-npm-panel" aria-labelledby="pm-9-npm" v-show="pm === 'npm'">
+<figure class="np-code" id="code-15" data-lang="sh"><div class="np-code-bar"><span class="np-dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="np-code-tab"><span class="np-code-badge" data-lang="sh" aria-hidden="true">$_</span>Terminal</span><button type="button" class="np-code-copy" aria-label="Copy code from Terminal" @click="copy($el)"><svg class="np-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="11.5" height="11.5" rx="2"/><path d="M15 9V5.5A2 2 0 0 0 13 3.5H5.5a2 2 0 0 0-2 2V13a2 2 0 0 0 2 2H9"/></svg><span v-text="copied === 'code-15' ? 'Copied' : 'Copy'">Copy</span></button></div><pre class="shiki shiki-themes light-plus dark-plus" style="--shiki-light:#000000;--shiki-dark:#D4D4D4;--shiki-light-bg:#FFFFFF;--shiki-dark-bg:#1E1E1E" tabindex="0" aria-label="Terminal code example"><code><span class="line"><span style="--shiki-light:#795E26;--shiki-dark:#DCDCAA">npm</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178"> install</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178"> numberparrot</span></span></code></pre><div class="np-code-status" aria-hidden="true"><span><svg class="np-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg>numberparrot</span><span>Shell</span><span>UTF-8</span><span>1 line</span></div></figure>
+</div>
+<div role="tabpanel" id="pm-9-pnpm-panel" aria-labelledby="pm-9-pnpm" style="display:none" v-show="pm === 'pnpm'">
+<figure class="np-code" id="code-16" data-lang="sh"><div class="np-code-bar"><span class="np-dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="np-code-tab"><span class="np-code-badge" data-lang="sh" aria-hidden="true">$_</span>Terminal</span><button type="button" class="np-code-copy" aria-label="Copy code from Terminal" @click="copy($el)"><svg class="np-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="11.5" height="11.5" rx="2"/><path d="M15 9V5.5A2 2 0 0 0 13 3.5H5.5a2 2 0 0 0-2 2V13a2 2 0 0 0 2 2H9"/></svg><span v-text="copied === 'code-16' ? 'Copied' : 'Copy'">Copy</span></button></div><pre class="shiki shiki-themes light-plus dark-plus" style="--shiki-light:#000000;--shiki-dark:#D4D4D4;--shiki-light-bg:#FFFFFF;--shiki-dark-bg:#1E1E1E" tabindex="0" aria-label="Terminal code example"><code><span class="line"><span style="--shiki-light:#795E26;--shiki-dark:#DCDCAA">pnpm</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178"> add</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178"> numberparrot</span></span></code></pre><div class="np-code-status" aria-hidden="true"><span><svg class="np-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg>numberparrot</span><span>Shell</span><span>UTF-8</span><span>1 line</span></div></figure>
+</div>
+<div role="tabpanel" id="pm-9-yarn-panel" aria-labelledby="pm-9-yarn" style="display:none" v-show="pm === 'yarn'">
+<figure class="np-code" id="code-17" data-lang="sh"><div class="np-code-bar"><span class="np-dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="np-code-tab"><span class="np-code-badge" data-lang="sh" aria-hidden="true">$_</span>Terminal</span><button type="button" class="np-code-copy" aria-label="Copy code from Terminal" @click="copy($el)"><svg class="np-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="11.5" height="11.5" rx="2"/><path d="M15 9V5.5A2 2 0 0 0 13 3.5H5.5a2 2 0 0 0-2 2V13a2 2 0 0 0 2 2H9"/></svg><span v-text="copied === 'code-17' ? 'Copied' : 'Copy'">Copy</span></button></div><pre class="shiki shiki-themes light-plus dark-plus" style="--shiki-light:#000000;--shiki-dark:#D4D4D4;--shiki-light-bg:#FFFFFF;--shiki-dark-bg:#1E1E1E" tabindex="0" aria-label="Terminal code example"><code><span class="line"><span style="--shiki-light:#795E26;--shiki-dark:#DCDCAA">yarn</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178"> add</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178"> numberparrot</span></span></code></pre><div class="np-code-status" aria-hidden="true"><span><svg class="np-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg>numberparrot</span><span>Shell</span><span>UTF-8</span><span>1 line</span></div></figure>
+</div>
+<div role="tabpanel" id="pm-9-bun-panel" aria-labelledby="pm-9-bun" style="display:none" v-show="pm === 'bun'">
+<figure class="np-code" id="code-18" data-lang="sh"><div class="np-code-bar"><span class="np-dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="np-code-tab"><span class="np-code-badge" data-lang="sh" aria-hidden="true">$_</span>Terminal</span><button type="button" class="np-code-copy" aria-label="Copy code from Terminal" @click="copy($el)"><svg class="np-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="11.5" height="11.5" rx="2"/><path d="M15 9V5.5A2 2 0 0 0 13 3.5H5.5a2 2 0 0 0-2 2V13a2 2 0 0 0 2 2H9"/></svg><span v-text="copied === 'code-18' ? 'Copied' : 'Copy'">Copy</span></button></div><pre class="shiki shiki-themes light-plus dark-plus" style="--shiki-light:#000000;--shiki-dark:#D4D4D4;--shiki-light-bg:#FFFFFF;--shiki-dark-bg:#1E1E1E" tabindex="0" aria-label="Terminal code example"><code><span class="line"><span style="--shiki-light:#795E26;--shiki-dark:#DCDCAA">bun</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178"> add</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178"> numberparrot</span></span></code></pre><div class="np-code-status" aria-hidden="true"><span><svg class="np-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg>numberparrot</span><span>Shell</span><span>UTF-8</span><span>1 line</span></div></figure>
+</div>
+</div>
+    </div>
+  </div>
+</section>
 
-<h2>Guides</h2>
-<ul class="guides">
-  <li><a href="convert-string-with-comma-to-number-javascript.html"><strong>Convert a String with a Comma to a Number in JavaScript</strong><span>Turn &quot;1.234,56&quot; into 1234.56 without replace() hacks.</span></a></li>
-  <li><a href="parsefloat-comma-decimal-separator.html"><strong>parseFloat with a Comma Decimal Separator: Why It Returns the Wrong Number</strong><span>Why parseFloat returns 1.234 for 1.234,56, and the fix.</span></a></li>
-  <li><a href="parse-localized-number-javascript.html"><strong>Parse a Localized Number in JavaScript (Any Locale, Using Intl)</strong><span>Read back what toLocaleString and Intl.NumberFormat write.</span></a></li>
-  <li><a href="parse-currency-string-javascript.html"><strong>Parse a Currency String to a Number in JavaScript (R$, €, ₹, CHF)</strong><span>Amount and ISO code from R$ 1.234,56, € and ₹ strings.</span></a></li>
-  <li><a href="arabic-digits-to-number-javascript.html"><strong>Convert Arabic and Persian Digits to a Number in JavaScript</strong><span>١٬٢٣٤٫٥٦ and ۱۲۳٫۴۵ to real numbers.</span></a></li>
-  <li><a href="intl-numberformat-parse.html"><strong>Intl.NumberFormat Parse: How to Reverse Intl Number Formatting</strong><span>The missing reverse of Intl.NumberFormat#format.</span></a></li>
-  <li><a href="numeral-js-alternative.html"><strong>numeral.js Alternative for Parsing Localized Numbers</strong><span>Replace numeral().value() with locale aware parsing.</span></a></li>
-</ul>
+<section id="guides" class="np-section" aria-labelledby="guides-title">
+  <div class="container">
+    <div class="np-section-head">
+      <p class="np-eyebrow"><svg class="np-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7.5A1.5 1.5 0 0 1 4.5 6h15A1.5 1.5 0 0 1 21 7.5V10a2 2 0 0 0 0 4v2.5a1.5 1.5 0 0 1-1.5 1.5h-15A1.5 1.5 0 0 1 3 16.5V14a2 2 0 0 0 0-4Z"/><path d="M15 6v2.2M15 10.9v2.2M15 15.8V18"/></svg>Guides</p>
+      <h2 id="guides-title">Boarding passes for the usual trouble</h2>
+      <p>Short guides for the questions people search for, each with the broken approach, why it breaks and the fix.</p>
     </div>
-  </main>
-  <footer class="site">
-    <div class="container">
-      <img src="img/mascot.svg" width="32" height="32" alt="">
-      <span>numberparrot is MIT licensed, made by <a href="https://github.com/kwy404">Alexandre Kohler</a>.</span>
-      <a href="https://github.com/kwy404/numberparrot">Source on GitHub</a>
-      <a href="https://www.npmjs.com/package/numberparrot">npm</a>
-      <span>Interactive parts built with <a href="https://github.com/kwy404/Voodoo.js">Voodoo.js</a>.</span>
+<div class="np-tickets">
+<a class="np-ticket" href="convert-string-with-comma-to-number-javascript.html">
+  <span class="np-ticket-stub" aria-hidden="true">
+    <span class="np-ticket-gate">Gate</span>
+    <span class="np-ticket-no">01</span>
+    <svg class="np-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7.5A1.5 1.5 0 0 1 4.5 6h15A1.5 1.5 0 0 1 21 7.5V10a2 2 0 0 0 0 4v2.5a1.5 1.5 0 0 1-1.5 1.5h-15A1.5 1.5 0 0 1 3 16.5V14a2 2 0 0 0 0-4Z"/><path d="M15 6v2.2M15 10.9v2.2M15 15.8V18"/></svg>
+  </span>
+  <span class="np-ticket-main">
+    <span class="np-ticket-route" aria-hidden="true"><span dir="auto">1.234,56</span><svg class="np-icon np-ticket-plane" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.2 13.8 3.5 12l-1-1.6 1.6-.6 6.6 1.2 4.8-4.9c.9-.9 2.6-1.4 3.3-.7.7.7.2 2.4-.7 3.3l-4.9 4.8 1.2 6.6-.6 1.6-1.6-1-1.8-6.7-3 2.9.3 2.3-1.2 1.2-1.2-2.8-2.8-1.2 1.2-1.2 2.3.3Z"/></svg><span>1234.56</span></span>
+    <strong class="np-ticket-title">Convert a String with a Comma to a Number in JavaScript</strong>
+    <span class="np-ticket-text">Turn &quot;1.234,56&quot; into 1234.56 without replace() hacks.</span>
+  </span>
+</a>
+<a class="np-ticket" href="parsefloat-comma-decimal-separator.html">
+  <span class="np-ticket-stub" aria-hidden="true">
+    <span class="np-ticket-gate">Gate</span>
+    <span class="np-ticket-no">02</span>
+    <svg class="np-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 5 5"/><path d="M8.5 12.5c.8 0 1.2-.5 1.2-1.1v-.9M12.5 12.5c.8 0 1.2-.5 1.2-1.1v-.9" stroke="var(--np-leaf)" stroke-width="2"/></svg>
+  </span>
+  <span class="np-ticket-main">
+    <span class="np-ticket-route" aria-hidden="true"><span dir="auto">1,5</span><svg class="np-icon np-ticket-plane" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.2 13.8 3.5 12l-1-1.6 1.6-.6 6.6 1.2 4.8-4.9c.9-.9 2.6-1.4 3.3-.7.7.7.2 2.4-.7 3.3l-4.9 4.8 1.2 6.6-.6 1.6-1.6-1-1.8-6.7-3 2.9.3 2.3-1.2 1.2-1.2-2.8-2.8-1.2 1.2-1.2 2.3.3Z"/></svg><span>1.5</span></span>
+    <strong class="np-ticket-title">parseFloat with a Comma Decimal Separator: Why It Returns the Wrong Number</strong>
+    <span class="np-ticket-text">Why parseFloat returns 1.234 for 1.234,56, and the fix.</span>
+  </span>
+</a>
+<a class="np-ticket" href="parse-localized-number-javascript.html">
+  <span class="np-ticket-stub" aria-hidden="true">
+    <span class="np-ticket-gate">Gate</span>
+    <span class="np-ticket-no">03</span>
+    <svg class="np-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c-3 3.2-3 14.8 0 18M12 3c3 3.2 3 14.8 0 18M4.6 7.5h14.8M4.6 16.5h14.8"/></svg>
+  </span>
+  <span class="np-ticket-main">
+    <span class="np-ticket-route" aria-hidden="true"><span dir="auto">1 234,56</span><svg class="np-icon np-ticket-plane" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.2 13.8 3.5 12l-1-1.6 1.6-.6 6.6 1.2 4.8-4.9c.9-.9 2.6-1.4 3.3-.7.7.7.2 2.4-.7 3.3l-4.9 4.8 1.2 6.6-.6 1.6-1.6-1-1.8-6.7-3 2.9.3 2.3-1.2 1.2-1.2-2.8-2.8-1.2 1.2-1.2 2.3.3Z"/></svg><span>1234.56</span></span>
+    <strong class="np-ticket-title">Parse a Localized Number in JavaScript (Any Locale, Using Intl)</strong>
+    <span class="np-ticket-text">Read back what toLocaleString and Intl.NumberFormat write.</span>
+  </span>
+</a>
+<a class="np-ticket" href="parse-currency-string-javascript.html">
+  <span class="np-ticket-stub" aria-hidden="true">
+    <span class="np-ticket-gate">Gate</span>
+    <span class="np-ticket-no">04</span>
+    <svg class="np-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><ellipse cx="12" cy="7" rx="7" ry="3" fill="var(--np-sun)" fill-opacity=".35"/><path d="M5 7v5c0 1.7 3.1 3 7 3s7-1.3 7-3V7M5 12v5c0 1.7 3.1 3 7 3s7-1.3 7-3v-5"/><ellipse cx="12" cy="7" rx="7" ry="3"/></svg>
+  </span>
+  <span class="np-ticket-main">
+    <span class="np-ticket-route" aria-hidden="true"><span dir="auto">R$ 10,00</span><svg class="np-icon np-ticket-plane" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.2 13.8 3.5 12l-1-1.6 1.6-.6 6.6 1.2 4.8-4.9c.9-.9 2.6-1.4 3.3-.7.7.7.2 2.4-.7 3.3l-4.9 4.8 1.2 6.6-.6 1.6-1.6-1-1.8-6.7-3 2.9.3 2.3-1.2 1.2-1.2-2.8-2.8-1.2 1.2-1.2 2.3.3Z"/></svg><span>10 BRL</span></span>
+    <strong class="np-ticket-title">Parse a Currency String to a Number in JavaScript (R$, €, ₹, CHF)</strong>
+    <span class="np-ticket-text">Amount and ISO code from R$ 1.234,56, € and ₹ strings.</span>
+  </span>
+</a>
+<a class="np-ticket" href="arabic-digits-to-number-javascript.html">
+  <span class="np-ticket-stub" aria-hidden="true">
+    <span class="np-ticket-gate">Gate</span>
+    <span class="np-ticket-no">05</span>
+    <svg class="np-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2.5" y="5" width="8.5" height="14" rx="2"/><rect x="13" y="5" width="8.5" height="14" rx="2"/><path d="M5.5 9.5 7.2 8v8M16 9c.3-1 1.1-1.3 1.7-1.3 1 0 1.7.8 1.4 1.8-.3 1-2.9 3.2-3.2 6.5h3.4"/></svg>
+  </span>
+  <span class="np-ticket-main">
+    <span class="np-ticket-route" aria-hidden="true"><span dir="auto">١٢٣٫٤</span><svg class="np-icon np-ticket-plane" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.2 13.8 3.5 12l-1-1.6 1.6-.6 6.6 1.2 4.8-4.9c.9-.9 2.6-1.4 3.3-.7.7.7.2 2.4-.7 3.3l-4.9 4.8 1.2 6.6-.6 1.6-1.6-1-1.8-6.7-3 2.9.3 2.3-1.2 1.2-1.2-2.8-2.8-1.2 1.2-1.2 2.3.3Z"/></svg><span>123.4</span></span>
+    <strong class="np-ticket-title">Convert Arabic and Persian Digits to a Number in JavaScript</strong>
+    <span class="np-ticket-text">١٬٢٣٤٫٥٦ and ۱۲۳٫۴۵ to real numbers.</span>
+  </span>
+</a>
+<a class="np-ticket" href="intl-numberformat-parse.html">
+  <span class="np-ticket-stub" aria-hidden="true">
+    <span class="np-ticket-gate">Gate</span>
+    <span class="np-ticket-no">06</span>
+    <svg class="np-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="m15.5 8.5-2 5-5 2 2-5Z" fill="var(--np-sun)" fill-opacity=".45"/></svg>
+  </span>
+  <span class="np-ticket-main">
+    <span class="np-ticket-route" aria-hidden="true"><span dir="auto">format()</span><svg class="np-icon np-ticket-plane" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.2 13.8 3.5 12l-1-1.6 1.6-.6 6.6 1.2 4.8-4.9c.9-.9 2.6-1.4 3.3-.7.7.7.2 2.4-.7 3.3l-4.9 4.8 1.2 6.6-.6 1.6-1.6-1-1.8-6.7-3 2.9.3 2.3-1.2 1.2-1.2-2.8-2.8-1.2 1.2-1.2 2.3.3Z"/></svg><span>parse()</span></span>
+    <strong class="np-ticket-title">Intl.NumberFormat Parse: How to Reverse Intl Number Formatting</strong>
+    <span class="np-ticket-text">The missing reverse of Intl.NumberFormat#format.</span>
+  </span>
+</a>
+<a class="np-ticket" href="numeral-js-alternative.html">
+  <span class="np-ticket-stub" aria-hidden="true">
+    <span class="np-ticket-gate">Gate</span>
+    <span class="np-ticket-no">07</span>
+    <svg class="np-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="7" width="18" height="13" rx="2.5"/><path d="M9 7V5.2C9 4.5 9.5 4 10.2 4h3.6c.7 0 1.2.5 1.2 1.2V7M7.5 7v13M16.5 7v13"/></svg>
+  </span>
+  <span class="np-ticket-main">
+    <span class="np-ticket-route" aria-hidden="true"><span dir="auto">numeral</span><svg class="np-icon np-ticket-plane" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.2 13.8 3.5 12l-1-1.6 1.6-.6 6.6 1.2 4.8-4.9c.9-.9 2.6-1.4 3.3-.7.7.7.2 2.4-.7 3.3l-4.9 4.8 1.2 6.6-.6 1.6-1.6-1-1.8-6.7-3 2.9.3 2.3-1.2 1.2-1.2-2.8-2.8-1.2 1.2-1.2 2.3.3Z"/></svg><span>parse</span></span>
+    <strong class="np-ticket-title">numeral.js Alternative for Parsing Localized Numbers</strong>
+    <span class="np-ticket-text">Replace numeral().value() with locale aware parsing.</span>
+  </span>
+</a>
+<a class="np-ticket" href="api.html">
+  <span class="np-ticket-stub" aria-hidden="true">
+    <span class="np-ticket-gate">Gate</span>
+    <span class="np-ticket-no">08</span>
+    <svg class="np-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v15H6.5A2.5 2.5 0 0 0 4 20.5Z"/><path d="M4 20.5A2.5 2.5 0 0 0 6.5 23H20v-5"/></svg>
+  </span>
+  <span class="np-ticket-main">
+    <span class="np-ticket-route" aria-hidden="true"><span dir="auto">API</span><svg class="np-icon np-ticket-plane" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.2 13.8 3.5 12l-1-1.6 1.6-.6 6.6 1.2 4.8-4.9c.9-.9 2.6-1.4 3.3-.7.7.7.2 2.4-.7 3.3l-4.9 4.8 1.2 6.6-.6 1.6-1.6-1-1.8-6.7-3 2.9.3 2.3-1.2 1.2-1.2-2.8-2.8-1.2 1.2-1.2 2.3.3Z"/></svg><span>docs</span></span>
+    <strong class="np-ticket-title">numberparrot API Reference: parse, parseCurrency, detect and More</strong>
+    <span class="np-ticket-text">Every function, option and error code.</span>
+  </span>
+</a>
+</div>
+  </div>
+</section>
+
+<section id="faq" class="np-section np-section-tint" aria-labelledby="faq-title">
+  <div class="container np-faq">
+    <div class="np-section-head">
+      <p class="np-eyebrow"><svg class="np-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="m15.5 8.5-2 5-5 2 2-5Z" fill="var(--np-sun)" fill-opacity=".45"/></svg>FAQ</p>
+      <h2 id="faq-title">Questions at the gate</h2>
+      <img src="img/mascot.svg" width="120" height="120" alt="Pico the parrot" class="np-faq-pico" loading="lazy">
     </div>
-    <div class="container more">
-      <span>More from kwy404:</span>
-      <a href="https://kwy404.github.io/graphemely/">graphemely</a>
-      <a href="https://kwy404.github.io/edgegoat/">edgegoat</a>
-      <a href="https://kwy404.github.io/vueleap/">vueleap</a>
-      <a href="https://github.com/kwy404/breakhound">breakhound</a>
-      <a href="https://github.com/kwy404/Voodoo.js">Voodoo.js</a>
+    <div class="accordion collapse-plus">
+      <details class="collapse" name="faq" open><summary class="collapse-title">How do I convert a string with a comma to a number in JavaScript?</summary><div class="collapse-content"><p>Call <code>parse(text, locale)</code> with the locale the number was written in: <code>parse("1.234,56", "pt-BR")</code> is <code>1234.56</code> and <code>parse("1,5", "de-DE")</code> is <code>1.5</code>. Swapping commas for dots breaks as soon as a number has a group separator.</p></div></details>
+      <details class="collapse" name="faq"><summary class="collapse-title">Why does parseFloat return the wrong number?</summary><div class="collapse-content"><p><code>parseFloat</code> reads characters while they look like an English number and silently stops at the first one that does not, so <code>parseFloat("1.234,56")</code> is <code>1.234</code>. A wrong number passes every <code>isNaN</code> check, which makes it worse than an error.</p></div></details>
+      <details class="collapse" name="faq"><summary class="collapse-title">How do I parse a currency string like R$ 1.234,56?</summary><div class="collapse-content"><p><code>parseCurrency("R$ 1.234,56", "pt-BR")</code> returns the amount <code>1234.56</code> and the currency <code>"BRL"</code>. Add <code>toMinorUnits: true</code> to get exact integer cents for money.</p></div></details>
+      <details class="collapse" name="faq"><summary class="collapse-title">What if I do not know the locale of a number?</summary><div class="collapse-content"><p><code>detect(text)</code> works out the decimal separator from the string itself and tells you when it cannot be sure: <code>detect("1,234")</code> is ambiguous, with the readings <code>1234</code> and <code>1.234</code>. Switch the world board to Detect mode to see it live.</p></div></details>
+      <details class="collapse" name="faq"><summary class="collapse-title">Does numberparrot work in the browser, Node.js, Deno and Bun?</summary><div class="collapse-content"><p>Yes. It has zero dependencies, ships ESM, CommonJS and TypeScript types, and is about 6.1 kB gzipped. It needs <code>Intl.NumberFormat</code> with full locale data, which every modern browser and Node.js 13 or newer provide.</p></div></details>
     </div>
-  </footer>
+  </div>
+</section>
+</main>
+  <footer class="np-foot">
+  <div class="np-foot-stamps" aria-hidden="true"><div class="container"><svg class="np-stamp" viewBox="0 0 120 120" width="74" height="74" aria-hidden="true">
+  <defs><path id="fs0-t" d="M17 60a43 43 0 0 1 86 0" fill="none"/><path id="fs0-b" d="M14 60a46 46 0 0 0 92 0" fill="none"/></defs>
+  <g transform="rotate(-8 60 60)" opacity=".92">
+  <circle cx="60" cy="60" r="52" fill="none" stroke="var(--np-leaf)" stroke-width="3.2"/><circle cx="60" cy="60" r="37" fill="none" stroke="var(--np-leaf)" stroke-width="1.6"/>
+  <text font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="8.5" font-weight="800" letter-spacing="1.6" fill="var(--np-leaf)"><textPath href="#fs0-t" startOffset="50%" text-anchor="middle">BRASIL</textPath></text>
+  <text font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="7.5" font-weight="700" letter-spacing="1.2" fill="var(--np-leaf)"><textPath href="#fs0-b" startOffset="50%" text-anchor="middle" side="left">GRU · SÃO PAULO</textPath></text>
+  <text x="60" y="64" text-anchor="middle" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="34" font-weight="800" fill="var(--np-leaf)">R$</text>
+  <text x="60" y="80" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="7" font-weight="700" letter-spacing=".8" fill="var(--np-leaf)">13 OCT 2026</text>
+  </g>
+</svg><svg class="np-stamp" viewBox="0 0 120 120" width="74" height="74" aria-hidden="true">
+  <defs></defs>
+  <g transform="rotate(6 60 60)" opacity=".92">
+  <rect x="6" y="14" width="108" height="92" rx="8" fill="none" stroke="var(--np-ink)" stroke-width="3.2"/><rect x="13" y="30" width="94" height="60" rx="4" fill="none" stroke="var(--np-ink)" stroke-width="1.6"/>
+  <text x="60" y="25.5" text-anchor="middle" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="8.5" font-weight="800" letter-spacing="1.6" fill="var(--np-ink)">EUROPA</text>
+  <text x="60" y="101" text-anchor="middle" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="7.5" font-weight="700" letter-spacing="1.2" fill="var(--np-ink)">CDG · BER · MAD</text>
+  <text x="60" y="66" text-anchor="middle" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="44" font-weight="800" fill="var(--np-ink)">€</text>
+  <text x="60" y="82" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="7" font-weight="700" letter-spacing=".8" fill="var(--np-ink)">13 OCT 2026</text>
+  </g>
+</svg><svg class="np-stamp" viewBox="0 0 120 120" width="74" height="74" aria-hidden="true">
+  <defs><path id="fs2-t" d="M11 60a49 37 0 0 1 98 0" fill="none"/><path id="fs2-b" d="M8 60a52 40 0 0 0 104 0" fill="none"/></defs>
+  <g transform="rotate(-4 60 60)" opacity=".92">
+  <ellipse cx="60" cy="60" rx="56" ry="44" fill="none" stroke="var(--np-red)" stroke-width="3.2"/><ellipse cx="60" cy="60" rx="42" ry="30" fill="none" stroke="var(--np-red)" stroke-width="1.6"/>
+  <text font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="8.5" font-weight="800" letter-spacing="1.6" fill="var(--np-red)"><textPath href="#fs2-t" startOffset="50%" text-anchor="middle">BHARAT</textPath></text>
+  <text font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="7.5" font-weight="700" letter-spacing="1.2" fill="var(--np-red)"><textPath href="#fs2-b" startOffset="50%" text-anchor="middle" side="left">BOM · DEL</textPath></text>
+  <text x="60" y="64" text-anchor="middle" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="44" font-weight="800" fill="var(--np-red)">₹</text>
+  <text x="60" y="80" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="7" font-weight="700" letter-spacing=".8" fill="var(--np-red)">13 OCT 2026</text>
+  </g>
+</svg><svg class="np-stamp" viewBox="0 0 120 120" width="74" height="74" aria-hidden="true">
+  <defs><path id="fs3-t" d="M17 60a43 43 0 0 1 86 0" fill="none"/><path id="fs3-b" d="M14 60a46 46 0 0 0 92 0" fill="none"/></defs>
+  <g transform="rotate(10 60 60)" opacity=".92">
+  <circle cx="60" cy="60" r="52" fill="none" stroke="var(--np-red)" stroke-width="3.2"/><circle cx="60" cy="60" r="37" fill="none" stroke="var(--np-red)" stroke-width="1.6"/>
+  <text font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="8.5" font-weight="800" letter-spacing="1.6" fill="var(--np-red)"><textPath href="#fs3-t" startOffset="50%" text-anchor="middle">NIPPON</textPath></text>
+  <text font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="7.5" font-weight="700" letter-spacing="1.2" fill="var(--np-red)"><textPath href="#fs3-b" startOffset="50%" text-anchor="middle" side="left">HND · TOKYO</textPath></text>
+  <text x="60" y="64" text-anchor="middle" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="44" font-weight="800" fill="var(--np-red)">¥</text>
+  <text x="60" y="80" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="7" font-weight="700" letter-spacing=".8" fill="var(--np-red)">13 OCT 2026</text>
+  </g>
+</svg><svg class="np-stamp" viewBox="0 0 120 120" width="74" height="74" aria-hidden="true">
+  <defs></defs>
+  <g transform="rotate(-6 60 60)" opacity=".92">
+  <rect x="6" y="14" width="108" height="92" rx="8" fill="none" stroke="var(--np-leaf)" stroke-width="3.2"/><rect x="13" y="30" width="94" height="60" rx="4" fill="none" stroke="var(--np-leaf)" stroke-width="1.6"/>
+  <text x="60" y="25.5" text-anchor="middle" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="8.5" font-weight="800" letter-spacing="1.6" fill="var(--np-leaf)">SCHWEIZ</text>
+  <text x="60" y="101" text-anchor="middle" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="7.5" font-weight="700" letter-spacing="1.2" fill="var(--np-leaf)">ZRH · ZÜRICH</text>
+  <text x="60" y="66" text-anchor="middle" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="26" font-weight="800" fill="var(--np-leaf)">CHF</text>
+  <text x="60" y="82" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="7" font-weight="700" letter-spacing=".8" fill="var(--np-leaf)">13 OCT 2026</text>
+  </g>
+</svg><svg class="np-stamp" viewBox="0 0 120 120" width="74" height="74" aria-hidden="true">
+  <defs><path id="fs5-t" d="M11 60a49 37 0 0 1 98 0" fill="none"/><path id="fs5-b" d="M8 60a52 40 0 0 0 104 0" fill="none"/></defs>
+  <g transform="rotate(5 60 60)" opacity=".92">
+  <ellipse cx="60" cy="60" rx="56" ry="44" fill="none" stroke="var(--np-ink)" stroke-width="3.2"/><ellipse cx="60" cy="60" rx="42" ry="30" fill="none" stroke="var(--np-ink)" stroke-width="1.6"/>
+  <text font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="8.5" font-weight="800" letter-spacing="1.6" fill="var(--np-ink)"><textPath href="#fs5-t" startOffset="50%" text-anchor="middle">UNITED KINGDOM</textPath></text>
+  <text font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="7.5" font-weight="700" letter-spacing="1.2" fill="var(--np-ink)"><textPath href="#fs5-b" startOffset="50%" text-anchor="middle" side="left">LHR · LONDON</textPath></text>
+  <text x="60" y="64" text-anchor="middle" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="44" font-weight="800" fill="var(--np-ink)">£</text>
+  <text x="60" y="80" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="7" font-weight="700" letter-spacing=".8" fill="var(--np-ink)">13 OCT 2026</text>
+  </g>
+</svg><svg class="np-stamp" viewBox="0 0 120 120" width="74" height="74" aria-hidden="true">
+  <defs><path id="fs6-t" d="M17 60a43 43 0 0 1 86 0" fill="none"/><path id="fs6-b" d="M14 60a46 46 0 0 0 92 0" fill="none"/></defs>
+  <g transform="rotate(-10 60 60)" opacity=".92">
+  <circle cx="60" cy="60" r="52" fill="none" stroke="var(--np-ink)" stroke-width="3.2"/><circle cx="60" cy="60" r="37" fill="none" stroke="var(--np-ink)" stroke-width="1.6"/>
+  <text font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="8.5" font-weight="800" letter-spacing="1.6" fill="var(--np-ink)"><textPath href="#fs6-t" startOffset="50%" text-anchor="middle">MISR</textPath></text>
+  <text font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="7.5" font-weight="700" letter-spacing="1.2" fill="var(--np-ink)"><textPath href="#fs6-b" startOffset="50%" text-anchor="middle" side="left">CAI · CAIRO</textPath></text>
+  <text x="60" y="64" text-anchor="middle" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="26" font-weight="800" fill="var(--np-ink)">ج.م</text>
+  <text x="60" y="80" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="7" font-weight="700" letter-spacing=".8" fill="var(--np-ink)">13 OCT 2026</text>
+  </g>
+</svg><svg class="np-stamp" viewBox="0 0 120 120" width="74" height="74" aria-hidden="true">
+  <defs></defs>
+  <g transform="rotate(4 60 60)" opacity=".92">
+  <rect x="6" y="14" width="108" height="92" rx="8" fill="none" stroke="var(--np-red)" stroke-width="3.2"/><rect x="13" y="30" width="94" height="60" rx="4" fill="none" stroke="var(--np-red)" stroke-width="1.6"/>
+  <text x="60" y="25.5" text-anchor="middle" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="8.5" font-weight="800" letter-spacing="1.6" fill="var(--np-red)">UNITED STATES</text>
+  <text x="60" y="101" text-anchor="middle" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="7.5" font-weight="700" letter-spacing="1.2" fill="var(--np-red)">JFK · NEW YORK</text>
+  <text x="60" y="66" text-anchor="middle" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="44" font-weight="800" fill="var(--np-red)">$</text>
+  <text x="60" y="82" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="7" font-weight="700" letter-spacing=".8" fill="var(--np-red)">13 OCT 2026</text>
+  </g>
+</svg><svg class="np-stamp" viewBox="0 0 120 120" width="74" height="74" aria-hidden="true">
+  <defs><path id="fs8-t" d="M11 60a49 37 0 0 1 98 0" fill="none"/><path id="fs8-b" d="M8 60a52 40 0 0 0 104 0" fill="none"/></defs>
+  <g transform="rotate(-7 60 60)" opacity=".92">
+  <ellipse cx="60" cy="60" rx="56" ry="44" fill="none" stroke="var(--np-leaf)" stroke-width="3.2"/><ellipse cx="60" cy="60" rx="42" ry="30" fill="none" stroke="var(--np-leaf)" stroke-width="1.6"/>
+  <text font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="8.5" font-weight="800" letter-spacing="1.6" fill="var(--np-leaf)"><textPath href="#fs8-t" startOffset="50%" text-anchor="middle">KOREA</textPath></text>
+  <text font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="7.5" font-weight="700" letter-spacing="1.2" fill="var(--np-leaf)"><textPath href="#fs8-b" startOffset="50%" text-anchor="middle" side="left">ICN · SEOUL</textPath></text>
+  <text x="60" y="64" text-anchor="middle" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="44" font-weight="800" fill="var(--np-leaf)">₩</text>
+  <text x="60" y="80" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="7" font-weight="700" letter-spacing=".8" fill="var(--np-leaf)">13 OCT 2026</text>
+  </g>
+</svg><svg class="np-stamp" viewBox="0 0 120 120" width="74" height="74" aria-hidden="true">
+  <defs><path id="fs9-t" d="M17 60a43 43 0 0 1 86 0" fill="none"/><path id="fs9-b" d="M14 60a46 46 0 0 0 92 0" fill="none"/></defs>
+  <g transform="rotate(7 60 60)" opacity=".92">
+  <circle cx="60" cy="60" r="52" fill="none" stroke="var(--np-leaf)" stroke-width="3.2"/><circle cx="60" cy="60" r="37" fill="none" stroke="var(--np-leaf)" stroke-width="1.6"/>
+  <text font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="8.5" font-weight="800" letter-spacing="1.6" fill="var(--np-leaf)"><textPath href="#fs9-t" startOffset="50%" text-anchor="middle">TÜRKİYE</textPath></text>
+  <text font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="7.5" font-weight="700" letter-spacing="1.2" fill="var(--np-leaf)"><textPath href="#fs9-b" startOffset="50%" text-anchor="middle" side="left">IST · ISTANBUL</textPath></text>
+  <text x="60" y="64" text-anchor="middle" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="44" font-weight="800" fill="var(--np-leaf)">₺</text>
+  <text x="60" y="80" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="7" font-weight="700" letter-spacing=".8" fill="var(--np-leaf)">13 OCT 2026</text>
+  </g>
+</svg></div></div>
+  <div class="container np-foot-grid">
+    <div class="np-foot-brand">
+      <a class="np-brand" href="./"><img src="img/mascot.svg" width="56" height="56" alt="Pico, the numberparrot mascot"><span>number<b>parrot</b></span></a>
+      <p>Pico repeats every number back the way it was meant, in every locale your runtime knows. MIT licensed, zero dependencies.</p>
+      <div class="np-foot-social">
+        <a class="np-icon-btn" href="https://github.com/kwy404/numberparrot" aria-label="Source on GitHub"><svg class="np-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path stroke="none" fill="currentColor" d="M12 1.6a10.4 10.4 0 0 0-3.3 20.3c.5.1.7-.2.7-.5v-1.8c-2.9.6-3.5-1.2-3.5-1.2-.5-1.2-1.2-1.5-1.2-1.5-.9-.6.1-.6.1-.6 1 .1 1.6 1.1 1.6 1.1.9 1.6 2.4 1.1 3 .9.1-.7.4-1.1.7-1.4-2.3-.3-4.7-1.2-4.7-5.1 0-1.1.4-2 1.1-2.8-.1-.3-.5-1.3.1-2.7 0 0 .9-.3 2.9 1.1a9.9 9.9 0 0 1 5.2 0c2-1.4 2.9-1.1 2.9-1.1.6 1.4.2 2.4.1 2.7.7.8 1.1 1.7 1.1 2.8 0 4-2.4 4.8-4.7 5.1.4.3.7.9.7 1.9v2.8c0 .3.2.6.7.5A10.4 10.4 0 0 0 12 1.6Z"/></svg></a>
+        <a class="np-icon-btn" href="https://www.npmjs.com/package/numberparrot" aria-label="numberparrot on npm"><svg class="np-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2.8 20 7.3v9.4L12 21.2l-8-4.5V7.3Z"/><path d="M4 7.3 12 12l8-4.7M12 12v9.2"/></svg></a>
+        <a class="np-icon-btn" href="https://github.com/kwy404/numberparrot/blob/main/CHANGELOG.md" aria-label="Changelog"><svg class="np-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v15H6.5A2.5 2.5 0 0 0 4 20.5Z"/><path d="M4 20.5A2.5 2.5 0 0 0 6.5 23H20v-5"/></svg></a>
+      </div>
+    </div>
+    <nav aria-labelledby="ft-site"><p class="np-foot-title" id="ft-site">On this site</p><ul>
+      <li><a href="./#board">World board</a></li><li><a href="./#departures">Departures</a></li><li><a href="./#use-cases">Use cases</a></li><li><a href="api.html">API reference</a></li><li><a href="./#faq">FAQ</a></li><li><a href="https://github.com/kwy404/numberparrot/issues">Report an issue</a></li>
+    </ul></nav>
+    <nav aria-labelledby="ft-guides"><p class="np-foot-title" id="ft-guides">Guides</p><ul>
+      <li><a href="convert-string-with-comma-to-number-javascript.html">Comma to number</a></li><li><a href="parsefloat-comma-decimal-separator.html">parseFloat and commas</a></li><li><a href="parse-localized-number-javascript.html">Localized numbers</a></li><li><a href="parse-currency-string-javascript.html">Currency strings</a></li><li><a href="arabic-digits-to-number-javascript.html">Arabic digits</a></li><li><a href="intl-numberformat-parse.html">Intl parse</a></li><li><a href="numeral-js-alternative.html">numeral.js alternative</a></li>
+    </ul></nav>
+    <nav aria-labelledby="ft-more"><p class="np-foot-title" id="ft-more">More from kwy404</p><ul>
+      <li><a href="https://kwy404.github.io/monsoon/">Monsoon</a></li><li><a href="https://kwy404.github.io/Voodoo.js/">Voodoo.js</a></li><li><a href="https://kwy404.github.io/breakhound/">breakhound</a></li><li><a href="https://kwy404.github.io/vueleap/">vueleap</a></li><li><a href="https://kwy404.github.io/graphemely/">graphemely</a></li><li><a href="https://kwy404.github.io/edgegoat/">edgegoat</a></li>
+    </ul></nav>
+  </div>
+  <div class="container"><div class="np-foot-bottom">
+    <p>Made by <strong>Alexandre Kohler</strong> <a class="np-foot-me" href="https://github.com/kwy404" rel="me noopener" aria-label="Alexandre Kohler on GitHub"><svg class="np-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path stroke="none" fill="currentColor" d="M12 1.6a10.4 10.4 0 0 0-3.3 20.3c.5.1.7-.2.7-.5v-1.8c-2.9.6-3.5-1.2-3.5-1.2-.5-1.2-1.2-1.5-1.2-1.5-.9-.6.1-.6.1-.6 1 .1 1.6 1.1 1.6 1.1.9 1.6 2.4 1.1 3 .9.1-.7.4-1.1.7-1.4-2.3-.3-4.7-1.2-4.7-5.1 0-1.1.4-2 1.1-2.8-.1-.3-.5-1.3.1-2.7 0 0 .9-.3 2.9 1.1a9.9 9.9 0 0 1 5.2 0c2-1.4 2.9-1.1 2.9-1.1.6 1.4.2 2.4.1 2.7.7.8 1.1 1.7 1.1 2.8 0 4-2.4 4.8-4.7 5.1.4.3.7.9.7 1.9v2.8c0 .3.2.6.7.5A10.4 10.4 0 0 0 12 1.6Z"/></svg>GitHub</a> <a class="np-foot-me" href="https://www.linkedin.com/in/alexandre-silva-173687256/" rel="me noopener" aria-label="Alexandre Kohler on LinkedIn"><svg class="np-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M7.5 10.5v6M7.5 7.5v.01M11.5 16.5v-6M11.5 13c0-1.6 1-2.7 2.5-2.7s2.5 1 2.5 2.7v3.5"/></svg>LinkedIn</a></p>
+    <p><a href="https://kwy404.github.io/monsoon/">Built with Monsoon</a><span aria-hidden="true">/</span><a href="https://kwy404.github.io/Voodoo.js/">Interactive parts built with Voodoo.js</a></p>
+  </div></div>
+</footer>
+  <dialog id="np-search" class="modal modal-top np-search-dialog" aria-label="Search the docs">
+  <div class="command-palette">
+    <label class="command-palette-search"><span class="sr-only">Search the docs</span>
+      <input class="command-palette-input" type="search" placeholder="Search guides, functions and locales" autocomplete="off" spellcheck="false" v-model="q" @keydown.down.prevent="move(1)" @keydown.up.prevent="move(-1)" @keydown.enter.prevent="go()" @keydown.esc.prevent="closeSearch()">
+    </label>
+    <div class="command-palette-list" role="listbox" aria-label="Results">
+      <a class="command-palette-item" role="option" v-for="(hit, i) in hits" :key="hit.url" :href="hit.url" :aria-selected="i === sel ? 'true' : 'false'" @mouseenter="sel = i" @click="closeSearch()"><span class="np-hit-kind" v-text="hit.kind"></span><span class="np-hit-title" v-text="hit.title"></span><span class="np-hit-text" v-text="hit.text"></span></a>
+      <p class="command-palette-empty" v-show="!hits.length">No match. Try parse, currency, Arabic or pt-BR.</p>
+    </div>
+    <div class="command-palette-footer"><span><kbd class="kbd kbd-xs">Enter</kbd> open</span><span><kbd class="kbd kbd-xs">Up</kbd> <kbd class="kbd kbd-xs">Down</kbd> move</span><span><kbd class="kbd kbd-xs">Esc</kbd> close</span></div>
+  </div>
+  <form method="dialog" class="modal-backdrop"><button aria-label="Close search">Close</button></form>
+</dialog>
 </body>
 </html>

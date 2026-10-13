@@ -1,9 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64" role="img" aria-label="Detection icon">
-  <title>Detection</title>
-  <rect width="64" height="64" rx="16" fill="#E3F7EC"/>
-  <circle cx="28" cy="28" r="13" fill="#2FBF71" opacity="0.35"/>
-    <circle cx="28" cy="28" r="13" fill="none" stroke="#1D2B3A" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-    <path d="M38 38 L50 50" fill="none" stroke="#1D2B3A" stroke-width="5" stroke-linecap="round"/>
-    <circle cx="28" cy="30" r="2.6" fill="#1D2B3A"/>
-    <path d="M29 33 C29 36 27 37 25 38" fill="none" stroke="#1D2B3A" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-</svg>

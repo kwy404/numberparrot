@@ -26,37 +26,37 @@
 
 <table align="center">
   <tr>
-    <td width="64"><img src="https://cdn.jsdelivr.net/gh/kwy404/numberparrot@main/assets/icons/locales.svg" width="48" alt="globe icon: parse numbers in any locale"></td>
+    <td width="64"><picture><source media="(prefers-color-scheme: dark)" srcset="https://cdn.jsdelivr.net/gh/kwy404/numberparrot@main/assets/art/dark/icon-globe.svg"><img src="https://cdn.jsdelivr.net/gh/kwy404/numberparrot@main/assets/art/light/icon-globe.svg" width="40" alt="globe icon: parse numbers in any locale"></picture></td>
     <td><b>Any locale</b></td>
     <td>Separators, digits and symbols come from <code>Intl.NumberFormat</code>, so every locale your runtime knows works.</td>
   </tr>
   <tr>
-    <td><img src="https://cdn.jsdelivr.net/gh/kwy404/numberparrot@main/assets/icons/currency.svg" width="48" alt="coin stack icon: parse currency strings to numbers"></td>
+    <td><picture><source media="(prefers-color-scheme: dark)" srcset="https://cdn.jsdelivr.net/gh/kwy404/numberparrot@main/assets/art/dark/icon-coins.svg"><img src="https://cdn.jsdelivr.net/gh/kwy404/numberparrot@main/assets/art/light/icon-coins.svg" width="40" alt="coin stack icon: parse currency strings to numbers"></picture></td>
     <td><b>Currency</b></td>
     <td>Symbols and ISO codes before or after the amount: <code>R$ 1.234,56</code>, <code>1 234,56 €</code>, <code>CHF 1'234.50</code>.</td>
   </tr>
   <tr>
-    <td><img src="https://cdn.jsdelivr.net/gh/kwy404/numberparrot@main/assets/icons/digits.svg" width="48" alt="digit tiles icon: Arabic-Indic, Persian, Devanagari and Thai digits"></td>
+    <td><picture><source media="(prefers-color-scheme: dark)" srcset="https://cdn.jsdelivr.net/gh/kwy404/numberparrot@main/assets/art/dark/icon-digits.svg"><img src="https://cdn.jsdelivr.net/gh/kwy404/numberparrot@main/assets/art/light/icon-digits.svg" width="40" alt="digit tiles icon: Arabic-Indic, Persian, Devanagari and Thai digits"></picture></td>
     <td><b>Any digits</b></td>
     <td>Arabic-Indic, Persian, Devanagari, Bengali, Thai, full width and every other Unicode digit.</td>
   </tr>
   <tr>
-    <td><img src="https://cdn.jsdelivr.net/gh/kwy404/numberparrot@main/assets/icons/accounting.svg" width="48" alt="parentheses icon: accounting negative numbers"></td>
+    <td><picture><source media="(prefers-color-scheme: dark)" srcset="https://cdn.jsdelivr.net/gh/kwy404/numberparrot@main/assets/art/dark/icon-parens.svg"><img src="https://cdn.jsdelivr.net/gh/kwy404/numberparrot@main/assets/art/light/icon-parens.svg" width="40" alt="parentheses icon: accounting negative numbers"></picture></td>
     <td><b>Accounting negatives</b></td>
     <td><code>(1.234,56)</code>, trailing minus, the Unicode minus sign and its look alikes.</td>
   </tr>
   <tr>
-    <td><img src="https://cdn.jsdelivr.net/gh/kwy404/numberparrot@main/assets/icons/detection.svg" width="48" alt="magnifier icon: detect decimal separator and locale"></td>
+    <td><picture><source media="(prefers-color-scheme: dark)" srcset="https://cdn.jsdelivr.net/gh/kwy404/numberparrot@main/assets/art/dark/icon-detect.svg"><img src="https://cdn.jsdelivr.net/gh/kwy404/numberparrot@main/assets/art/light/icon-detect.svg" width="40" alt="magnifier icon: detect decimal separator and locale"></picture></td>
     <td><b>Detection</b></td>
     <td>Unknown locale? <code>detect()</code> finds the decimal separator and flags real ambiguity like <code>1,234</code>.</td>
   </tr>
   <tr>
-    <td><img src="https://cdn.jsdelivr.net/gh/kwy404/numberparrot@main/assets/icons/money.svg" width="48" alt="shield icon: money safety with integer cents"></td>
+    <td><picture><source media="(prefers-color-scheme: dark)" srcset="https://cdn.jsdelivr.net/gh/kwy404/numberparrot@main/assets/art/dark/icon-shield.svg"><img src="https://cdn.jsdelivr.net/gh/kwy404/numberparrot@main/assets/art/light/icon-shield.svg" width="40" alt="shield icon: money safety with integer cents"></picture></td>
     <td><b>Money safety</b></td>
     <td><code>toMinorUnits</code> gives integer cents from the decimal digits: <code>"0,29"</code> is <code>29</code>, never <code>28.999999999999996</code>.</td>
   </tr>
   <tr>
-    <td><img src="https://cdn.jsdelivr.net/gh/kwy404/numberparrot@main/assets/icons/input.svg" width="48" alt="text field icon: validate number input fields while typing"></td>
+    <td><picture><source media="(prefers-color-scheme: dark)" srcset="https://cdn.jsdelivr.net/gh/kwy404/numberparrot@main/assets/art/dark/icon-input.svg"><img src="https://cdn.jsdelivr.net/gh/kwy404/numberparrot@main/assets/art/light/icon-input.svg" width="40" alt="text field icon: validate number input fields while typing"></picture></td>
     <td><b>Form input</b></td>
     <td><code>normalizeInput()</code> cleans fields on every keystroke and keeps partial values like <code>1.234,</code> valid.</td>
   </tr>
@@ -67,7 +67,7 @@
 </p>
 
 <p align="center">
-  <a href="https://kwy404.github.io/numberparrot/"><b>Documentation and live playground</b></a>
+  <a href="https://kwy404.github.io/numberparrot/"><b>Documentation, API reference and the live world board</b></a>
 </p>
 
 ## Table of contents
@@ -88,6 +88,8 @@
 - [Runtime support and bundle size](#runtime-support-and-bundle-size)
 - [Documentation](#documentation)
 - [Contributing](#contributing)
+- [More from kwy404](#more-from-kwy404)
+- [Author](#author)
 - [License](#license)
 
 ## Install
@@ -376,7 +378,7 @@ Facts checked against the npm registry and each library's behavior in October 20
 
 | | `parseFloat` / `Number` | numeral.js | @internationalized/number | numberparrot |
 | --- | --- | --- | --- | --- |
-| Latest release | built in | 2.0.6 (March 2017) | 3.6.9 (October 2026) | 0.1.0 |
+| Latest release | built in | 2.0.6 (March 2017) | 3.6.9 (October 2026) | 1.0.0 |
 | Runtime dependencies | none | none | 1 (`@swc/helpers`) | none |
 | License | built in | MIT | Apache-2.0 | MIT |
 | Locale data | none | `en` built in, others registered by hand | `Intl` | `Intl` |
@@ -398,9 +400,10 @@ Facts checked against the npm registry and each library's behavior in October 20
 
 ## Documentation
 
-The full guide and an interactive playground live at **[kwy404.github.io/numberparrot](https://kwy404.github.io/numberparrot/)**:
+The guides, the API reference and the interactive world board live at **[kwy404.github.io/numberparrot](https://kwy404.github.io/numberparrot/)**:
 
-- [Playground: parseFloat vs numberparrot in any locale](https://kwy404.github.io/numberparrot/)
+- [World board: one number written and parsed in 39 locales](https://kwy404.github.io/numberparrot/)
+- [API reference](https://kwy404.github.io/numberparrot/api.html)
 - [Convert a string with a comma to a number in JavaScript](https://kwy404.github.io/numberparrot/convert-string-with-comma-to-number-javascript.html)
 - [parseFloat with a comma decimal separator](https://kwy404.github.io/numberparrot/parsefloat-comma-decimal-separator.html)
 - [Parse a localized number in JavaScript](https://kwy404.github.io/numberparrot/parse-localized-number-javascript.html)
@@ -415,11 +418,16 @@ Issues and pull requests are welcome. See [CONTRIBUTING.md](https://github.com/k
 
 ## More from kwy404
 
+- [Monsoon](https://kwy404.github.io/monsoon/): utility-first CSS with no build step
+- [Voodoo.js](https://kwy404.github.io/Voodoo.js/): reactive HTML with no build step
+- [breakhound](https://kwy404.github.io/breakhound/)
+- [vueleap](https://kwy404.github.io/vueleap/)
 - [graphemely](https://kwy404.github.io/graphemely/)
 - [edgegoat](https://kwy404.github.io/edgegoat/)
-- [vueleap](https://kwy404.github.io/vueleap/)
-- [breakhound](https://github.com/kwy404/breakhound)
-- [Voodoo.js](https://github.com/kwy404/Voodoo.js)
+
+## Author
+
+Made by Alexandre Kohler ([GitHub](https://github.com/kwy404), [LinkedIn](https://www.linkedin.com/in/alexandre-silva-173687256/)). The documentation site is [built with Monsoon](https://kwy404.github.io/monsoon/), and its interactive parts are built with [Voodoo.js](https://kwy404.github.io/Voodoo.js/).
 
 ## License
 

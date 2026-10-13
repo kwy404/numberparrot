@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" class="np-stamp" viewBox="0 0 120 120" width="120" height="120" aria-hidden="true">
+  <defs><path id="inr-t" d="M11 60a49 37 0 0 1 98 0" fill="none"/><path id="inr-b" d="M8 60a52 40 0 0 0 104 0" fill="none"/></defs>
+  <g transform="rotate(-4 60 60)" opacity=".92">
+  <ellipse cx="60" cy="60" rx="56" ry="44" fill="none" stroke="#E5484D" stroke-width="3.2"/><ellipse cx="60" cy="60" rx="42" ry="30" fill="none" stroke="#E5484D" stroke-width="1.6"/>
+  <text font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="8.5" font-weight="800" letter-spacing="1.6" fill="#E5484D"><textPath href="#inr-t" startOffset="50%" text-anchor="middle">BHARAT</textPath></text>
+  <text font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="7.5" font-weight="700" letter-spacing="1.2" fill="#E5484D"><textPath href="#inr-b" startOffset="50%" text-anchor="middle" side="left">BOM · DEL</textPath></text>
+  <text x="60" y="64" text-anchor="middle" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="44" font-weight="800" fill="#E5484D">₹</text>
+  <text x="60" y="80" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="7" font-weight="700" letter-spacing=".8" fill="#E5484D">13 OCT 2026</text>
+  </g>
+</svg>

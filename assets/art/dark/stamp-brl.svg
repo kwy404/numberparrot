@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" class="np-stamp" viewBox="0 0 120 120" width="120" height="120" aria-hidden="true">
+  <defs><path id="brl-t" d="M17 60a43 43 0 0 1 86 0" fill="none"/><path id="brl-b" d="M14 60a46 46 0 0 0 92 0" fill="none"/></defs>
+  <g transform="rotate(-8 60 60)" opacity=".92">
+  <circle cx="60" cy="60" r="52" fill="none" stroke="#4ADE90" stroke-width="3.2"/><circle cx="60" cy="60" r="37" fill="none" stroke="#4ADE90" stroke-width="1.6"/>
+  <text font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="8.5" font-weight="800" letter-spacing="1.6" fill="#4ADE90"><textPath href="#brl-t" startOffset="50%" text-anchor="middle">BRASIL</textPath></text>
+  <text font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="7.5" font-weight="700" letter-spacing="1.2" fill="#4ADE90"><textPath href="#brl-b" startOffset="50%" text-anchor="middle" side="left">GRU · SÃO PAULO</textPath></text>
+  <text x="60" y="64" text-anchor="middle" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="34" font-weight="800" fill="#4ADE90">R$</text>
+  <text x="60" y="80" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="7" font-weight="700" letter-spacing=".8" fill="#4ADE90">13 OCT 2026</text>
+  </g>
+</svg>

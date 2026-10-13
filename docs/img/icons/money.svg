@@ -1,7 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64" role="img" aria-label="Money safety icon">
-  <title>Money safety</title>
-  <rect width="64" height="64" rx="16" fill="#FFF4D6"/>
-  <path d="M32 12 L48 18 V30 C48 42 40 49 32 52 C24 49 16 42 16 30 V18 Z" fill="#FFC83D"/>
-    <path d="M32 12 L48 18 V30 C48 42 40 49 32 52 C24 49 16 42 16 30 V18 Z" fill="none" stroke="#1D2B3A" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-    <path d="M25 31 L30 36 L40 26" fill="none" stroke="#1D2B3A" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-</svg>
