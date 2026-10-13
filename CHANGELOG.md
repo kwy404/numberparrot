@@ -6,6 +6,12 @@ All notable changes to this project are documented here. The format follows
 
 ## [Unreleased]
 
+## [1.0.0] - 2026-10-13
+
+### Changed
+
+- First stable release. The public API is now covered by semantic versioning: breaking changes only in a new major version.
+
 ## [0.1.2] - 2026-10-12
 
 ### Changed
@@ -44,7 +50,8 @@ All notable changes to this project are documented here. The format follows
   built with Voodoo.js and code examples are highlighted at build time with Shiki.
 - Mascot Pico and project artwork.
 
-[Unreleased]: https://github.com/kwy404/numberparrot/compare/v0.1.2...HEAD
+[Unreleased]: https://github.com/kwy404/numberparrot/compare/v1.0.0...HEAD
+[1.0.0]: https://github.com/kwy404/numberparrot/compare/v0.1.2...v1.0.0
 [0.1.2]: https://github.com/kwy404/numberparrot/compare/v0.1.1...v0.1.2
 [0.1.1]: https://github.com/kwy404/numberparrot/compare/v0.1.0...v0.1.1
 [0.1.0]: https://github.com/kwy404/numberparrot/releases/tag/v0.1.0
