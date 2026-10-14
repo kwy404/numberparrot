@@ -420,10 +420,15 @@ Issues and pull requests are welcome. See [CONTRIBUTING.md](https://github.com/k
 
 - [Monsoon](https://kwy404.github.io/monsoon/): utility-first CSS with no build step
 - [Voodoo.js](https://kwy404.github.io/Voodoo.js/): reactive HTML with no build step
-- [breakhound](https://kwy404.github.io/breakhound/)
-- [vueleap](https://kwy404.github.io/vueleap/)
-- [graphemely](https://kwy404.github.io/graphemely/)
-- [edgegoat](https://kwy404.github.io/edgegoat/)
+- [breakhound](https://kwy404.github.io/breakhound/): find bugs in any JavaScript library automatically, no tests required
+- [vueleap](https://kwy404.github.io/vueleap/): migrate Vue 2 to Vue 3 with one command
+- [graphemely](https://kwy404.github.io/graphemely/): truncate, slice and count strings with emoji safely
+- [edgegoat](https://kwy404.github.io/edgegoat/): edge case test inputs for time zones, DST, unicode and numbers
+- [cookieowl](https://kwy404.github.io/cookieowl/): free cookie consent banner for LGPD and GDPR that really blocks trackers
+- [installkite](https://kwy404.github.io/installkite/): make any website installable and offline capable
+- [a11ymedic](https://kwy404.github.io/a11ymedic/): the accessibility checker that explains every problem and gives the exact fix
+- [fontsketch](https://kwy404.github.io/fontsketch/): turn your handwriting into a font, free in your browser
+- [kastor](https://kwy404.github.io/kastor/): the TypeScript ORM for almost every database
 
 ## Author
 

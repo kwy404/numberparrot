@@ -40,6 +40,11 @@ const MORE = [
   ["vueleap", "https://kwy404.github.io/vueleap/"],
   ["graphemely", "https://kwy404.github.io/graphemely/"],
   ["edgegoat", "https://kwy404.github.io/edgegoat/"],
+  ["cookieowl", "https://kwy404.github.io/cookieowl/"],
+  ["installkite", "https://kwy404.github.io/installkite/"],
+  ["a11ymedic", "https://kwy404.github.io/a11ymedic/"],
+  ["fontsketch", "https://kwy404.github.io/fontsketch/"],
+  ["kastor", "https://kwy404.github.io/kastor/"],
 ];
 
 // Per guide extras: route shown on its ticket, the stamp and the postcard art.

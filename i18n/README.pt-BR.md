@@ -254,6 +254,20 @@ Node.js 18 ou mais novo, Deno, Bun e navegadores modernos. O pacote inteiro tem 
 - [Intl.NumberFormat parse](https://kwy404.github.io/numberparrot/intl-numberformat-parse.html)
 - [numeral.js alternative](https://kwy404.github.io/numberparrot/numeral-js-alternative.html)
 
+## Mais de kwy404
+
+- [Monsoon](https://kwy404.github.io/monsoon/): CSS utility-first sem etapa de build
+- [Voodoo.js](https://kwy404.github.io/Voodoo.js/): HTML reativo sem etapa de build
+- [breakhound](https://kwy404.github.io/breakhound/): encontre bugs em qualquer biblioteca JavaScript automaticamente, sem escrever testes
+- [vueleap](https://kwy404.github.io/vueleap/): migre de Vue 2 para Vue 3 com um comando
+- [graphemely](https://kwy404.github.io/graphemely/): truncar, fatiar e contar strings com emoji com segurança
+- [edgegoat](https://kwy404.github.io/edgegoat/): entradas de teste para casos extremos de fuso horário, horário de verão, unicode e números
+- [cookieowl](https://kwy404.github.io/cookieowl/): banner de cookies gratuito para LGPD e GDPR que bloqueia rastreadores de verdade
+- [installkite](https://kwy404.github.io/installkite/): torne qualquer site instalável e com funcionamento offline
+- [a11ymedic](https://kwy404.github.io/a11ymedic/): verificador de acessibilidade que explica cada problema e entrega a correção exata
+- [fontsketch](https://kwy404.github.io/fontsketch/): crie uma fonte com a sua letra, grátis e no navegador
+- [kastor](https://kwy404.github.io/kastor/): o ORM para TypeScript para quase todos os bancos de dados
+
 ## Licença
 
 [MIT](https://github.com/kwy404/numberparrot/blob/main/LICENSE) © 2026 Alexandre Kohler.
