@@ -55,7 +55,6 @@ const ROUTES = {
   "parse-currency-string-javascript.html": { from: "R$ 10,00", to: "10 BRL", stamp: "usd", place: "NEW YORK", icon: "coins" },
   "arabic-digits-to-number-javascript.html": { from: "١٢٣٫٤", to: "123.4", stamp: "egp", place: "CAIRO", icon: "digits" },
   "intl-numberformat-parse.html": { from: "format()", to: "parse()", stamp: "jpy", place: "TOKYO", icon: "compass" },
-  "numeral-js-alternative.html": { from: "numeral", to: "parse", stamp: "gbp", place: "LONDON", icon: "suitcase" },
 };
 
 const API_PAGE = {
@@ -808,7 +807,7 @@ const indexJsonld = {
       version: VERSION,
       image: SITE + "og.png",
       keywords:
-        "parse localized number javascript, convert string with comma to number javascript, parse currency string to number javascript, parseFloat comma decimal, intl number parse, numeral.js alternative",
+        "parse localized number javascript, convert string with comma to number javascript, parse currency string to number javascript, parseFloat comma decimal, intl number parse",
     },
     { "@type": "WebSite", name: "numberparrot", url: SITE, inLanguage: "en", author: AUTHOR },
     {

@@ -252,7 +252,6 @@ Node.js 18 ou mais novo, Deno, Bun e navegadores modernos. O pacote inteiro tem 
 - [Parse a currency string to a number in JavaScript](https://kwy404.github.io/numberparrot/parse-currency-string-javascript.html)
 - [Convert Arabic and Persian digits to numbers](https://kwy404.github.io/numberparrot/arabic-digits-to-number-javascript.html)
 - [Intl.NumberFormat parse](https://kwy404.github.io/numberparrot/intl-numberformat-parse.html)
-- [numeral.js alternative](https://kwy404.github.io/numberparrot/numeral-js-alternative.html)
 
 ## Mais de kwy404
 

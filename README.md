@@ -410,7 +410,6 @@ The guides, the API reference and the interactive world board live at **[kwy404.
 - [Parse a currency string to a number in JavaScript](https://kwy404.github.io/numberparrot/parse-currency-string-javascript.html)
 - [Convert Arabic and Persian digits to numbers in JavaScript](https://kwy404.github.io/numberparrot/arabic-digits-to-number-javascript.html)
 - [Intl.NumberFormat parse: the missing reverse of format](https://kwy404.github.io/numberparrot/intl-numberformat-parse.html)
-- [A maintained numeral.js alternative for parsing](https://kwy404.github.io/numberparrot/numeral-js-alternative.html)
 
 ## Contributing
 
