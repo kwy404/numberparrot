@@ -1,6 +1,6 @@
 {
   "name": "numberparrot",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Parse numbers and currency strings written in any locale back into JavaScript numbers.",
   "keywords": [
     "number",

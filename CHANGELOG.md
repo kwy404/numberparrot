@@ -6,6 +6,8 @@ All notable changes to this project are documented here. The format follows
 
 ## [Unreleased]
 
+## [1.1.0] - 2026-10-16
+
 ### Added
 
 - `parseColumn(values, candidates?)` reads a whole column written in one unknown format, such as a CSV column or a pasted spreadsheet range. Unambiguous cells decide the decimal separator for the ambiguous ones, every cell is read with one locale, and cells that do not fit are listed in `invalid`.
@@ -55,7 +57,8 @@ All notable changes to this project are documented here. The format follows
   built with Voodoo.js and code examples are highlighted at build time with Shiki.
 - Mascot Pico and project artwork.
 
-[Unreleased]: https://github.com/kwy404/numberparrot/compare/v1.0.0...HEAD
+[Unreleased]: https://github.com/kwy404/numberparrot/compare/v1.1.0...HEAD
+[1.1.0]: https://github.com/kwy404/numberparrot/compare/v1.0.0...v1.1.0
 [1.0.0]: https://github.com/kwy404/numberparrot/compare/v0.1.2...v1.0.0
 [0.1.2]: https://github.com/kwy404/numberparrot/compare/v0.1.1...v0.1.2
 [0.1.1]: https://github.com/kwy404/numberparrot/compare/v0.1.0...v0.1.1
