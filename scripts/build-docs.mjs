@@ -28,7 +28,7 @@ const AUTHOR = {
   sameAs: ["https://github.com/kwy404", "https://www.linkedin.com/in/alexandre-silva-173687256/"],
 };
 const PUBLISHED = "2026-10-12";
-const MODIFIED = "2026-10-13";
+const MODIFIED = "2026-10-15";
 const MONSOON_CSS = "https://cdn.jsdelivr.net/npm/monsooncss@0.2.0/dist/monsoon.min.css";
 const VOODOO = "https://cdn.jsdelivr.net/npm/voodoojs@1.0.0/dist/voodoo.full.min.js";
 const FONTS = "https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700;800&family=Space+Grotesk:wght@500;600;700&display=swap";
@@ -49,20 +49,17 @@ const MORE = [
 
 // Per guide extras: route shown on its ticket, the stamp and the postcard art.
 const ROUTES = {
-  "convert-string-with-comma-to-number-javascript.html": { from: "1.234,56", to: "1234.56", stamp: "brl", place: "SÃO PAULO", icon: "ticket" },
   "parsefloat-comma-decimal-separator.html": { from: "1,5", to: "1.5", stamp: "eur", place: "BERLIN", icon: "detect" },
   "parse-localized-number-javascript.html": { from: "1 234,56", to: "1234.56", stamp: "chf", place: "ZÜRICH", icon: "globe" },
   "parse-currency-string-javascript.html": { from: "R$ 10,00", to: "10 BRL", stamp: "usd", place: "NEW YORK", icon: "coins" },
   "arabic-digits-to-number-javascript.html": { from: "١٢٣٫٤", to: "123.4", stamp: "egp", place: "CAIRO", icon: "digits" },
-  "intl-numberformat-parse.html": { from: "format()", to: "parse()", stamp: "jpy", place: "TOKYO", icon: "compass" },
 };
 
 const API_PAGE = {
   file: "api.html",
   nav: "API reference",
-  title: "numberparrot API Reference: parse, parseCurrency, detect and More",
-  description:
-    "Every numberparrot function with options, return values, error codes and examples: parse, parseCurrency, detect, isValid, createParser, normalizeInput and getLocaleInfo.",
+  title: "API reference",
+  description: "Every numberparrot function with its options, return values, error codes and examples.",
   summary: "Every function, option and error code.",
 };
 
@@ -358,7 +355,7 @@ ${rail(toc)}
       <p class="np-eyebrow">${icon(kicker === "Reference" ? "book" : "postcard", "np-icon")}${kicker}</p>
       <h1>${esc(h1)}</h1>
       <p class="np-lead">${lead}</p>
-      <p class="np-meta"><span>${icon("clock", "np-icon")}${minutes} min read</span><span>${icon("check", "np-icon")}Updated <time datetime="${MODIFIED}">October 13, 2026</time></span><span>${icon("code", "np-icon")}numberparrot ${VERSION}</span></p>
+      <p class="np-meta"><span>${icon("clock", "np-icon")}${minutes} min read</span><span>${icon("check", "np-icon")}Updated <time datetime="${MODIFIED}">October 15, 2026</time></span><span>${icon("code", "np-icon")}numberparrot ${VERSION}</span></p>
     </div>
     <div class="np-doc-art" aria-hidden="true">${art}</div>
   </header>
@@ -443,8 +440,10 @@ ${code(fn.example, "ts", `${fn.name}.ts`)}`,
 <p>All functions take an optional <code>locale</code>: a BCP 47 tag (<code>"pt-BR"</code>), a list of tags, or nothing for the runtime default. Locale data is read from <code>Intl.NumberFormat#formatToParts()</code> once and cached. Pick a locale in the panel next to this page to see what it uses.</p>
 ${code(`import {
   parse,
+  tryParse,
   parseCurrency,
   detect,
+  parseColumn,
   isValid,
   createParser,
   normalizeInput,
@@ -462,7 +461,7 @@ ${localeRows}
 <h2>Runtime support</h2>
 <ul>
 <li>Node.js 18 and newer, Deno, Bun and all modern browsers. Requires <code>Intl.NumberFormat</code> with <code>formatToParts</code> and full ICU locale data, which Node ships by default since version 13.</li>
-<li>The whole library is about 6.1 kB gzipped. Importing only <code>parse</code> costs about 3.6 kB.</li>
+<li>The whole library is about 6.9 kB gzipped. Importing only <code>parse</code> costs about 3.6 kB.</li>
 <li>ESM (<code>dist/index.js</code>), CommonJS (<code>dist/index.cjs</code>) and type definitions for both.</li>
 </ul>
 <h2>Install</h2>
@@ -500,7 +499,7 @@ ${ticketGrid("api.html", true)}`;
     file: API_PAGE.file,
     title: API_PAGE.title,
     h1: "API reference",
-    lead: "Seven functions and one error class. Every one takes the locale as an argument, so data from Berlin, Mumbai and Cairo can sit side by side.",
+    lead: "Nine functions and one error class. Every one takes the locale as an argument, so data from Berlin, Mumbai and Cairo can sit side by side.",
     kicker: "Reference",
     art: `<div class="np-stamp-pile">${stamp("eur", undefined, { id: "api-s1", size: 128 })}${stamp("inr", undefined, { id: "api-s2", size: 112 })}${stamp("brl", undefined, { id: "api-s3", size: 104 })}</div>`,
     content: html,
@@ -619,24 +618,24 @@ ${code(fn.example, "ts", `${fn.name}.ts`)}
 
 const FAQ = [
   [
-    "How do I convert a string with a comma to a number in JavaScript?",
-    'Call <code>parse(text, locale)</code> with the locale the number was written in: <code>parse("1.234,56", "pt-BR")</code> is <code>1234.56</code> and <code>parse("1,5", "de-DE")</code> is <code>1.5</code>. Swapping commas for dots breaks as soon as a number has a group separator.',
+    "Why not swap the comma for a dot?",
+    'Because the meaning of <code>.</code> and <code>,</code> depends on who wrote the number. Swapping fixes <code>"1,5"</code> and breaks <code>"1.234,56"</code> and <code>"1,234"</code>. <code>parse(text, locale)</code> reads the separators of that locale from <code>Intl.NumberFormat</code> instead.',
   ],
   [
-    "Why does parseFloat return the wrong number?",
-    '<code>parseFloat</code> reads characters while they look like an English number and silently stops at the first one that does not, so <code>parseFloat("1.234,56")</code> is <code>1.234</code>. A wrong number passes every <code>isNaN</code> check, which makes it worse than an error.',
+    "What does parseFloat do with 1.234,56?",
+    'It reads characters while they look like an English number and stops at the first one that does not, so <code>parseFloat("1.234,56")</code> is <code>1.234</code>. A wrong number passes every <code>isNaN</code> check, which makes it worse than an error.',
   ],
   [
-    "How do I parse a currency string like R$ 1.234,56?",
-    '<code>parseCurrency("R$ 1.234,56", "pt-BR")</code> returns the amount <code>1234.56</code> and the currency <code>"BRL"</code>. Add <code>toMinorUnits: true</code> to get exact integer cents for money.',
+    "How do I get the currency of a price?",
+    '<code>parseCurrency("R$ 1.234,56", "pt-BR")</code> returns the amount <code>1234.56</code> and the code <code>"BRL"</code>. Add <code>toMinorUnits: true</code> to get exact integer cents.',
   ],
   [
-    "What if I do not know the locale of a number?",
-    '<code>detect(text)</code> works out the decimal separator from the string itself and tells you when it cannot be sure: <code>detect("1,234")</code> is ambiguous, with the readings <code>1234</code> and <code>1.234</code>. Switch the world board to Detect mode to see it live.',
+    "What if I do not know the locale?",
+    'Paste it in the box at the top of this page. For one value, <code>detect(text)</code> works out the decimal separator and says when it cannot be sure. For a column, <code>parseColumn(values)</code> lets the clear cells decide for the unclear ones.',
   ],
   [
-    "Does numberparrot work in the browser, Node.js, Deno and Bun?",
-    "Yes. It has zero dependencies, ships ESM, CommonJS and TypeScript types, and is about 6.1 kB gzipped. It needs <code>Intl.NumberFormat</code> with full locale data, which every modern browser and Node.js 13 or newer provide.",
+    "Where does it run?",
+    "Node.js 18 and newer, Deno, Bun and modern browsers. It has zero dependencies, ships ESM, CommonJS and TypeScript types, and is about 6.9 kB gzipped.",
   ],
 ];
 
@@ -744,7 +743,7 @@ ${usesHtml}
   <div class="container">
     <div class="np-section-head">
       <p class="np-eyebrow">${icon("code", "np-icon")}API</p>
-      <h2 id="api-title">Seven functions, one passport each</h2>
+      <h2 id="api-title">Nine functions, one passport each</h2>
       <p>Every function takes the locale as an argument, so data from Berlin, Mumbai and Cairo can sit side by side. No global state, nothing to register.</p>
     </div>
     <div class="np-api">
@@ -758,7 +757,7 @@ ${apiPanels}
     <div class="np-install-row">
       <div>
         <h3>Install</h3>
-        <p>Node.js 18+, Deno, Bun and every modern browser. ESM, CommonJS and TypeScript types, about 6.1 kB gzipped.</p>
+        <p>Node.js 18+, Deno, Bun and every modern browser. ESM, CommonJS and TypeScript types, about 6.9 kB gzipped.</p>
       </div>
       ${installTabs()}
     </div>
@@ -770,7 +769,7 @@ ${apiPanels}
     <div class="np-section-head">
       <p class="np-eyebrow">${icon("ticket", "np-icon")}Guides</p>
       <h2 id="guides-title">Boarding passes for the usual trouble</h2>
-      <p>Short guides for the questions people search for, each with the broken approach, why it breaks and the fix.</p>
+      <p>Four short guides. Each one shows the usual approach, why it breaks and what to do instead.</p>
     </div>
 ${ticketGrid(null)}
   </div>
@@ -796,8 +795,7 @@ const indexJsonld = {
     {
       "@type": "SoftwareSourceCode",
       name: "numberparrot",
-      description:
-        "Parse localized number and currency strings into JavaScript numbers for any locale, using Intl.NumberFormat data. Zero dependencies.",
+      description: "Reads numbers and prices written in any locale back into JavaScript numbers.",
       url: SITE,
       codeRepository: REPO,
       programmingLanguage: ["TypeScript", "JavaScript"],
@@ -806,8 +804,6 @@ const indexJsonld = {
       author: AUTHOR,
       version: VERSION,
       image: SITE + "og.png",
-      keywords:
-        "parse localized number javascript, convert string with comma to number javascript, parse currency string to number javascript, parseFloat comma decimal, intl number parse",
     },
     { "@type": "WebSite", name: "numberparrot", url: SITE, inLanguage: "en", author: AUTHOR },
     {
@@ -821,8 +817,7 @@ writeFileSync(
   layout({
     file: "index.html",
     title: "numberparrot: parse localized numbers and currency strings in JavaScript",
-    description:
-      'parseFloat("1.234,56") returns 1.234. numberparrot returns 1234.56. Parse numbers and currency strings written in any locale, with Intl data and zero dependencies.',
+    description: "A small JavaScript library that reads numbers and prices written in any locale, using the Intl data of the runtime.",
     body: indexBody,
     jsonld: indexJsonld,
     ogType: "website",

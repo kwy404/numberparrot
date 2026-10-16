@@ -30,6 +30,22 @@ ${opt([
 <p>Besides the locale's own format, the default lenient mode accepts any whitespace (including U+00A0 and U+202F) or apostrophe as a group separator, the other one of <code>.</code> and <code>,</code> as a group separator, a leading (<code>.5</code>) or trailing (<code>5.</code>) decimal separator, signs and currency on either side, exponents (<code>E</code>, <code>e</code>, <code>×10^</code>), <code>∞</code>, and digits in any script.</p>`,
   },
   {
+    id: "try-parse",
+    name: "tryParse",
+    signature: "tryParse(input, locale?, options?): ParseResult",
+    summary: "Like parse, but says why a value was rejected. Never throws.",
+    example: `import { tryParse } from "numberparrot";
+
+tryParse("1.234,56", "pt-BR");
+// { ok: true, value: 1234.56, code: null, message: null }
+
+tryParse("1,23", "en-US");
+// { ok: false, value: NaN, code: "INVALID_GROUPING",
+//   message: "Group separators are in the wrong places" }`,
+    body: () => `
+<p>Takes the same arguments and options as <code>parse</code> and returns <code>{ ok, value, code, message }</code>. When <code>ok</code> is false, <code>value</code> is <code>NaN</code> and <code>code</code> and <code>message</code> are the ones <code>NumberParseError</code> would carry, so a form can show a precise message without strict mode or <code>try</code>.</p>`,
+  },
+  {
     id: "parse-currency",
     name: "parseCurrency",
     signature: "parseCurrency(input, locale?, options?): CurrencyResult",
@@ -87,6 +103,33 @@ detect("1,234");
 <p>Switch the world board on the <a href="./#board">home page</a> to Detect mode to see every reading of a string across 39 locales.</p>`,
   },
   {
+    id: "parse-column",
+    name: "parseColumn",
+    signature: "parseColumn(values, candidates?): ColumnResult",
+    summary: "Read a whole column in one unknown format. Clear cells decide for unclear ones.",
+    example: `import { parseColumn } from "numberparrot";
+
+parseColumn(["1,234", "12,5", "1.000,00"]);
+// { values: [1.234, 12.5, 1000], locale: "pt-BR", decimal: ",",
+//   ambiguous: false, confidence: 0.93, invalid: [], reason: ... }
+
+parseColumn(["1,5", "2,25", "3.75"]).invalid; // [2]: the odd one out`,
+    body: () => `
+<p>A single <code>"1,234"</code> is ambiguous, but a column rarely is. <code>parseColumn</code> runs <code>detect</code> on every cell, lets the unambiguous cells vote for the decimal separator, picks the first candidate locale that writes it and reads every cell with that one locale. <code>candidates</code> works as in <code>detect</code>.</p>
+<div class="table-wrap"><table>
+<thead><tr><th>Field</th><th>Type</th><th>Description</th></tr></thead>
+<tbody>
+<tr><td><code>values</code></td><td><code>number[]</code></td><td>One number per cell. Blank cells and cells that do not fit are <code>NaN</code>.</td></tr>
+<tr><td><code>locale</code></td><td><code>string | null</code></td><td>The candidate used for every cell, <code>null</code> when no cell is a number.</td></tr>
+<tr><td><code>decimal</code></td><td><code>string | null</code></td><td>The decimal separator chosen for the column.</td></tr>
+<tr><td><code>ambiguous</code></td><td><code>boolean</code></td><td>True when no cell settles the format and the candidate order decided.</td></tr>
+<tr><td><code>confidence</code></td><td><code>number</code></td><td>0 to 1. Lower when cells disagree or do not fit.</td></tr>
+<tr><td><code>reason</code></td><td><code>string</code></td><td>Short English explanation naming the deciding cell.</td></tr>
+<tr><td><code>invalid</code></td><td><code>number[]</code></td><td>Indexes of non blank cells that are not numbers in the chosen format.</td></tr>
+</tbody></table></div>
+<p>Paste a column into the box at the top of the <a href="./">home page</a> to try it.</p>`,
+  },
+  {
     id: "is-valid",
     name: "isValid",
     signature: "isValid(input, locale?, options?): boolean",
@@ -110,7 +153,7 @@ const brl = createParser("pt-BR");
 ["1.234,56", "R$ 10,00", "(5,25)"].map(brl.parse); // [1234.56, 10, -5.25]
 brl.info.decimal; // ","`,
     body: () => `
-<p>Resolves the locale once and returns <code>{ info, parse, isValid, parseCurrency, normalizeInput }</code> bound to it. The fastest way to parse many values, for example every row of a CSV file.</p>`,
+<p>Resolves the locale once and returns <code>{ info, parse, tryParse, isValid, parseCurrency, normalizeInput }</code> bound to it. The fastest way to parse many values, for example every row of a CSV file.</p>`,
   },
   {
     id: "normalize-input",

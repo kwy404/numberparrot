@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>https://kwy404.github.io/numberparrot/</loc><lastmod>2026-10-13</lastmod></url>
-  <url><loc>https://kwy404.github.io/numberparrot/api.html</loc><lastmod>2026-10-13</lastmod></url>
-  <url><loc>https://kwy404.github.io/numberparrot/convert-string-with-comma-to-number-javascript.html</loc><lastmod>2026-10-13</lastmod></url>
-  <url><loc>https://kwy404.github.io/numberparrot/parsefloat-comma-decimal-separator.html</loc><lastmod>2026-10-13</lastmod></url>
-  <url><loc>https://kwy404.github.io/numberparrot/parse-localized-number-javascript.html</loc><lastmod>2026-10-13</lastmod></url>
-  <url><loc>https://kwy404.github.io/numberparrot/parse-currency-string-javascript.html</loc><lastmod>2026-10-13</lastmod></url>
-  <url><loc>https://kwy404.github.io/numberparrot/arabic-digits-to-number-javascript.html</loc><lastmod>2026-10-13</lastmod></url>
-  <url><loc>https://kwy404.github.io/numberparrot/intl-numberformat-parse.html</loc><lastmod>2026-10-13</lastmod></url>
+  <url><loc>https://kwy404.github.io/numberparrot/</loc><lastmod>2026-10-15</lastmod></url>
+  <url><loc>https://kwy404.github.io/numberparrot/api.html</loc><lastmod>2026-10-15</lastmod></url>
+  <url><loc>https://kwy404.github.io/numberparrot/parsefloat-comma-decimal-separator.html</loc><lastmod>2026-10-15</lastmod></url>
+  <url><loc>https://kwy404.github.io/numberparrot/parse-localized-number-javascript.html</loc><lastmod>2026-10-15</lastmod></url>
+  <url><loc>https://kwy404.github.io/numberparrot/parse-currency-string-javascript.html</loc><lastmod>2026-10-15</lastmod></url>
+  <url><loc>https://kwy404.github.io/numberparrot/arabic-digits-to-number-javascript.html</loc><lastmod>2026-10-15</lastmod></url>
 </urlset>

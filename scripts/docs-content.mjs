@@ -10,69 +10,11 @@ export const code = (text, lang = "ts", title = lang === "sh" ? "Terminal" : `ex
 
 export const GUIDES = [
   {
-    file: "convert-string-with-comma-to-number-javascript.html",
-    nav: "Comma to number",
-    title: "Convert a String with a Comma to a Number in JavaScript",
-    description:
-      'How to convert "1,5" or "1.234,56" to a number in JavaScript. Why replace(",", ".") and parseFloat fail, and a locale aware fix that works in every locale.',
-    summary: 'Turn "1.234,56" into 1234.56 without replace() hacks.',
-    body: () => `
-<p class="lead">Half the world writes decimals with a comma. JavaScript only understands a dot. Here is why the usual fixes break and how to convert comma strings reliably.</p>
-
-<h2>The problem</h2>
-<p>A user in Brazil, Germany or France types <code>1.234,56</code>. JavaScript reads it like this:</p>
-${code(`parseFloat("1.234,56"); // 1.234   (stops at the second ".")
-Number("1.234,56");     // NaN
-parseFloat("1,5");      // 1       (stops at the ",")`)}
-
-<h2>Why replace(",", ".") is not enough</h2>
-<p>The most common answer online is to swap the comma for a dot. It works for <code>"1,5"</code> and breaks for everything else:</p>
-<div class="table-wrap"><table>
-<thead><tr><th>Input</th><th>Meaning</th><th><code>Number(s.replace(",", "."))</code></th></tr></thead>
-<tbody>
-<tr><td><code>1,5</code></td><td>1.5 (de-DE)</td><td class="good">1.5</td></tr>
-<tr><td><code>1.234,56</code></td><td>1234.56 (pt-BR)</td><td class="bad">NaN</td></tr>
-<tr><td><code>1,234</code></td><td>1234 (en-US)</td><td class="bad">1.234</td></tr>
-<tr><td><code>1 234,56</code></td><td>1234.56 (fr-FR)</td><td class="bad">NaN</td></tr>
-<tr><td><code>R$ 10,00</code></td><td>10 (pt-BR)</td><td class="bad">NaN</td></tr>
-</tbody></table></div>
-<p>Removing every dot first (<code>s.replace(/\\./g, "").replace(",", ".")</code>) fixes Brazilian input and silently corrupts English input, where the dot is the decimal separator. There is no character swap that is right for every locale, because the meaning of <code>.</code> and <code>,</code> depends on who wrote the number.</p>
-
-<h2>The fix: parse with the locale</h2>
-<p>numberparrot reads the decimal and group separators for the locale from <code>Intl.NumberFormat</code>, so it parses exactly what the locale writes, and returns <code>NaN</code> for anything else instead of guessing:</p>
-${code(`import { parse } from "numberparrot";
-
-parse("1,5", "de-DE");        // 1.5
-parse("1.234,56", "pt-BR");   // 1234.56
-parse("1 234,56", "fr-FR");   // 1234.56 (any kind of space)
-parse("R$ 10,00", "pt-BR");   // 10
-parse("1,234", "en-US");      // 1234
-parse("1.234,56", "en-US");   // NaN, not an en-US number`)}
-
-<h2>When you do not know the locale</h2>
-<p>For CSV files or pasted values, <code>detect()</code> works out the decimal separator from the string itself and tells you when it cannot be sure:</p>
-${code(`import { detect } from "numberparrot";
-
-detect("1.234,56").value;  // 1234.56, confidence 0.95
-detect("1,5").value;       // 1.5
-detect("1,234");           // ambiguous: true, alternatives [1234, 1.234]`)}
-
-<h2>In a form field</h2>
-${code(`import { createParser } from "numberparrot";
-
-const brl = createParser(navigator.language); // for example "pt-BR"
-input.addEventListener("change", () => {
-  const value = brl.parse(input.value);
-  input.setCustomValidity(Number.isNaN(value) ? "Please enter a number" : "");
-});`)}
-`,
-  },
-  {
     file: "parsefloat-comma-decimal-separator.html",
     nav: "parseFloat and commas",
-    title: "parseFloat with a Comma Decimal Separator: Why It Returns the Wrong Number",
+    title: "Why parseFloat misreads comma decimals",
     description:
-      'parseFloat("1,5") returns 1 and parseFloat("1.234,56") returns 1.234. Learn why parseFloat ignores the comma decimal separator and how to parse it correctly.',
+      'What parseFloat and Number do with "1,5" and "1.234,56", why swapping characters does not fix it, and how to read a number with its locale.',
     summary: "Why parseFloat returns 1.234 for 1.234,56, and the fix.",
     body: () => `
 <p class="lead"><code>parseFloat</code> does not fail on numbers written with a comma decimal separator. It does something worse: it returns a wrong number.</p>
@@ -91,6 +33,20 @@ ${code(`Number("1,5");       // NaN
 Number("1.234,56");  // NaN
 Number("1 234");     // NaN`)}
 <p><code>Number</code> rejects the whole string, which is safer, but it still only understands one format: a dot as the decimal separator and no grouping at all.</p>
+
+<h2>Why replace(",", ".") is not enough</h2>
+<p>The most common answer online is to swap the comma for a dot. It works for <code>"1,5"</code> and breaks for everything else:</p>
+<div class="table-wrap"><table>
+<thead><tr><th>Input</th><th>Meaning</th><th><code>Number(s.replace(",", "."))</code></th></tr></thead>
+<tbody>
+<tr><td><code>1,5</code></td><td>1.5 (de-DE)</td><td class="good">1.5</td></tr>
+<tr><td><code>1.234,56</code></td><td>1234.56 (pt-BR)</td><td class="bad">NaN</td></tr>
+<tr><td><code>1,234</code></td><td>1234 (en-US)</td><td class="bad">1.234</td></tr>
+<tr><td><code>1 234,56</code></td><td>1234.56 (fr-FR)</td><td class="bad">NaN</td></tr>
+<tr><td><code>R$ 10,00</code></td><td>10 (pt-BR)</td><td class="bad">NaN</td></tr>
+</tbody></table></div>
+<p>Removing every dot first (<code>s.replace(/\\./g, "").replace(",", ".")</code>) fixes Brazilian input and silently corrupts English input, where the dot is the decimal separator. There is no character swap that is right for every locale, because the meaning of <code>.</code> and <code>,</code> depends on who wrote the number.</p>
+
 
 <h2>The fix</h2>
 <p>Parse with the locale the number was written in. numberparrot gets the separators from <code>Intl.NumberFormat</code> and validates the whole string:</p>
@@ -113,14 +69,34 @@ parse("1,23", "en-US", { strict: true }); // NumberParseError: INVALID_GROUPING`
 <tr><td><code>1 234,56</code></td><td>fr-FR</td><td class="bad">1</td><td class="bad">NaN</td><td class="good">1234.56</td></tr>
 <tr><td><code>-1.234,56</code></td><td>it-IT</td><td class="bad">-1.234</td><td class="bad">NaN</td><td class="good">-1234.56</td></tr>
 </tbody></table></div>
+
+<h2>When you do not know the locale</h2>
+<p>For a pasted value, <code>detect()</code> works out the decimal separator from the string itself and says when it cannot be sure. For a whole CSV column, <code>parseColumn()</code> lets the cells that are clear decide for the ones that are not:</p>
+${code(`import { detect, parseColumn } from "numberparrot";
+
+detect("1.234,56").value;  // 1234.56, confidence 0.95
+detect("1,234");           // ambiguous: true, alternatives [1234, 1.234]
+
+parseColumn(["1,234", "12,5", "1.000,00"]).values;
+// [1.234, 12.5, 1000]: "12,5" shows the comma is the decimal separator`)}
+
+<h2>In a form field</h2>
+<p><code>tryParse</code> never throws and says why a value was rejected, which is handy for validation messages:</p>
+${code(`import { createParser } from "numberparrot";
+
+const local = createParser(navigator.language); // for example "pt-BR"
+input.addEventListener("change", () => {
+  const result = local.tryParse(input.value);
+  input.setCustomValidity(result.ok ? "" : \`Not a number here: \${result.message}\`);
+});`)}
 `,
   },
   {
     file: "parse-localized-number-javascript.html",
-    nav: "Localized numbers",
-    title: "Parse a Localized Number in JavaScript (Any Locale, Using Intl)",
+    nav: "Reading Intl output",
+    title: "Reading numbers back from Intl.NumberFormat",
     description:
-      "Parse numbers formatted with Intl.NumberFormat or toLocaleString back into JavaScript numbers for any locale: narrow no-break spaces, apostrophes, Indian grouping and non-Latin digits.",
+      "Intl.NumberFormat writes numbers in any locale but cannot read them back. What makes that hard and how numberparrot does it with the same Intl data.",
     summary: "Read back what toLocaleString and Intl.NumberFormat write.",
     body: () => `
 <p class="lead"><code>toLocaleString()</code> and <code>Intl.NumberFormat</code> can write a number in any locale. Nothing built in can read it back.</p>
@@ -151,6 +127,16 @@ for (const locale of locales) {
 }`)}
 <p>The test suite runs this round trip for 17 locales and more than 80 values in decimal, scientific, percent, currency and accounting styles.</p>
 
+<h2>Round trip guarantee</h2>
+<p>For values printed with enough significant digits (17), parsing gives back exactly the same JavaScript number. The test suite checks this for 17 locales in decimal, scientific, percent, currency and accounting styles:</p>
+${code(`const nf = new Intl.NumberFormat("fr-FR", { maximumSignificantDigits: 17 });
+const value = 0.1 + 0.2;
+parse(nf.format(value), "fr-FR") === value; // true`)}
+
+<h2>Numbering systems and extensions</h2>
+${code(`parse(new Intl.NumberFormat("th-TH-u-nu-thai").format(1234.5), "th-TH-u-nu-thai"); // 1234.5
+parse(new Intl.NumberFormat("hi-IN-u-nu-deva").format(1234.5), "hi-IN-u-nu-deva"); // 1234.5`)}
+
 <h2>Look at the locale data</h2>
 ${code(`import { getLocaleInfo } from "numberparrot";
 
@@ -168,9 +154,9 @@ rows.map((row) => sv.parse(row.amount));`)}
   {
     file: "parse-currency-string-javascript.html",
     nav: "Currency strings",
-    title: "Parse a Currency String to a Number in JavaScript (R$, €, ₹, CHF)",
+    title: "Currency strings and exact cents",
     description:
-      'Convert currency strings like "R$ 1.234,56", "1 234,56 €" or "($1,234.56)" to numbers and ISO codes in JavaScript, with exact integer cents for money.',
+      'Getting the amount and the ISO code out of prices like "R$ 1.234,56" or "($1,234.56)", with integer minor units for money.',
     summary: "Amount and ISO code from R$ 1.234,56, € and ₹ strings.",
     body: () => `
 <p class="lead">Prices come with symbols, codes, spaces and parentheses. Here is how to get the amount and the currency out safely.</p>
@@ -212,10 +198,10 @@ ${code(`parseCurrency("12,50", "pt-BR", { currency: "BRL" });
   },
   {
     file: "arabic-digits-to-number-javascript.html",
-    nav: "Arabic digits",
-    title: "Convert Arabic and Persian Digits to a Number in JavaScript",
+    nav: "Other digit scripts",
+    title: "Arabic, Persian and other digit scripts",
     description:
-      "Convert Arabic-Indic (٠١٢٣), Persian (۰۱۲۳), Devanagari, Thai and full width digits to JavaScript numbers, including the Arabic decimal and thousands separators.",
+      "How numberparrot reads Arabic-Indic, Persian, Devanagari, Thai and full width digits, with the Arabic decimal and group separators.",
     summary: "١٬٢٣٤٫٥٦ and ۱۲۳٫۴۵ to real numbers.",
     body: () => `
 <p class="lead">Arabic-Indic and Persian digits are real digits, and <code>Intl.NumberFormat</code> prints them by default for locales like ar-EG and fa-IR. JavaScript cannot read them back.</p>
@@ -253,44 +239,6 @@ ${code(`import { normalizeInput } from "numberparrot";
 
 normalizeInput("١٢٫٥", "ar-EG");
 // { text: "12٫5", value: 12.5, valid: true, complete: true }`)}
-`,
-  },
-  {
-    file: "intl-numberformat-parse.html",
-    nav: "Intl parse",
-    title: "Intl.NumberFormat Parse: How to Reverse Intl Number Formatting",
-    description:
-      "Intl.NumberFormat can format numbers but has no parse method. How to parse Intl output back into numbers for any locale, style and numbering system.",
-    summary: "The missing reverse of Intl.NumberFormat#format.",
-    body: () => `
-<p class="lead"><code>Intl.NumberFormat</code> has <code>format</code>, <code>formatToParts</code> and <code>formatRange</code>. There is no <code>parse</code>.</p>
-
-<h2>What is missing</h2>
-${code(`const nf = new Intl.NumberFormat("de-DE", { style: "currency", currency: "EUR" });
-const text = nf.format(-1234.5); // "-1.234,50 €"
-nf.parse(text);                  // TypeError: nf.parse is not a function`)}
-
-<h2>A parser built on the same data</h2>
-<p>numberparrot asks <code>Intl.NumberFormat#formatToParts</code> for the decimal, group, minus, percent and exponent symbols and the digits of the numbering system, then parses with them. Whatever Intl writes, numberparrot reads:</p>
-${code(`import { parse, parseCurrency } from "numberparrot";
-
-parse(new Intl.NumberFormat("de-DE").format(1234.5), "de-DE");                       // 1234.5
-parse(new Intl.NumberFormat("en-US", { style: "percent" }).format(0.25), "en-US");   // 0.25
-parse(new Intl.NumberFormat("sv-SE", { notation: "scientific" }).format(1500), "sv-SE"); // 1500
-parse(new Intl.NumberFormat("ar-EG").format(-42.5), "ar-EG");                         // -42.5
-
-const usd = new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", currencySign: "accounting" });
-parseCurrency(usd.format(-1234.56), "en-US"); // { amount: -1234.56, currency: "USD", ... }`)}
-
-<h2>Round trip guarantee</h2>
-<p>For values printed with enough significant digits (17), parsing gives back exactly the same JavaScript number. The test suite checks this for 17 locales in decimal, scientific, percent, currency and accounting styles:</p>
-${code(`const nf = new Intl.NumberFormat("fr-FR", { maximumSignificantDigits: 17 });
-const value = 0.1 + 0.2;
-parse(nf.format(value), "fr-FR") === value; // true`)}
-
-<h2>Numbering systems and extensions</h2>
-${code(`parse(new Intl.NumberFormat("th-TH-u-nu-thai").format(1234.5), "th-TH-u-nu-thai"); // 1234.5
-parse(new Intl.NumberFormat("hi-IN-u-nu-deva").format(1234.5), "hi-IN-u-nu-deva"); // 1234.5`)}
 `,
   },
 ];
