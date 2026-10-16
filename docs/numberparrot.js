@@ -747,6 +747,7 @@ function parseColumn(values, candidates = DEFAULT_CANDIDATES) {
   const cells = Array.from(values, (v) => typeof v === "string" ? v : v == null ? "" : String(v));
   const datas = candidates.map((c) => localeData(c));
   const tally = /* @__PURE__ */ new Map();
+  const groups = /* @__PURE__ */ new Map();
   let anyNumber = false;
   let anyAmbiguous = false;
   cells.forEach((cell, i) => {
@@ -754,6 +755,7 @@ function parseColumn(values, candidates = DEFAULT_CANDIDATES) {
     const found = detect(cell, candidates);
     if (Number.isNaN(found.value)) return;
     anyNumber = true;
+    if (found.group !== null) groups.set(found.group, (groups.get(found.group) ?? 0) + 1);
     if (found.ambiguous) {
       anyAmbiguous = true;
       return;
@@ -791,13 +793,21 @@ function parseColumn(values, candidates = DEFAULT_CANDIDATES) {
     const cell = JSON.stringify(cells[best.first]);
     reason = ranked.length > 1 ? `${best.count} of ${total} cells use "${mark}" as the decimal separator, for example ${cell}` : `${cell} (row ${best.first + 1}) shows that "${mark}" is the decimal separator`;
   }
+  let group = null;
+  let groupCount = 0;
+  for (const [g, n] of groups) {
+    if (n > groupCount && g !== decimal) {
+      group = g;
+      groupCount = n;
+    }
+  }
   let pick = -1;
   let pickScore = -1;
   datas.forEach((data2, i) => {
     if (!data2.loose.decimals.includes(decimal)) return;
     let read = 0;
     for (const cell of cells) if (cell.trim() !== "" && !Number.isNaN(parseWith(cell, data2))) read++;
-    const score = read * 2 + (data2.decimal === decimal ? 1 : 0);
+    const score = read * 4 + (data2.decimal === decimal ? 2 : 0) + (data2.group === group ? 1 : 0);
     if (score > pickScore) {
       pick = i;
       pickScore = score;

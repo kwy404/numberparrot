@@ -82,6 +82,8 @@ describe("parseColumn", () => {
     expect(parseColumn(["\u0661\u066C\u0662\u0663\u0664\u066B\u0665", "\u0667"]).locale).toBe("ar-EG");
     const fr = parseColumn(["1 234,5", "12 000"]);
     expect(fr.values).toEqual([1234.5, 12000]);
+    expect(fr.locale).toBe("fr-FR");
+    expect(parseColumn(["1'234.56", "12'000"]).locale).toBe("de-CH");
   });
 
   it("returns an empty result when nothing is a number", () => {
