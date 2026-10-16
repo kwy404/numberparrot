@@ -1,7 +1,7 @@
 // Pure logic of the world board, the departures board and the locale picker.
 // Shared by the browser (app.js) and the docs build (scripts/build-docs.mjs), which
 // prerenders the first state of every widget into the static HTML.
-import { detect, getLocaleInfo, parse, parseCurrency } from "./numberparrot.js";
+import { detect, getLocaleInfo, parse, parseColumn, parseCurrency, tryParse } from "./numberparrot.js";
 
 /** 39 locales grouped by region: [locale, airport code, city, currency]. */
 export const REGIONS = [
@@ -280,5 +280,110 @@ export function localeCard(locale, text = "") {
     example: clean(nf(place.locale, { maximumFractionDigits: 2 }).format(1234.56)),
     result: t.trim() === "" ? "Type a number" : show(value),
     ok: t.trim() !== "" && !Number.isNaN(value),
+  };
+}
+
+// Paste and see ---------------------------------------------------------------------------
+// The box at the top of the home page. Whatever the visitor pastes (one value, a column,
+// a spreadsheet row) is split into cells and read as one column with parseColumn, so the
+// clear cells decide the format of the unclear ones. Every row also shows what
+// parseFloat makes of the same text.
+
+/** Samples for the chips under the paste box. */
+export const PASTES = [
+  { label: "Bank export", text: "1.234,56\n-87,90\n12,5\n1.000.000,00\n0,29" },
+  { label: "Price list", text: "$1,299.00\n$89.90\n($12.45)\n$0.29" },
+  { label: "Unclear column", text: "1,234\n5,678\n9,5" },
+  { label: "Spreadsheet row", text: "1 234,56\t12 000\t-0,5\t3,75" },
+  { label: "Arabic digits", text: "١٬٢٣٤٫٥٦\n٧٫٥\n٣٠٠" },
+  { label: "One value", text: "1,234" },
+];
+
+const MAX_ROWS = 40;
+const round = (n) => Math.round(n * 1e9) / 1e9;
+
+/** Splits pasted text into cells: one per line, tab or semicolon. Commas stay, they can be decimals. */
+export function splitCells(text) {
+  return String(text ?? "")
+    .split(/\r?\n|\t|;/)
+    .map((c) => c.trim())
+    .filter((c) => c !== "");
+}
+
+/** Everything the paste box shows for `text`. Pure, so the build prerenders it. */
+export function computePaste(text) {
+  const all = splitCells(text);
+  const cells = all.slice(0, MAX_ROWS);
+  if (cells.length === 0) {
+    return {
+      empty: true,
+      cells: [],
+      headline: "Paste numbers here: one value, a column or a row copied from a spreadsheet.",
+      reason: "Pico reads them all in one format and shows what parseFloat would have done.",
+      confidence: 0,
+      ambiguous: false,
+      read: 0,
+      count: 0,
+      wrong: 0,
+      total: "",
+      more: 0,
+      json: "[]",
+    };
+  }
+  const col = parseColumn(cells);
+  const locale = col.locale ?? "en-US";
+  let wrong = 0;
+  let sum = 0;
+  const rows = cells.map((raw, i) => {
+    const value = col.values[i];
+    const ok = !Number.isNaN(value);
+    const pf = parseFloat(raw);
+    const pfWrong = ok ? !Object.is(pf, value) : false;
+    if (pfWrong) wrong++;
+    if (ok) sum += value;
+    let note = "";
+    let currency = "";
+    if (ok) {
+      const money = parseCurrency(raw, locale);
+      if (money.symbol !== null && money.currency) currency = money.currency;
+    } else {
+      const why = tryParse(raw, locale);
+      note = why.ok ? "" : why.message;
+    }
+    return {
+      key: `${i}:${raw}`,
+      raw,
+      pf: show(pf),
+      np: ok ? show(value) : "NaN",
+      ok,
+      pfWrong,
+      currency,
+      note,
+    };
+  });
+  const read = rows.filter((r) => r.ok).length;
+  let headline;
+  if (col.locale === null) headline = "None of this is a number in any format Pico knows.";
+  else if (col.ambiguous) headline = `Could go either way. Read the ${locale} way, with "${col.decimal}" as the decimal separator.`;
+  else headline = `Read as ${locale}, with "${col.decimal}" as the decimal separator.`;
+  let reason = col.reason;
+  if (cells.length === 1 && col.ambiguous) {
+    const d = detect(cells[0]);
+    const other = d.alternatives.find((v) => !Object.is(v, col.values[0]));
+    if (other !== undefined) reason = `"${cells[0]}" can also mean ${show(other)}. Paste the rest of the column and the other cells will settle it.`;
+  }
+  return {
+    empty: false,
+    cells: rows,
+    headline,
+    reason,
+    confidence: Math.round(col.confidence * 100),
+    ambiguous: col.ambiguous,
+    read,
+    count: cells.length,
+    wrong,
+    total: read > 1 ? show(round(sum)) : "",
+    more: all.length - cells.length,
+    json: JSON.stringify(rows.map((r) => (r.ok ? Number(r.np) : null))),
   };
 }

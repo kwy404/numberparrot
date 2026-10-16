@@ -4,7 +4,7 @@
 // declare their behavior in HTML (v-model, v-text, @click, v-effect, v-theme-toggle).
 // Plain JavaScript is only used where Voodoo cannot help: the clipboard, the native
 // search dialog and the split flap animation of the departures board.
-import { EXAMPLES, computeBoard, departures, localeCard, PLACES, boardState } from "./board-model.js";
+import { EXAMPLES, PASTES, computeBoard, computePaste, departures, localeCard, PLACES, boardState } from "./board-model.js";
 import INDEX from "./search-index.js";
 
 const V = window.V;
@@ -68,7 +68,9 @@ function search(query, limit) {
 
 if (V) {
   // Values and pure functions only, as the Voodoo.js security guide recommends.
-  Object.assign(V.config.globals, { computeBoard });
+  Object.assign(V.config.globals, { computeBoard, computePaste });
+  // The paste box rows are prerendered for the first paint; the v-for row takes over.
+  for (const row of document.querySelectorAll("[data-prerender]")) row.remove();
 
   const savedLocale = store.get(LOCALE_KEY);
   const startLocale = PLACES.some((p) => p.locale === savedLocale) ? savedLocale : "pt-BR";
@@ -89,6 +91,8 @@ if (V) {
     loc: startLocale,
     trial: "1.234,56",
     card: localeCard(startLocale, "1.234,56"),
+    // paste and see
+    P: { text: PASTES[0].text, r: computePaste(PASTES[0].text) },
     // world board
     B: boardState(),
     openSearch() {
@@ -116,6 +120,9 @@ if (V) {
     goRail() {
       const hit = S.rhits[0];
       if (hit) location.href = hit.url;
+    },
+    sample(i) {
+      S.P.text = PASTES[i].text;
     },
     setMode(mode) {
       const from = S.B.mode;

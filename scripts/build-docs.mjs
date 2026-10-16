@@ -15,7 +15,7 @@ import { readFileSync, writeFileSync } from "node:fs";
 import { API } from "./api-content.mjs";
 import { globe, icon, postcard, stamp } from "./art.mjs";
 import { code, esc, GUIDES } from "./docs-content.mjs";
-import { EXAMPLES, MODES, PLACES, REGIONS, boardState, departures, localeCard } from "../docs/board-model.js";
+import { EXAMPLES, MODES, PASTES, PLACES, REGIONS, boardState, computePaste, departures, localeCard } from "../docs/board-model.js";
 
 const SITE = "https://kwy404.github.io/numberparrot/";
 const REPO = "https://github.com/kwy404/numberparrot";
@@ -129,7 +129,7 @@ ${panels}
 
 function ticket(g, i, compact = false) {
   const r = ROUTES[g.file] || { from: "API", to: "docs", icon: "book" };
-  return `<a class="np-ticket${compact ? " np-ticket-compact" : ""}" href="${g.file}">
+  return `<a class="np-ticket${compact ? " np-ticket-compact" : ""}" href="${g.file}" v-motion-scroll="fadeUp">
   <span class="np-ticket-stub" aria-hidden="true">
     <span class="np-ticket-gate">Gate</span>
     <span class="np-ticket-no">${String(i + 1).padStart(2, "0")}</span>
@@ -145,7 +145,7 @@ function ticket(g, i, compact = false) {
 
 const TICKETS = [...GUIDES, API_PAGE];
 const ticketGrid = (exclude, compact = false) =>
-  `<div class="np-tickets">
+  `<div class="np-tickets" v-motion-stagger="60">
 ${TICKETS.filter((g) => g.file !== exclude)
   .map((g) => ticket(g, TICKETS.indexOf(g), compact))
   .join("\n")}
@@ -156,6 +156,7 @@ function themeButton() {
 }
 
 const NAV = [
+  ["./#try", "Try it"],
   ["./#board", "World board"],
   ["./#departures", "Departures"],
   ["./#use-cases", "Use cases"],
@@ -202,7 +203,7 @@ function footer() {
       </div>
     </div>
     <nav aria-labelledby="ft-site"><p class="np-foot-title" id="ft-site">On this site</p><ul>
-      <li><a href="./#board">World board</a></li><li><a href="./#departures">Departures</a></li><li><a href="./#use-cases">Use cases</a></li><li><a href="api.html">API reference</a></li><li><a href="./#faq">FAQ</a></li><li><a href="${REPO}/issues">Report an issue</a></li>
+      <li><a href="./#try">Paste and see</a></li><li><a href="./#board">World board</a></li><li><a href="./#departures">Departures</a></li><li><a href="./#use-cases">Use cases</a></li><li><a href="api.html">API reference</a></li><li><a href="./#faq">FAQ</a></li><li><a href="${REPO}/issues">Report an issue</a></li>
     </ul></nav>
     <nav aria-labelledby="ft-guides"><p class="np-foot-title" id="ft-guides">Guides</p><ul>
       ${GUIDES.map((g) => `<li><a href="${g.file}">${esc(g.nav)}</a></li>`).join("")}
@@ -377,7 +378,7 @@ for (const guide of GUIDES) {
   const install = `
 <h2>Install</h2>
 ${installTabs()}
-<p>Zero dependencies, ESM and CommonJS, TypeScript types included. Works in Node.js 18+, Deno, Bun and browsers. <a href="./#board">Try it on the world board</a> or read the <a href="api.html">API reference</a>.</p>
+<p>Zero dependencies, ESM and CommonJS, TypeScript types included. Works in Node.js 18+, Deno, Bun and browsers. <a href="./#try">Paste your own numbers on the home page</a> or read the <a href="api.html">API reference</a>.</p>
 <h2>More guides</h2>
 ${ticketGrid(guide.file, true)}`;
   const { html, toc } = prepareBody(rest + install);
@@ -589,7 +590,7 @@ const USES = [
 // 1234.56`, "digits.ts"],
 ];
 const usesHtml = USES.map(
-  ([st, from, title, text, snippet, file], i) => `<article class="np-postcard">
+  ([st, from, title, text, snippet, file], i) => `<article class="np-postcard" v-motion-scroll="fadeUp">
   <div class="np-postcard-text">
     <p class="np-postcard-from">${icon("pin", "np-icon")}${from}</p>
     <h3>${esc(title)}</h3>
@@ -639,27 +640,90 @@ const FAQ = [
   ],
 ];
 
+// Paste and see: the first thing on the home page --------------------------------------------
+const P0 = computePaste(PASTES[0].text);
+function pasteRow(c, attrs = "") {
+  return `<li class="np-paste-row" data-ok="${c.ok}" data-pf="${c.pfWrong ? "bad" : "ok"}"${attrs}>
+          <code class="np-paste-raw" dir="ltr" v-text="c.raw">${esc(c.raw)}</code>
+          <code class="np-paste-pf" v-text="c.pf">${esc(c.pf)}</code>
+          <span class="np-paste-np"><code v-text="c.np">${esc(c.np)}</code><span class="np-paste-cur" v-show="c.currency" v-text="c.currency"${c.currency ? "" : ' style="display:none"'}>${esc(c.currency)}</span></span>
+          <span class="np-paste-note" v-show="c.note" v-text="c.note"${c.note ? "" : ' style="display:none"'}>${esc(c.note)}</span>
+        </li>`;
+}
+function pasteBox() {
+  const [first, ...rest] = P0.cells;
+  const samples = PASTES.map(
+    (p, i) => `<button type="button" class="np-chip" @click="sample(${i})">${esc(p.label)}</button>`,
+  ).join("");
+  return `      <div class="np-paste" data-state="sure" :data-state="P.r.empty ? 'empty' : (P.r.ambiguous || P.r.confidence < 60 ? 'unsure' : 'sure')" v-effect="P.r = computePaste(P.text)" v-motion="{ opacity: [0, 1], y: [24, 0], delay: 160, duration: 600, easing: 'easeOutExpo' }">
+        <div class="np-perch" aria-hidden="true">
+          <p class="np-perch-bubble" v-text="P.r.empty ? 'Paste away!' : (P.r.wrong ? 'parseFloat missed ' + P.r.wrong : 'All read!')">parseFloat missed ${P0.wrong}</p>
+          <span class="np-pico" data-pico><img class="np-pico-base" src="img/mascot.svg" width="96" height="96" alt=""></span>
+        </div>
+        <div class="np-paste-top">
+          <label class="np-paste-label" for="np-paste-text">${icon("input", "np-icon")}Paste and see</label>
+          <span class="np-paste-count" v-text="P.r.count ? P.r.read + ' of ' + P.r.count + ' read' : ''">${P0.read} of ${P0.count} read</span>
+        </div>
+        <textarea id="np-paste-text" class="np-paste-field" rows="5" placeholder="Paste here, for example 1.234,56" spellcheck="false" autocomplete="off" aria-describedby="np-paste-head" v-model="P.text">${esc(PASTES[0].text)}</textarea>
+        <div class="np-examples np-paste-samples" role="group" aria-label="Samples"><span class="np-examples-label">Try</span>${samples}</div>
+        <div class="np-paste-verdict">
+          <p class="np-paste-head" id="np-paste-head" role="status" v-text="P.r.headline">${esc(P0.headline)}</p>
+          <p class="np-paste-reason" v-text="P.r.reason">${esc(P0.reason)}</p>
+          <div class="np-confidence" v-show="!P.r.empty"><span>Confidence</span><span class="np-meter"><i style="width:${P0.confidence}%" :style="{ width: P.r.confidence + '%' }"></i></span><strong v-text="P.r.confidence + '%'">${P0.confidence}%</strong></div>
+        </div>
+        <div class="np-paste-table" v-show="!P.r.empty">
+          <div class="np-paste-thead" aria-hidden="true"><span>You pasted</span><span>parseFloat</span><span>numberparrot</span></div>
+          <ol class="np-paste-rows" aria-label="Values read" v-motion-stagger="45">
+        ${pasteRow(first, ` v-for="c in P.r.cells" :key="c.key" :data-ok="c.ok ? 'true' : 'false'" :data-pf="c.pfWrong ? 'bad' : 'ok'" v-motion="fadeUp"`)}
+        ${rest.map((c) => pasteRow(c, " data-prerender")).join("\n        ")}
+          </ol>
+          <p class="np-paste-more" v-show="P.r.more" style="display:none" v-text="'and ' + P.r.more + ' more'"></p>
+          <div class="np-paste-foot">
+            <span class="np-paste-wrong"><strong v-text="P.r.wrong">${P0.wrong}</strong> wrong with parseFloat</span>
+            <span class="np-paste-sum" v-show="P.r.total">Sum <code v-text="P.r.total">${esc(P0.total)}</code></span>
+            <button type="button" class="btn btn-xs btn-outline btn-neutral" @click="copyText(P.r.json, 'json')">${icon("copy", "np-icon")}<span v-text="copied === 'json' ? 'Copied' : 'Copy as JSON'">Copy as JSON</span></button>
+          </div>
+        </div>
+      </div>`;
+}
+
 const indexBody = `<main id="main">
-<section id="board" class="np-hero" aria-labelledby="title">
+<section id="try" class="np-hero" aria-labelledby="title">
   <div class="container">
     <div class="np-hero-grid">
-      <div>
-        <p class="np-eyebrow">${icon("globe", "np-icon")}One number, ${PLACES.length} locales, read back right</p>
-        <h1 id="title">Parse localized numbers and currency strings in any locale</h1>
-        <p class="np-lead"><code>parseFloat("1.234,56")</code> returns <code class="np-bad">1.234</code>. numberparrot returns <code class="np-good">1234.56</code>. Type one number on the board below: every locale writes it its own way, and numberparrot reads every one back.</p>
-        <div class="np-hero-actions">
+      <div class="np-hero-copy" v-motion-stagger="70">
+        <p class="np-eyebrow" v-motion="fadeUp">${icon("input", "np-icon")}Paste a number, see it read right</p>
+        <h1 id="title" v-motion="fadeUp">Read numbers written in any locale</h1>
+        <p class="np-lead" v-motion="fadeUp"><code>parseFloat("1.234,56")</code> returns <code class="np-bad">1.234</code>. numberparrot returns <code class="np-good">1234.56</code>. Paste a price, a bank export or a spreadsheet column in the box: it works out the format and reads every value.</p>
+        <div class="np-hero-actions" v-motion="fadeUp">
           <button type="button" class="np-install" @click="copyText('npm i numberparrot', 'hero')" aria-label="Copy the install command: npm i numberparrot"><span class="np-install-prompt" aria-hidden="true">$</span><span>npm i numberparrot</span>${icon("copy", "np-icon")}<span class="np-install-state" v-text="copied === 'hero' ? 'Copied' : 'Copy'">Copy</span></button>
           <a class="btn btn-primary" href="api.html">${icon("book", "np-icon")}API reference</a>
           <a class="btn btn-outline btn-neutral" href="${REPO}">${icon("github", "np-icon")}GitHub</a>
         </div>
+        <ul class="np-hero-facts" v-motion="fadeUp" aria-label="At a glance">
+          <li>${icon("check", "np-icon")}Zero dependencies</li>
+          <li>${icon("check", "np-icon")}About 6.9 kB gzipped</li>
+          <li>${icon("check", "np-icon")}Every locale your runtime knows</li>
+        </ul>
       </div>
-      <div class="np-hero-art" aria-hidden="true">
-        ${globe(undefined, { id: "hero-globe", size: 300 })}
-        <img class="np-hero-pico" src="img/mascot.svg" width="132" height="132" alt="">
+${pasteBox()}
+    </div>
+  </div>
+</section>
+
+<section id="board" class="np-board-section" aria-labelledby="board-title">
+  <div class="container">
+    <div class="np-board-head">
+      <div class="np-section-head" v-motion-scroll="fadeUp">
+        <p class="np-eyebrow">${icon("globe", "np-icon")}World board</p>
+        <h2 id="board-title">One number, ${PLACES.length} locales</h2>
+        <p>Type one number. Every locale writes it its own way, and numberparrot reads every one back.</p>
+      </div>
+      <div class="np-board-art" aria-hidden="true">
+        ${globe(undefined, { id: "hero-globe", size: 220 })}
         <p class="np-bubble" v-text="B.b.bubble">${esc(B.b.bubble)}</p>
       </div>
     </div>
-
     <div class="np-board" data-mode="number" :data-mode="B.mode" v-effect="B.b = computeBoard(B.text, B.mode)">
       <div class="np-board-bar">
         <div>
@@ -715,7 +779,7 @@ ${regionsHtml}
       </div>
       <div class="np-dep-clock">${icon("clock", "np-icon")}<span id="np-clock">09:41</span><small>Local time</small></div>
     </div>
-    <div class="np-flapboard" role="table" aria-label="Departures: numbers written in different locales and how they parse">
+    <div class="np-flapboard" v-motion-scroll="fadeUp" role="table" aria-label="Departures: numbers written in different locales and how they parse">
       <div class="np-flap-row np-flap-headrow" role="row">${COLS.map(([key, label]) => `<span class="np-flap-th np-col-${key}" role="columnheader">${label}</span>`).join("")}</div>
 ${flapRows}
     </div>
@@ -728,12 +792,12 @@ ${flapRows}
 
 <section id="use-cases" class="np-section" aria-labelledby="uc-title">
   <div class="container">
-    <div class="np-section-head">
+    <div class="np-section-head" v-motion-scroll="fadeUp">
       <p class="np-eyebrow">${icon("postcard", "np-icon")}Use cases</p>
       <h2 id="uc-title">Postcards from where numbers come from</h2>
       <p>Numbers rarely start in your code. They arrive from shoppers, banks, scrapers and spreadsheets, written the way their sender writes them.</p>
     </div>
-    <div class="np-postcards">
+    <div class="np-postcards" v-motion-stagger="80">
 ${usesHtml}
     </div>
   </div>
@@ -741,12 +805,12 @@ ${usesHtml}
 
 <section id="api" class="np-section np-section-tint" aria-labelledby="api-title">
   <div class="container">
-    <div class="np-section-head">
+    <div class="np-section-head" v-motion-scroll="fadeUp">
       <p class="np-eyebrow">${icon("code", "np-icon")}API</p>
       <h2 id="api-title">Nine functions, one passport each</h2>
       <p>Every function takes the locale as an argument, so data from Berlin, Mumbai and Cairo can sit side by side. No global state, nothing to register.</p>
     </div>
-    <div class="np-api">
+    <div class="np-api" v-motion-scroll="fadeUp">
       <div class="np-api-list" role="tablist" aria-label="Functions" aria-orientation="vertical">
 ${apiList}
       </div>
@@ -766,7 +830,7 @@ ${apiPanels}
 
 <section id="guides" class="np-section" aria-labelledby="guides-title">
   <div class="container">
-    <div class="np-section-head">
+    <div class="np-section-head" v-motion-scroll="fadeUp">
       <p class="np-eyebrow">${icon("ticket", "np-icon")}Guides</p>
       <h2 id="guides-title">Boarding passes for the usual trouble</h2>
       <p>Four short guides. Each one shows the usual approach, why it breaks and what to do instead.</p>
@@ -777,7 +841,7 @@ ${ticketGrid(null)}
 
 <section id="faq" class="np-section np-section-tint" aria-labelledby="faq-title">
   <div class="container np-faq">
-    <div class="np-section-head">
+    <div class="np-section-head" v-motion-scroll="fadeUp">
       <p class="np-eyebrow">${icon("compass", "np-icon")}FAQ</p>
       <h2 id="faq-title">Questions at the gate</h2>
       <img src="img/mascot.svg" width="120" height="120" alt="Pico the parrot" class="np-faq-pico" loading="lazy">
@@ -856,6 +920,7 @@ console.log("wrote docs/404.html");
 
 // Search index ------------------------------------------------------------------------------
 const index = [
+  { kind: "Page", title: "Paste and see", text: "Paste numbers, a column or a spreadsheet row and see them read", url: "./#try" },
   { kind: "Page", title: "World board", text: "Type a number, see it in 39 locales", url: "./#board" },
   { kind: "Page", title: "Departures", text: "parseFloat and numberparrot, flight by flight", url: "./#departures" },
   { kind: "Page", title: "Use cases", text: "Checkout, CSV, prices, accounting, cents, scripts", url: "./#use-cases" },

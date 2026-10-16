@@ -42,7 +42,7 @@
   <div class="container np-top-row">
     <a class="np-brand" href="./" aria-label="numberparrot home"><img src="favicon.svg" width="30" height="30" alt=""><span>number<b>parrot</b></span></a>
     <a class="badge badge-sm badge-outline np-ver" href="https://github.com/kwy404/numberparrot/blob/main/CHANGELOG.md" aria-label="Version 1.0.0, read the changelog">v1.0.0</a>
-    <nav class="np-nav" aria-label="Main"><a class="np-nav-link" href="./#board">World board</a><a class="np-nav-link" href="./#departures">Departures</a><a class="np-nav-link" href="./#use-cases">Use cases</a><a class="np-nav-link" href="api.html">API</a><a class="np-nav-link" href="./#guides">Guides</a></nav>
+    <nav class="np-nav" aria-label="Main"><a class="np-nav-link" href="./#try">Try it</a><a class="np-nav-link" href="./#board">World board</a><a class="np-nav-link" href="./#departures">Departures</a><a class="np-nav-link" href="./#use-cases">Use cases</a><a class="np-nav-link" href="api.html">API</a><a class="np-nav-link" href="./#guides">Guides</a></nav>
     <div class="np-top-end">
       <button type="button" class="np-search-btn" @click="openSearch()" aria-label="Search the docs" aria-haspopup="dialog"><svg class="np-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="m20 20-4.2-4.2"/></svg><span>Search</span><kbd class="kbd kbd-xs">Ctrl K</kbd></button>
       <a class="np-icon-btn np-hide-sm" href="https://github.com/kwy404/numberparrot" aria-label="numberparrot on GitHub"><svg class="np-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path stroke="none" fill="currentColor" d="M12 1.6a10.4 10.4 0 0 0-3.3 20.3c.5.1.7-.2.7-.5v-1.8c-2.9.6-3.5-1.2-3.5-1.2-.5-1.2-1.2-1.5-1.2-1.5-.9-.6.1-.6.1-.6 1 .1 1.6 1.1 1.6 1.1.9 1.6 2.4 1.1 3 .9.1-.7.4-1.1.7-1.4-2.3-.3-4.7-1.2-4.7-5.1 0-1.1.4-2 1.1-2.8-.1-.3-.5-1.3.1-2.7 0 0 .9-.3 2.9 1.1a9.9 9.9 0 0 1 5.2 0c2-1.4 2.9-1.1 2.9-1.1.6 1.4.2 2.4.1 2.7.7.8 1.1 1.7 1.1 2.8 0 4-2.4 4.8-4.7 5.1.4.3.7.9.7 1.9v2.8c0 .3.2.6.7.5A10.4 10.4 0 0 0 12 1.6Z"/></svg></a>
@@ -51,25 +51,104 @@
     </div>
   </div>
   <nav id="np-menu" class="np-mobile" aria-label="Mobile" style="display:none" v-show="menu" @click="menu = false">
-    <div class="container"><a class="np-nav-link" href="./#board">World board</a><a class="np-nav-link" href="./#departures">Departures</a><a class="np-nav-link" href="./#use-cases">Use cases</a><a class="np-nav-link" href="api.html">API</a><a class="np-nav-link" href="./#guides">Guides</a><a class="np-nav-link" href="https://github.com/kwy404/numberparrot">GitHub</a><a class="np-nav-link" href="https://www.npmjs.com/package/numberparrot">npm</a></div>
+    <div class="container"><a class="np-nav-link" href="./#try">Try it</a><a class="np-nav-link" href="./#board">World board</a><a class="np-nav-link" href="./#departures">Departures</a><a class="np-nav-link" href="./#use-cases">Use cases</a><a class="np-nav-link" href="api.html">API</a><a class="np-nav-link" href="./#guides">Guides</a><a class="np-nav-link" href="https://github.com/kwy404/numberparrot">GitHub</a><a class="np-nav-link" href="https://www.npmjs.com/package/numberparrot">npm</a></div>
   </nav>
 </header>
   <main id="main">
-<section id="board" class="np-hero" aria-labelledby="title">
+<section id="try" class="np-hero" aria-labelledby="title">
   <div class="container">
     <div class="np-hero-grid">
-      <div>
-        <p class="np-eyebrow"><svg class="np-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c-3 3.2-3 14.8 0 18M12 3c3 3.2 3 14.8 0 18M4.6 7.5h14.8M4.6 16.5h14.8"/></svg>One number, 39 locales, read back right</p>
-        <h1 id="title">Parse localized numbers and currency strings in any locale</h1>
-        <p class="np-lead"><code>parseFloat("1.234,56")</code> returns <code class="np-bad">1.234</code>. numberparrot returns <code class="np-good">1234.56</code>. Type one number on the board below: every locale writes it its own way, and numberparrot reads every one back.</p>
-        <div class="np-hero-actions">
+      <div class="np-hero-copy" v-motion-stagger="70">
+        <p class="np-eyebrow" v-motion="fadeUp"><svg class="np-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2.5" y="6.5" width="19" height="11" rx="2.5"/><path d="M6 12h6"/><path d="M15.5 9v6" stroke="var(--np-leaf)" stroke-width="2"/></svg>Paste a number, see it read right</p>
+        <h1 id="title" v-motion="fadeUp">Read numbers written in any locale</h1>
+        <p class="np-lead" v-motion="fadeUp"><code>parseFloat("1.234,56")</code> returns <code class="np-bad">1.234</code>. numberparrot returns <code class="np-good">1234.56</code>. Paste a price, a bank export or a spreadsheet column in the box: it works out the format and reads every value.</p>
+        <div class="np-hero-actions" v-motion="fadeUp">
           <button type="button" class="np-install" @click="copyText('npm i numberparrot', 'hero')" aria-label="Copy the install command: npm i numberparrot"><span class="np-install-prompt" aria-hidden="true">$</span><span>npm i numberparrot</span><svg class="np-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="11.5" height="11.5" rx="2"/><path d="M15 9V5.5A2 2 0 0 0 13 3.5H5.5a2 2 0 0 0-2 2V13a2 2 0 0 0 2 2H9"/></svg><span class="np-install-state" v-text="copied === 'hero' ? 'Copied' : 'Copy'">Copy</span></button>
           <a class="btn btn-primary" href="api.html"><svg class="np-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v15H6.5A2.5 2.5 0 0 0 4 20.5Z"/><path d="M4 20.5A2.5 2.5 0 0 0 6.5 23H20v-5"/></svg>API reference</a>
           <a class="btn btn-outline btn-neutral" href="https://github.com/kwy404/numberparrot"><svg class="np-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path stroke="none" fill="currentColor" d="M12 1.6a10.4 10.4 0 0 0-3.3 20.3c.5.1.7-.2.7-.5v-1.8c-2.9.6-3.5-1.2-3.5-1.2-.5-1.2-1.2-1.5-1.2-1.5-.9-.6.1-.6.1-.6 1 .1 1.6 1.1 1.6 1.1.9 1.6 2.4 1.1 3 .9.1-.7.4-1.1.7-1.4-2.3-.3-4.7-1.2-4.7-5.1 0-1.1.4-2 1.1-2.8-.1-.3-.5-1.3.1-2.7 0 0 .9-.3 2.9 1.1a9.9 9.9 0 0 1 5.2 0c2-1.4 2.9-1.1 2.9-1.1.6 1.4.2 2.4.1 2.7.7.8 1.1 1.7 1.1 2.8 0 4-2.4 4.8-4.7 5.1.4.3.7.9.7 1.9v2.8c0 .3.2.6.7.5A10.4 10.4 0 0 0 12 1.6Z"/></svg>GitHub</a>
         </div>
+        <ul class="np-hero-facts" v-motion="fadeUp" aria-label="At a glance">
+          <li><svg class="np-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg>Zero dependencies</li>
+          <li><svg class="np-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg>About 6.9 kB gzipped</li>
+          <li><svg class="np-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg>Every locale your runtime knows</li>
+        </ul>
       </div>
-      <div class="np-hero-art" aria-hidden="true">
-        <svg class="np-art" viewBox="0 0 360 380" width="300" height="317" role="img" aria-label="A globe whose meridians are made of numbers written in different locales">
+      <div class="np-paste" data-state="sure" :data-state="P.r.empty ? 'empty' : (P.r.ambiguous || P.r.confidence < 60 ? 'unsure' : 'sure')" v-effect="P.r = computePaste(P.text)" v-motion="{ opacity: [0, 1], y: [24, 0], delay: 160, duration: 600, easing: 'easeOutExpo' }">
+        <div class="np-perch" aria-hidden="true">
+          <p class="np-perch-bubble" v-text="P.r.empty ? 'Paste away!' : (P.r.wrong ? 'parseFloat missed ' + P.r.wrong : 'All read!')">parseFloat missed 5</p>
+          <span class="np-pico" data-pico><img class="np-pico-base" src="img/mascot.svg" width="96" height="96" alt=""></span>
+        </div>
+        <div class="np-paste-top">
+          <label class="np-paste-label" for="np-paste-text"><svg class="np-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2.5" y="6.5" width="19" height="11" rx="2.5"/><path d="M6 12h6"/><path d="M15.5 9v6" stroke="var(--np-leaf)" stroke-width="2"/></svg>Paste and see</label>
+          <span class="np-paste-count" v-text="P.r.count ? P.r.read + ' of ' + P.r.count + ' read' : ''">5 of 5 read</span>
+        </div>
+        <textarea id="np-paste-text" class="np-paste-field" rows="5" placeholder="Paste here, for example 1.234,56" spellcheck="false" autocomplete="off" aria-describedby="np-paste-head" v-model="P.text">1.234,56
+-87,90
+12,5
+1.000.000,00
+0,29</textarea>
+        <div class="np-examples np-paste-samples" role="group" aria-label="Samples"><span class="np-examples-label">Try</span><button type="button" class="np-chip" @click="sample(0)">Bank export</button><button type="button" class="np-chip" @click="sample(1)">Price list</button><button type="button" class="np-chip" @click="sample(2)">Unclear column</button><button type="button" class="np-chip" @click="sample(3)">Spreadsheet row</button><button type="button" class="np-chip" @click="sample(4)">Arabic digits</button><button type="button" class="np-chip" @click="sample(5)">One value</button></div>
+        <div class="np-paste-verdict">
+          <p class="np-paste-head" id="np-paste-head" role="status" v-text="P.r.headline">Read as pt-BR, with &quot;,&quot; as the decimal separator.</p>
+          <p class="np-paste-reason" v-text="P.r.reason">&quot;1.234,56&quot; (row 1) shows that &quot;,&quot; is the decimal separator</p>
+          <div class="np-confidence" v-show="!P.r.empty"><span>Confidence</span><span class="np-meter"><i style="width:92%" :style="{ width: P.r.confidence + '%' }"></i></span><strong v-text="P.r.confidence + '%'">92%</strong></div>
+        </div>
+        <div class="np-paste-table" v-show="!P.r.empty">
+          <div class="np-paste-thead" aria-hidden="true"><span>You pasted</span><span>parseFloat</span><span>numberparrot</span></div>
+          <ol class="np-paste-rows" aria-label="Values read" v-motion-stagger="45">
+        <li class="np-paste-row" data-ok="true" data-pf="bad" v-for="c in P.r.cells" :key="c.key" :data-ok="c.ok ? 'true' : 'false'" :data-pf="c.pfWrong ? 'bad' : 'ok'" v-motion="fadeUp">
+          <code class="np-paste-raw" dir="ltr" v-text="c.raw">1.234,56</code>
+          <code class="np-paste-pf" v-text="c.pf">1.234</code>
+          <span class="np-paste-np"><code v-text="c.np">1234.56</code><span class="np-paste-cur" v-show="c.currency" v-text="c.currency" style="display:none"></span></span>
+          <span class="np-paste-note" v-show="c.note" v-text="c.note" style="display:none"></span>
+        </li>
+        <li class="np-paste-row" data-ok="true" data-pf="bad" data-prerender>
+          <code class="np-paste-raw" dir="ltr" v-text="c.raw">-87,90</code>
+          <code class="np-paste-pf" v-text="c.pf">-87</code>
+          <span class="np-paste-np"><code v-text="c.np">-87.9</code><span class="np-paste-cur" v-show="c.currency" v-text="c.currency" style="display:none"></span></span>
+          <span class="np-paste-note" v-show="c.note" v-text="c.note" style="display:none"></span>
+        </li>
+        <li class="np-paste-row" data-ok="true" data-pf="bad" data-prerender>
+          <code class="np-paste-raw" dir="ltr" v-text="c.raw">12,5</code>
+          <code class="np-paste-pf" v-text="c.pf">12</code>
+          <span class="np-paste-np"><code v-text="c.np">12.5</code><span class="np-paste-cur" v-show="c.currency" v-text="c.currency" style="display:none"></span></span>
+          <span class="np-paste-note" v-show="c.note" v-text="c.note" style="display:none"></span>
+        </li>
+        <li class="np-paste-row" data-ok="true" data-pf="bad" data-prerender>
+          <code class="np-paste-raw" dir="ltr" v-text="c.raw">1.000.000,00</code>
+          <code class="np-paste-pf" v-text="c.pf">1</code>
+          <span class="np-paste-np"><code v-text="c.np">1000000</code><span class="np-paste-cur" v-show="c.currency" v-text="c.currency" style="display:none"></span></span>
+          <span class="np-paste-note" v-show="c.note" v-text="c.note" style="display:none"></span>
+        </li>
+        <li class="np-paste-row" data-ok="true" data-pf="bad" data-prerender>
+          <code class="np-paste-raw" dir="ltr" v-text="c.raw">0,29</code>
+          <code class="np-paste-pf" v-text="c.pf">0</code>
+          <span class="np-paste-np"><code v-text="c.np">0.29</code><span class="np-paste-cur" v-show="c.currency" v-text="c.currency" style="display:none"></span></span>
+          <span class="np-paste-note" v-show="c.note" v-text="c.note" style="display:none"></span>
+        </li>
+          </ol>
+          <p class="np-paste-more" v-show="P.r.more" style="display:none" v-text="'and ' + P.r.more + ' more'"></p>
+          <div class="np-paste-foot">
+            <span class="np-paste-wrong"><strong v-text="P.r.wrong">5</strong> wrong with parseFloat</span>
+            <span class="np-paste-sum" v-show="P.r.total">Sum <code v-text="P.r.total">1001159.45</code></span>
+            <button type="button" class="btn btn-xs btn-outline btn-neutral" @click="copyText(P.r.json, 'json')"><svg class="np-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="11.5" height="11.5" rx="2"/><path d="M15 9V5.5A2 2 0 0 0 13 3.5H5.5a2 2 0 0 0-2 2V13a2 2 0 0 0 2 2H9"/></svg><span v-text="copied === 'json' ? 'Copied' : 'Copy as JSON'">Copy as JSON</span></button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="board" class="np-board-section" aria-labelledby="board-title">
+  <div class="container">
+    <div class="np-board-head">
+      <div class="np-section-head" v-motion-scroll="fadeUp">
+        <p class="np-eyebrow"><svg class="np-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c-3 3.2-3 14.8 0 18M12 3c3 3.2 3 14.8 0 18M4.6 7.5h14.8M4.6 16.5h14.8"/></svg>World board</p>
+        <h2 id="board-title">One number, 39 locales</h2>
+        <p>Type one number. Every locale writes it its own way, and numberparrot reads every one back.</p>
+      </div>
+      <div class="np-board-art" aria-hidden="true">
+        <svg class="np-art" viewBox="0 0 360 380" width="220" height="232" role="img" aria-label="A globe whose meridians are made of numbers written in different locales">
   <defs><path id="hero-globe-m0e" d="M180 68 A112.6 128 0 0 1 180 324" fill="none"/><path id="hero-globe-m0w" d="M180 68 A112.6 128 0 0 0 180 324" fill="none"/><path id="hero-globe-m1e" d="M180 68 A53.8 128 0 0 1 180 324" fill="none"/><path id="hero-globe-m1w" d="M180 68 A53.8 128 0 0 0 180 324" fill="none"/><clipPath id="hero-globe-clip"><circle cx="180" cy="196" r="127"/></clipPath></defs>
   <circle cx="276" cy="86" r="50" fill="var(--np-sun)"/>
   <path d="M276 18v-10M276 164v-8M208 86h-10M354 86h-8M228 38l-7-7M324 134l6 6M324 38l7-7" stroke="var(--np-sun)" stroke-width="3" stroke-linecap="round"/>
@@ -84,11 +163,9 @@
   <path d="M146 328 h68" stroke="var(--np-ink)" stroke-width="2.5" stroke-linecap="round"/>
   <path d="M180 328 v18 M134 346 h92" stroke="var(--np-ink)" stroke-width="2.5" stroke-linecap="round"/>
 </svg>
-        <img class="np-hero-pico" src="img/mascot.svg" width="132" height="132" alt="">
         <p class="np-bubble" v-text="B.b.bubble">1234567.891!</p>
       </div>
     </div>
-
     <div class="np-board" data-mode="number" :data-mode="B.mode" v-effect="B.b = computeBoard(B.text, B.mode)">
       <div class="np-board-bar">
         <div>
@@ -441,7 +518,7 @@
       </div>
       <div class="np-dep-clock"><svg class="np-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><span id="np-clock">09:41</span><small>Local time</small></div>
     </div>
-    <div class="np-flapboard" role="table" aria-label="Departures: numbers written in different locales and how they parse">
+    <div class="np-flapboard" v-motion-scroll="fadeUp" role="table" aria-label="Departures: numbers written in different locales and how they parse">
       <div class="np-flap-row np-flap-headrow" role="row"><span class="np-flap-th np-col-time" role="columnheader">Time</span><span class="np-flap-th np-col-flight" role="columnheader">Flight</span><span class="np-flap-th np-col-from" role="columnheader">From</span><span class="np-flap-th np-col-written" role="columnheader">As written</span><span class="np-flap-th np-col-pf" role="columnheader">parseFloat</span><span class="np-flap-th np-col-np" role="columnheader">numberparrot</span><span class="np-flap-th np-col-status" role="columnheader">Status</span></div>
 <div class="np-flap-row" role="row" data-status="diverted"><span class="np-flap np-col-time" role="cell" data-w="5" aria-label="06:00"><span class="np-chars" aria-hidden="true"><span class="np-ch">0</span><span class="np-ch">6</span><span class="np-ch">:</span><span class="np-ch">0</span><span class="np-ch">0</span></span></span><span class="np-flap np-col-flight" role="cell" data-w="7" aria-label="GRU 100"><span class="np-chars" aria-hidden="true"><span class="np-ch">G</span><span class="np-ch">R</span><span class="np-ch">U</span><span class="np-ch">&nbsp;</span><span class="np-ch">1</span><span class="np-ch">0</span><span class="np-ch">0</span></span></span><span class="np-flap np-col-from" role="cell" data-w="12" aria-label="SÃO PAULO"><span class="np-chars" aria-hidden="true"><span class="np-ch">S</span><span class="np-ch">Ã</span><span class="np-ch">O</span><span class="np-ch">&nbsp;</span><span class="np-ch">P</span><span class="np-ch">A</span><span class="np-ch">U</span><span class="np-ch">L</span><span class="np-ch">O</span><span class="np-ch">&nbsp;</span><span class="np-ch">&nbsp;</span><span class="np-ch">&nbsp;</span></span></span><span class="np-flap np-col-written" role="cell" data-w="13" aria-label="1.234,56"><span class="np-chars" aria-hidden="true"><span class="np-ch">1</span><span class="np-ch">.</span><span class="np-ch">2</span><span class="np-ch">3</span><span class="np-ch">4</span><span class="np-ch">,</span><span class="np-ch">5</span><span class="np-ch">6</span><span class="np-ch">&nbsp;</span><span class="np-ch">&nbsp;</span><span class="np-ch">&nbsp;</span><span class="np-ch">&nbsp;</span><span class="np-ch">&nbsp;</span></span></span><span class="np-flap np-col-pf" role="cell" data-w="9" aria-label="1.234"><span class="np-chars" aria-hidden="true"><span class="np-ch">1</span><span class="np-ch">.</span><span class="np-ch">2</span><span class="np-ch">3</span><span class="np-ch">4</span><span class="np-ch">&nbsp;</span><span class="np-ch">&nbsp;</span><span class="np-ch">&nbsp;</span><span class="np-ch">&nbsp;</span></span></span><span class="np-flap np-col-np" role="cell" data-w="10" aria-label="1234.56"><span class="np-chars" aria-hidden="true"><span class="np-ch">1</span><span class="np-ch">2</span><span class="np-ch">3</span><span class="np-ch">4</span><span class="np-ch">.</span><span class="np-ch">5</span><span class="np-ch">6</span><span class="np-ch">&nbsp;</span><span class="np-ch">&nbsp;</span><span class="np-ch">&nbsp;</span></span></span><span class="np-flap np-col-status" role="cell" data-w="9" aria-label="DIVERTED"><span class="np-chars" aria-hidden="true"><span class="np-ch">D</span><span class="np-ch">I</span><span class="np-ch">V</span><span class="np-ch">E</span><span class="np-ch">R</span><span class="np-ch">T</span><span class="np-ch">E</span><span class="np-ch">D</span><span class="np-ch">&nbsp;</span></span></span></div>
 <div class="np-flap-row" role="row" data-status="diverted"><span class="np-flap np-col-time" role="cell" data-w="5" aria-label="06:37"><span class="np-chars" aria-hidden="true"><span class="np-ch">0</span><span class="np-ch">6</span><span class="np-ch">:</span><span class="np-ch">3</span><span class="np-ch">7</span></span></span><span class="np-flap np-col-flight" role="cell" data-w="7" aria-label="ZRH 147"><span class="np-chars" aria-hidden="true"><span class="np-ch">Z</span><span class="np-ch">R</span><span class="np-ch">H</span><span class="np-ch">&nbsp;</span><span class="np-ch">1</span><span class="np-ch">4</span><span class="np-ch">7</span></span></span><span class="np-flap np-col-from" role="cell" data-w="12" aria-label="ZÜRICH"><span class="np-chars" aria-hidden="true"><span class="np-ch">Z</span><span class="np-ch">Ü</span><span class="np-ch">R</span><span class="np-ch">I</span><span class="np-ch">C</span><span class="np-ch">H</span><span class="np-ch">&nbsp;</span><span class="np-ch">&nbsp;</span><span class="np-ch">&nbsp;</span><span class="np-ch">&nbsp;</span><span class="np-ch">&nbsp;</span><span class="np-ch">&nbsp;</span></span></span><span class="np-flap np-col-written" role="cell" data-w="13" aria-label="1'234'567.89"><span class="np-chars" aria-hidden="true"><span class="np-ch">1</span><span class="np-ch">'</span><span class="np-ch">2</span><span class="np-ch">3</span><span class="np-ch">4</span><span class="np-ch">'</span><span class="np-ch">5</span><span class="np-ch">6</span><span class="np-ch">7</span><span class="np-ch">.</span><span class="np-ch">8</span><span class="np-ch">9</span><span class="np-ch">&nbsp;</span></span></span><span class="np-flap np-col-pf" role="cell" data-w="9" aria-label="1"><span class="np-chars" aria-hidden="true"><span class="np-ch">1</span><span class="np-ch">&nbsp;</span><span class="np-ch">&nbsp;</span><span class="np-ch">&nbsp;</span><span class="np-ch">&nbsp;</span><span class="np-ch">&nbsp;</span><span class="np-ch">&nbsp;</span><span class="np-ch">&nbsp;</span><span class="np-ch">&nbsp;</span></span></span><span class="np-flap np-col-np" role="cell" data-w="10" aria-label="1234567.89"><span class="np-chars" aria-hidden="true"><span class="np-ch">1</span><span class="np-ch">2</span><span class="np-ch">3</span><span class="np-ch">4</span><span class="np-ch">5</span><span class="np-ch">6</span><span class="np-ch">7</span><span class="np-ch">.</span><span class="np-ch">8</span><span class="np-ch">9</span></span></span><span class="np-flap np-col-status" role="cell" data-w="9" aria-label="DIVERTED"><span class="np-chars" aria-hidden="true"><span class="np-ch">D</span><span class="np-ch">I</span><span class="np-ch">V</span><span class="np-ch">E</span><span class="np-ch">R</span><span class="np-ch">T</span><span class="np-ch">E</span><span class="np-ch">D</span><span class="np-ch">&nbsp;</span></span></span></div>
@@ -459,13 +536,13 @@
 
 <section id="use-cases" class="np-section" aria-labelledby="uc-title">
   <div class="container">
-    <div class="np-section-head">
+    <div class="np-section-head" v-motion-scroll="fadeUp">
       <p class="np-eyebrow"><svg class="np-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2.5" y="5" width="19" height="14" rx="2"/><path d="M12.5 8v8M5.5 9h4M5.5 12h4M5.5 15h3"/><rect x="15.5" y="8" width="3.5" height="4" rx=".5"/></svg>Use cases</p>
       <h2 id="uc-title">Postcards from where numbers come from</h2>
       <p>Numbers rarely start in your code. They arrive from shoppers, banks, scrapers and spreadsheets, written the way their sender writes them.</p>
     </div>
-    <div class="np-postcards">
-<article class="np-postcard">
+    <div class="np-postcards" v-motion-stagger="80">
+<article class="np-postcard" v-motion-scroll="fadeUp">
   <div class="np-postcard-text">
     <p class="np-postcard-from"><svg class="np-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-6.5-5.6-6.5-11a6.5 6.5 0 0 1 13 0C18.5 15.4 12 21 12 21Z"/><circle cx="12" cy="10" r="2.3" fill="var(--np-sun)"/></svg>From São Paulo</p>
     <h3>Checkout and price fields</h3>
@@ -487,7 +564,7 @@
   <div class="np-postcard-code"><figure class="np-code np-code-mini" id="code-1" data-lang="ts"><div class="np-code-bar"><span class="np-dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="np-code-tab"><span class="np-code-badge" data-lang="ts" aria-hidden="true">TS</span>checkout.ts</span><button type="button" class="np-code-copy" aria-label="Copy code from checkout.ts" @click="copy($el)"><svg class="np-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="11.5" height="11.5" rx="2"/><path d="M15 9V5.5A2 2 0 0 0 13 3.5H5.5a2 2 0 0 0-2 2V13a2 2 0 0 0 2 2H9"/></svg><span v-text="copied === 'code-1' ? 'Copied' : 'Copy'">Copy</span></button></div><pre class="shiki shiki-themes light-plus dark-plus" style="--shiki-light:#000000;--shiki-dark:#D4D4D4;--shiki-light-bg:#FFFFFF;--shiki-dark-bg:#1E1E1E" tabindex="0" aria-label="checkout.ts code example"><code><span class="line"><span style="--shiki-light:#795E26;--shiki-dark:#DCDCAA">normalizeInput</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">(</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178">"1.234,"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">, </span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178">"pt-BR"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">).</span><span style="--shiki-light:#001080;--shiki-dark:#9CDCFE">value</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">;</span></span>
 <span class="line"><span style="--shiki-light:#008000;--shiki-dark:#6A9955">// 1234</span></span></code></pre></figure></div>
 </article>
-<article class="np-postcard">
+<article class="np-postcard" v-motion-scroll="fadeUp">
   <div class="np-postcard-text">
     <p class="np-postcard-from"><svg class="np-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-6.5-5.6-6.5-11a6.5 6.5 0 0 1 13 0C18.5 15.4 12 21 12 21Z"/><circle cx="12" cy="10" r="2.3" fill="var(--np-sun)"/></svg>From Berlin</p>
     <h3>CSV and bank exports</h3>
@@ -509,7 +586,7 @@
   <div class="np-postcard-code"><figure class="np-code np-code-mini" id="code-2" data-lang="ts"><div class="np-code-bar"><span class="np-dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="np-code-tab"><span class="np-code-badge" data-lang="ts" aria-hidden="true">TS</span>import.ts</span><button type="button" class="np-code-copy" aria-label="Copy code from import.ts" @click="copy($el)"><svg class="np-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="11.5" height="11.5" rx="2"/><path d="M15 9V5.5A2 2 0 0 0 13 3.5H5.5a2 2 0 0 0-2 2V13a2 2 0 0 0 2 2H9"/></svg><span v-text="copied === 'code-2' ? 'Copied' : 'Copy'">Copy</span></button></div><pre class="shiki shiki-themes light-plus dark-plus" style="--shiki-light:#000000;--shiki-dark:#D4D4D4;--shiki-light-bg:#FFFFFF;--shiki-dark-bg:#1E1E1E" tabindex="0" aria-label="import.ts code example"><code><span class="line"><span style="--shiki-light:#795E26;--shiki-dark:#DCDCAA">createParser</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">(</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178">"de-DE"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">).</span><span style="--shiki-light:#795E26;--shiki-dark:#DCDCAA">parse</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">(</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178">"1.234,56"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">);</span></span>
 <span class="line"><span style="--shiki-light:#008000;--shiki-dark:#6A9955">// 1234.56</span></span></code></pre></figure></div>
 </article>
-<article class="np-postcard">
+<article class="np-postcard" v-motion-scroll="fadeUp">
   <div class="np-postcard-text">
     <p class="np-postcard-from"><svg class="np-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-6.5-5.6-6.5-11a6.5 6.5 0 0 1 13 0C18.5 15.4 12 21 12 21Z"/><circle cx="12" cy="10" r="2.3" fill="var(--np-sun)"/></svg>From Tokyo</p>
     <h3>Scraped and pasted prices</h3>
@@ -531,7 +608,7 @@
   <div class="np-postcard-code"><figure class="np-code np-code-mini" id="code-3" data-lang="ts"><div class="np-code-bar"><span class="np-dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="np-code-tab"><span class="np-code-badge" data-lang="ts" aria-hidden="true">TS</span>prices.ts</span><button type="button" class="np-code-copy" aria-label="Copy code from prices.ts" @click="copy($el)"><svg class="np-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="11.5" height="11.5" rx="2"/><path d="M15 9V5.5A2 2 0 0 0 13 3.5H5.5a2 2 0 0 0-2 2V13a2 2 0 0 0 2 2H9"/></svg><span v-text="copied === 'code-3' ? 'Copied' : 'Copy'">Copy</span></button></div><pre class="shiki shiki-themes light-plus dark-plus" style="--shiki-light:#000000;--shiki-dark:#D4D4D4;--shiki-light-bg:#FFFFFF;--shiki-dark-bg:#1E1E1E" tabindex="0" aria-label="prices.ts code example"><code><span class="line"><span style="--shiki-light:#795E26;--shiki-dark:#DCDCAA">parseCurrency</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">(</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178">"￥1,235"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">, </span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178">"ja-JP"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">).</span><span style="--shiki-light:#001080;--shiki-dark:#9CDCFE">currency</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">;</span></span>
 <span class="line"><span style="--shiki-light:#008000;--shiki-dark:#6A9955">// "JPY"</span></span></code></pre></figure></div>
 </article>
-<article class="np-postcard">
+<article class="np-postcard" v-motion-scroll="fadeUp">
   <div class="np-postcard-text">
     <p class="np-postcard-from"><svg class="np-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-6.5-5.6-6.5-11a6.5 6.5 0 0 1 13 0C18.5 15.4 12 21 12 21Z"/><circle cx="12" cy="10" r="2.3" fill="var(--np-sun)"/></svg>From London</p>
     <h3>Accounting reports</h3>
@@ -553,7 +630,7 @@
   <div class="np-postcard-code"><figure class="np-code np-code-mini" id="code-4" data-lang="ts"><div class="np-code-bar"><span class="np-dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="np-code-tab"><span class="np-code-badge" data-lang="ts" aria-hidden="true">TS</span>ledger.ts</span><button type="button" class="np-code-copy" aria-label="Copy code from ledger.ts" @click="copy($el)"><svg class="np-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="11.5" height="11.5" rx="2"/><path d="M15 9V5.5A2 2 0 0 0 13 3.5H5.5a2 2 0 0 0-2 2V13a2 2 0 0 0 2 2H9"/></svg><span v-text="copied === 'code-4' ? 'Copied' : 'Copy'">Copy</span></button></div><pre class="shiki shiki-themes light-plus dark-plus" style="--shiki-light:#000000;--shiki-dark:#D4D4D4;--shiki-light-bg:#FFFFFF;--shiki-dark-bg:#1E1E1E" tabindex="0" aria-label="ledger.ts code example"><code><span class="line"><span style="--shiki-light:#795E26;--shiki-dark:#DCDCAA">parse</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">(</span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178">"(1,234.56)"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">, </span><span style="--shiki-light:#A31515;--shiki-dark:#CE9178">"en-GB"</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">);</span></span>
 <span class="line"><span style="--shiki-light:#008000;--shiki-dark:#6A9955">// -1234.56</span></span></code></pre></figure></div>
 </article>
-<article class="np-postcard">
+<article class="np-postcard" v-motion-scroll="fadeUp">
   <div class="np-postcard-text">
     <p class="np-postcard-from"><svg class="np-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-6.5-5.6-6.5-11a6.5 6.5 0 0 1 13 0C18.5 15.4 12 21 12 21Z"/><circle cx="12" cy="10" r="2.3" fill="var(--np-sun)"/></svg>From Mumbai</p>
     <h3>Money in integer cents</h3>
@@ -577,7 +654,7 @@
 <span class="line"><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">}).</span><span style="--shiki-light:#001080;--shiki-dark:#9CDCFE">amount</span><span style="--shiki-light:#000000;--shiki-dark:#D4D4D4">;</span></span>
 <span class="line"><span style="--shiki-light:#008000;--shiki-dark:#6A9955">// 1999</span></span></code></pre></figure></div>
 </article>
-<article class="np-postcard">
+<article class="np-postcard" v-motion-scroll="fadeUp">
   <div class="np-postcard-text">
     <p class="np-postcard-from"><svg class="np-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-6.5-5.6-6.5-11a6.5 6.5 0 0 1 13 0C18.5 15.4 12 21 12 21Z"/><circle cx="12" cy="10" r="2.3" fill="var(--np-sun)"/></svg>From Cairo</p>
     <h3>Every script</h3>
@@ -605,12 +682,12 @@
 
 <section id="api" class="np-section np-section-tint" aria-labelledby="api-title">
   <div class="container">
-    <div class="np-section-head">
+    <div class="np-section-head" v-motion-scroll="fadeUp">
       <p class="np-eyebrow"><svg class="np-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m8.5 7-5 5 5 5M15.5 7l5 5-5 5M13.5 4.5l-3 15"/></svg>API</p>
       <h2 id="api-title">Nine functions, one passport each</h2>
       <p>Every function takes the locale as an argument, so data from Berlin, Mumbai and Cairo can sit side by side. No global state, nothing to register.</p>
     </div>
-    <div class="np-api">
+    <div class="np-api" v-motion-scroll="fadeUp">
       <div class="np-api-list" role="tablist" aria-label="Functions" aria-orientation="vertical">
 <button type="button" class="np-api-item" role="tab" id="api-tab-parse" aria-controls="api-panel-parse" aria-selected="true" :aria-selected="api === 'parse' ? 'true' : 'false'" @click="api = 'parse'"><code>parse</code><span>Read a number written in a locale. NaN when it is not a valid number there.</span></button>
 <button type="button" class="np-api-item" role="tab" id="api-tab-try-parse" aria-controls="api-panel-try-parse" aria-selected="false" :aria-selected="api === 'try-parse' ? 'true' : 'false'" @click="api = 'try-parse'"><code>tryParse</code><span>Like parse, but says why a value was rejected. Never throws.</span></button>
@@ -759,13 +836,13 @@
 
 <section id="guides" class="np-section" aria-labelledby="guides-title">
   <div class="container">
-    <div class="np-section-head">
+    <div class="np-section-head" v-motion-scroll="fadeUp">
       <p class="np-eyebrow"><svg class="np-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7.5A1.5 1.5 0 0 1 4.5 6h15A1.5 1.5 0 0 1 21 7.5V10a2 2 0 0 0 0 4v2.5a1.5 1.5 0 0 1-1.5 1.5h-15A1.5 1.5 0 0 1 3 16.5V14a2 2 0 0 0 0-4Z"/><path d="M15 6v2.2M15 10.9v2.2M15 15.8V18"/></svg>Guides</p>
       <h2 id="guides-title">Boarding passes for the usual trouble</h2>
       <p>Four short guides. Each one shows the usual approach, why it breaks and what to do instead.</p>
     </div>
-<div class="np-tickets">
-<a class="np-ticket" href="parsefloat-comma-decimal-separator.html">
+<div class="np-tickets" v-motion-stagger="60">
+<a class="np-ticket" href="parsefloat-comma-decimal-separator.html" v-motion-scroll="fadeUp">
   <span class="np-ticket-stub" aria-hidden="true">
     <span class="np-ticket-gate">Gate</span>
     <span class="np-ticket-no">01</span>
@@ -777,7 +854,7 @@
     <span class="np-ticket-text">Why parseFloat returns 1.234 for 1.234,56, and the fix.</span>
   </span>
 </a>
-<a class="np-ticket" href="parse-localized-number-javascript.html">
+<a class="np-ticket" href="parse-localized-number-javascript.html" v-motion-scroll="fadeUp">
   <span class="np-ticket-stub" aria-hidden="true">
     <span class="np-ticket-gate">Gate</span>
     <span class="np-ticket-no">02</span>
@@ -789,7 +866,7 @@
     <span class="np-ticket-text">Read back what toLocaleString and Intl.NumberFormat write.</span>
   </span>
 </a>
-<a class="np-ticket" href="parse-currency-string-javascript.html">
+<a class="np-ticket" href="parse-currency-string-javascript.html" v-motion-scroll="fadeUp">
   <span class="np-ticket-stub" aria-hidden="true">
     <span class="np-ticket-gate">Gate</span>
     <span class="np-ticket-no">03</span>
@@ -801,7 +878,7 @@
     <span class="np-ticket-text">Amount and ISO code from R$ 1.234,56, € and ₹ strings.</span>
   </span>
 </a>
-<a class="np-ticket" href="arabic-digits-to-number-javascript.html">
+<a class="np-ticket" href="arabic-digits-to-number-javascript.html" v-motion-scroll="fadeUp">
   <span class="np-ticket-stub" aria-hidden="true">
     <span class="np-ticket-gate">Gate</span>
     <span class="np-ticket-no">04</span>
@@ -813,7 +890,7 @@
     <span class="np-ticket-text">١٬٢٣٤٫٥٦ and ۱۲۳٫۴۵ to real numbers.</span>
   </span>
 </a>
-<a class="np-ticket" href="api.html">
+<a class="np-ticket" href="api.html" v-motion-scroll="fadeUp">
   <span class="np-ticket-stub" aria-hidden="true">
     <span class="np-ticket-gate">Gate</span>
     <span class="np-ticket-no">05</span>
@@ -831,7 +908,7 @@
 
 <section id="faq" class="np-section np-section-tint" aria-labelledby="faq-title">
   <div class="container np-faq">
-    <div class="np-section-head">
+    <div class="np-section-head" v-motion-scroll="fadeUp">
       <p class="np-eyebrow"><svg class="np-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="m15.5 8.5-2 5-5 2 2-5Z" fill="var(--np-sun)" fill-opacity=".45"/></svg>FAQ</p>
       <h2 id="faq-title">Questions at the gate</h2>
       <img src="img/mascot.svg" width="120" height="120" alt="Pico the parrot" class="np-faq-pico" loading="lazy">
@@ -949,7 +1026,7 @@
       </div>
     </div>
     <nav aria-labelledby="ft-site"><p class="np-foot-title" id="ft-site">On this site</p><ul>
-      <li><a href="./#board">World board</a></li><li><a href="./#departures">Departures</a></li><li><a href="./#use-cases">Use cases</a></li><li><a href="api.html">API reference</a></li><li><a href="./#faq">FAQ</a></li><li><a href="https://github.com/kwy404/numberparrot/issues">Report an issue</a></li>
+      <li><a href="./#try">Paste and see</a></li><li><a href="./#board">World board</a></li><li><a href="./#departures">Departures</a></li><li><a href="./#use-cases">Use cases</a></li><li><a href="api.html">API reference</a></li><li><a href="./#faq">FAQ</a></li><li><a href="https://github.com/kwy404/numberparrot/issues">Report an issue</a></li>
     </ul></nav>
     <nav aria-labelledby="ft-guides"><p class="np-foot-title" id="ft-guides">Guides</p><ul>
       <li><a href="parsefloat-comma-decimal-separator.html">parseFloat and commas</a></li><li><a href="parse-localized-number-javascript.html">Reading Intl output</a></li><li><a href="parse-currency-string-javascript.html">Currency strings</a></li><li><a href="arabic-digits-to-number-javascript.html">Other digit scripts</a></li>
