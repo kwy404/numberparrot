@@ -246,6 +246,7 @@ function layout({ file, title, description, body, jsonld, ogType }) {
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="color-scheme" content="light dark">
   <script>(function(){try{var t=localStorage.getItem("voodoo:theme");if(t&&t.charAt(0)==='"')t=JSON.parse(t);var r=document.documentElement;if(t==="light"||t==="dark"){r.setAttribute("data-theme",t);r.style.colorScheme=t}}catch(e){}})();</script>
+  <script src="seasons.js"></script>
   <title>${esc(fullTitle)}</title>
   <meta name="description" content="${esc(description)}">
   <link rel="canonical" href="${url}">
@@ -462,7 +463,7 @@ ${localeRows}
 <h2>Runtime support</h2>
 <ul>
 <li>Node.js 18 and newer, Deno, Bun and all modern browsers. Requires <code>Intl.NumberFormat</code> with <code>formatToParts</code> and full ICU locale data, which Node ships by default since version 13.</li>
-<li>The whole library is about 6.9 kB gzipped. Importing only <code>parse</code> costs about 3.6 kB.</li>
+<li>The whole library is about 7 kB gzipped. Importing only <code>parse</code> costs about 3.6 kB.</li>
 <li>ESM (<code>dist/index.js</code>), CommonJS (<code>dist/index.cjs</code>) and type definitions for both.</li>
 </ul>
 <h2>Install</h2>
@@ -636,7 +637,7 @@ const FAQ = [
   ],
   [
     "Where does it run?",
-    "Node.js 18 and newer, Deno, Bun and modern browsers. It has zero dependencies, ships ESM, CommonJS and TypeScript types, and is about 6.9 kB gzipped.",
+    "Node.js 18 and newer, Deno, Bun and modern browsers. It has zero dependencies, ships ESM, CommonJS and TypeScript types, and is about 7 kB gzipped.",
   ],
 ];
 
@@ -702,7 +703,7 @@ const indexBody = `<main id="main">
         </div>
         <ul class="np-hero-facts" v-motion="fadeUp" aria-label="At a glance">
           <li>${icon("check", "np-icon")}Zero dependencies</li>
-          <li>${icon("check", "np-icon")}About 6.9 kB gzipped</li>
+          <li>${icon("check", "np-icon")}About 7 kB gzipped</li>
           <li>${icon("check", "np-icon")}Every locale your runtime knows</li>
         </ul>
       </div>
@@ -821,7 +822,7 @@ ${apiPanels}
     <div class="np-install-row">
       <div>
         <h3>Install</h3>
-        <p>Node.js 18+, Deno, Bun and every modern browser. ESM, CommonJS and TypeScript types, about 6.9 kB gzipped.</p>
+        <p>Node.js 18+, Deno, Bun and every modern browser. ESM, CommonJS and TypeScript types, about 7 kB gzipped.</p>
       </div>
       ${installTabs()}
     </div>

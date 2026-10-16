@@ -570,3 +570,41 @@ code.np-bad, td.np-bad, .np-lead code.np-bad { color: var(--np-bad); background:
 .np-404-art .np-art { width: min(380px, 100%); height: auto; transform: rotate(-3deg); }
 .np-404-art img { position: absolute; right: -1rem; bottom: -2.5rem; width: 7rem; height: auto; }
 .np-404-sub { margin: 4rem 0 1.25rem; font-size: 1.4rem; font-weight: 700; letter-spacing: -.02em; }
+
+/* Special dates: seasons.js sets data-season on <html> -------------------------------------- */
+.np-sd { display: none; }
+html[data-theme="dark"] .np-sl { display: none; }
+html[data-theme="dark"] .np-sd { display: block; }
+@media (prefers-color-scheme: dark) {
+  html:not([data-theme="light"]) .np-sl { display: none; }
+  html:not([data-theme="light"]) .np-sd { display: block; }
+}
+html:not([data-season]) .np-pico-season, html:not([data-season]) .np-season-hero, html:not([data-season]) .np-season-fx { display: none !important; }
+html[data-season] .np-pico-base { visibility: hidden; }
+.np-pico .np-pico-season { inset: auto; left: -7.5%; top: -17.5%; width: 115%; height: 117.5%; }
+.np-hero { position: relative; overflow: hidden; }
+.np-hero > .container { position: relative; z-index: 1; }
+.np-season-hero { position: absolute; inset: 0 0 auto; display: flex; justify-content: center; pointer-events: none; opacity: .7; }
+.np-season-hero img { width: min(1100px, 100%); height: auto; }
+.np-season-fx { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+html[data-season="halloween"] { --np-sun: oklch(0.74 0.15 55); }
+html[data-season="christmas"] { --np-sun: oklch(0.68 0.17 27); }
+html[data-season="newyear"] { --np-sun: oklch(0.84 0.14 90); }
+html[data-season="carnival"] { --np-sun: oklch(0.72 0.16 350); }
+html[data-season="valentine"] { --np-sun: oklch(0.73 0.15 10); }
+html[data-season="easter"] { --np-sun: oklch(0.84 0.08 340); }
+html[data-season="junina"] { --np-sun: oklch(0.78 0.15 60); }
+.np-season-chip {
+  position: fixed; left: 1rem; bottom: 1rem; z-index: 40; display: flex; align-items: center; gap: .5rem;
+  padding: .3rem .4rem .3rem .35rem; border: 1px solid var(--border); border-radius: 999px;
+  background: var(--surface); box-shadow: var(--m-shadow-lg); font-size: .8rem; font-weight: 600;
+  animation: np-pop .5s ease-out 1s both;
+}
+.np-season-mini { position: relative; width: 1.75rem; height: 1.75rem; border-radius: 999px; background: var(--np-sky); overflow: hidden; }
+.np-season-mini img { width: 100%; height: 100%; }
+.np-season-sw { position: relative; width: 2.1rem; height: 1.2rem; border-radius: 999px; background: var(--muted); border: 1px solid var(--border); cursor: pointer; transition: background-color .2s; }
+.np-season-sw::after { content: ""; position: absolute; top: .1rem; left: .12rem; width: .85rem; height: .85rem; border-radius: 999px; background: var(--foreground); transition: transform .2s ease-out; }
+.np-season-sw[aria-checked="true"] { background: var(--primary); border-color: var(--primary); }
+.np-season-sw[aria-checked="true"]::after { transform: translateX(.88rem); background: var(--primary-foreground, #fff); }
+.np-season-sw:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
+@media (prefers-reduced-motion: reduce) { .np-season-chip { animation: none; } .np-season-sw, .np-season-sw::after { transition: none; } }

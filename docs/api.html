@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="color-scheme" content="light dark">
   <script>(function(){try{var t=localStorage.getItem("voodoo:theme");if(t&&t.charAt(0)==='"')t=JSON.parse(t);var r=document.documentElement;if(t==="light"||t==="dark"){r.setAttribute("data-theme",t);r.style.colorScheme=t}}catch(e){}})();</script>
+  <script src="seasons.js"></script>
   <title>API reference | numberparrot</title>
   <meta name="description" content="Every numberparrot function with its options, return values, error codes and examples.">
   <link rel="canonical" href="https://kwy404.github.io/numberparrot/api.html">
@@ -374,7 +375,7 @@
 <h2 id="runtime-support">Runtime support<a class="np-anchor" href="#runtime-support" aria-label="Link to this section">#</a></h2>
 <ul>
 <li>Node.js 18 and newer, Deno, Bun and all modern browsers. Requires <code>Intl.NumberFormat</code> with <code>formatToParts</code> and full ICU locale data, which Node ships by default since version 13.</li>
-<li>The whole library is about 6.9 kB gzipped. Importing only <code>parse</code> costs about 3.6 kB.</li>
+<li>The whole library is about 7 kB gzipped. Importing only <code>parse</code> costs about 3.6 kB.</li>
 <li>ESM (<code>dist/index.js</code>), CommonJS (<code>dist/index.cjs</code>) and type definitions for both.</li>
 </ul>
 <h2 id="install">Install<a class="np-anchor" href="#install" aria-label="Link to this section">#</a></h2>

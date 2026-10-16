@@ -56,7 +56,7 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "size": "node scripts/size.mjs",
-    "docs": "node scripts/build-assets.mjs && node scripts/build-docs.mjs && npm run docs:highlight",
+    "docs": "node scripts/build-assets.mjs && node scripts/seasons-art.mjs && node scripts/build-docs.mjs && npm run docs:highlight",
     "docs:highlight": "node scripts/highlight-docs.mjs",
     "prepublishOnly": "npm run build && npm test"
   },

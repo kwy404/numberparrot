@@ -30,7 +30,7 @@
 npm install numberparrot
 ```
 
-Zero dependências. ESM, CommonJS e tipos TypeScript. Node.js 18 ou mais novo, Deno, Bun e navegadores modernos. Cerca de 6,9 kB com gzip para a biblioteca inteira e 3,6 kB só para o `parse`.
+Zero dependências. ESM, CommonJS e tipos TypeScript. Node.js 18 ou mais novo, Deno, Bun e navegadores modernos. Cerca de 7 kB com gzip para a biblioteca inteira e 3,6 kB só para o `parse`.
 
 ## Uso rápido
 
