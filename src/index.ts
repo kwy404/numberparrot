@@ -6,9 +6,10 @@
  *
  * @packageDocumentation
  */
-export { parse, isValid, type ParseOptions } from "./parse";
+export { parse, isValid, tryParse, type ParseOptions, type ParseResult } from "./parse";
 export { parseCurrency, type CurrencyOptions, type CurrencyResult } from "./money";
 export { detect, DEFAULT_CANDIDATES, type DetectResult } from "./detect";
+export { parseColumn, type ColumnResult } from "./column";
 export { normalizeInput, type InputOptions, type InputState } from "./input";
 export { createParser, type Parser } from "./parser";
 export { getLocaleInfo, type LocaleInfo, type LocaleInput } from "./locale";

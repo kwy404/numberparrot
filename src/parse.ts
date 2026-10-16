@@ -1,5 +1,5 @@
 import { type Scan, scan, toNumber } from "./core";
-import { NumberParseError } from "./errors";
+import { NumberParseError, type ParseErrorCode } from "./errors";
 import { type LocaleData, type LocaleInput, localeData } from "./locale";
 
 /** Options accepted by {@link parse}, {@link isValid} and {@link createParser}. */
@@ -115,4 +115,51 @@ export function isValid(input: string | number, locale?: LocaleInput, options?: 
   } catch {
     return false;
   }
+}
+
+/** Result of {@link tryParse}: the number, or the reason it could not be read. */
+export type ParseResult =
+  | { readonly ok: true; readonly value: number; readonly code: null; readonly message: null }
+  | { readonly ok: false; readonly value: number; readonly code: ParseErrorCode; readonly message: string };
+
+const failed = (code: ParseErrorCode, message: string): ParseResult => ({ ok: false, value: NaN, code, message });
+
+/** @internal */
+export function tryParseWith(input: unknown, data: LocaleData, options?: ParseOptions): ParseResult {
+  if (typeof input === "number") {
+    if (Number.isNaN(input)) return failed("NO_DIGITS", "The input is NaN");
+    if (options?.strict && !Number.isFinite(input)) return failed("OUT_OF_RANGE", "Number is not finite");
+    return { ok: true, value: input, code: null, message: null };
+  }
+  if (typeof input !== "string") return failed("NOT_A_STRING", "Expected a string or a number");
+  const result = scan(input, data, options);
+  if (!result.ok) return failed(result.code, result.message);
+  const value = toNumber(result, options?.keepPercent);
+  if (options?.strict && !result.infinite && !Number.isFinite(value)) {
+    return failed("OUT_OF_RANGE", "Number is too large");
+  }
+  return { ok: true, value, code: null, message: null };
+}
+
+/**
+ * Like {@link parse}, but never throws and tells why an input was rejected.
+ *
+ * `code` and `message` are the same ones {@link NumberParseError} carries in
+ * strict mode, so a form can show a precise message without switching to
+ * strict mode or wrapping calls in `try`.
+ *
+ * @example
+ * ```ts
+ * import { tryParse } from "numberparrot";
+ *
+ * tryParse("1.234,56", "pt-BR");
+ * // { ok: true, value: 1234.56, code: null, message: null }
+ *
+ * tryParse("1,23", "en-US");
+ * // { ok: false, value: NaN, code: "INVALID_GROUPING",
+ * //   message: "Group separators are in the wrong places" }
+ * ```
+ */
+export function tryParse(input: string | number, locale?: LocaleInput, options?: ParseOptions): ParseResult {
+  return tryParseWith(input, localeData(locale), options);
 }

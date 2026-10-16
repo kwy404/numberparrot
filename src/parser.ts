@@ -1,7 +1,7 @@
 import { type InputOptions, type InputState, normalizeInputWith } from "./input";
 import { type LocaleInfo, type LocaleInput, localeData } from "./locale";
 import { type CurrencyOptions, type CurrencyResult, parseCurrencyWith } from "./money";
-import { type ParseOptions, parseWith } from "./parse";
+import { type ParseOptions, type ParseResult, parseWith, tryParseWith } from "./parse";
 
 /** A parser bound to one locale and one set of options. Returned by {@link createParser}. */
 export interface Parser {
@@ -9,6 +9,8 @@ export interface Parser {
   readonly info: LocaleInfo;
   /** Same as {@link parse} with the bound locale and options. */
   parse(input: string | number): number;
+  /** Same as {@link tryParse} with the bound locale and options. */
+  tryParse(input: string | number): ParseResult;
   /** Same as {@link isValid} with the bound locale and options. */
   isValid(input: string | number): boolean;
   /** Same as {@link parseCurrency} with the bound locale; options are merged. */
@@ -41,6 +43,7 @@ export function createParser(locale?: LocaleInput, options?: ParseOptions): Pars
   return {
     info: data.info,
     parse: (input) => parseWith(input, data, options),
+    tryParse: (input) => tryParseWith(input, data, options),
     isValid: (input) => {
       try {
         return !Number.isNaN(parseWith(input, data, options));

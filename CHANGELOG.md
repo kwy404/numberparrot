@@ -6,6 +6,11 @@ All notable changes to this project are documented here. The format follows
 
 ## [Unreleased]
 
+### Added
+
+- `parseColumn(values, candidates?)` reads a whole column written in one unknown format, such as a CSV column or a pasted spreadsheet range. Unambiguous cells decide the decimal separator for the ambiguous ones, every cell is read with one locale, and cells that do not fit are listed in `invalid`.
+- `tryParse(input, locale?, options?)` never throws and returns `{ ok, value, code, message }`, so a form can say why a value was rejected without strict mode or `try`. Bound parsers from `createParser` get `tryParse` too.
+
 ## [1.0.0] - 2026-10-13
 
 ### Changed

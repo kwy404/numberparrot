@@ -458,6 +458,25 @@ function isValid(input, locale, options) {
     return false;
   }
 }
+var failed = (code, message) => ({ ok: false, value: NaN, code, message });
+function tryParseWith(input, data, options) {
+  if (typeof input === "number") {
+    if (Number.isNaN(input)) return failed("NO_DIGITS", "The input is NaN");
+    if (options?.strict && !Number.isFinite(input)) return failed("OUT_OF_RANGE", "Number is not finite");
+    return { ok: true, value: input, code: null, message: null };
+  }
+  if (typeof input !== "string") return failed("NOT_A_STRING", "Expected a string or a number");
+  const result2 = scan(input, data, options);
+  if (!result2.ok) return failed(result2.code, result2.message);
+  const value = toNumber(result2, options?.keepPercent);
+  if (options?.strict && !result2.infinite && !Number.isFinite(value)) {
+    return failed("OUT_OF_RANGE", "Number is too large");
+  }
+  return { ok: true, value, code: null, message: null };
+}
+function tryParse(input, locale, options) {
+  return tryParseWith(input, localeData(locale), options);
+}
 
 // src/money.ts
 function minorUnits(scan2, digits, strict, input, locale) {
@@ -716,6 +735,92 @@ function detect(input, candidates = DEFAULT_CANDIDATES) {
   return finish(null, group, runsOk ? 0.9 : 0, `"${group}" separates groups of digits in a whole number`);
 }
 
+// src/column.ts
+var OTHER = { ".": ",", ",": "." };
+var round = (n) => Math.round(n * 100) / 100;
+function vote(decimal, group) {
+  if (decimal !== null) return decimal;
+  if (group !== null && OTHER[group]) return OTHER[group];
+  return null;
+}
+function parseColumn(values, candidates = DEFAULT_CANDIDATES) {
+  const cells = Array.from(values, (v) => typeof v === "string" ? v : v == null ? "" : String(v));
+  const datas = candidates.map((c) => localeData(c));
+  const tally = /* @__PURE__ */ new Map();
+  let anyNumber = false;
+  let anyAmbiguous = false;
+  cells.forEach((cell, i) => {
+    if (cell.trim() === "") return;
+    const found = detect(cell, candidates);
+    if (Number.isNaN(found.value)) return;
+    anyNumber = true;
+    if (found.ambiguous) {
+      anyAmbiguous = true;
+      return;
+    }
+    const mark = vote(found.decimal, found.group);
+    if (mark === null) return;
+    const entry = tally.get(mark) ?? { weight: 0, count: 0, first: i };
+    entry.weight += found.confidence;
+    entry.count++;
+    tally.set(mark, entry);
+  });
+  const blank = cells.map(() => NaN);
+  if (!anyNumber) {
+    return {
+      values: blank,
+      locale: null,
+      decimal: null,
+      ambiguous: false,
+      confidence: 0,
+      reason: "No cell is a number",
+      invalid: cells.flatMap((c, i) => c.trim() === "" ? [] : [i])
+    };
+  }
+  const first = datas[0] ?? localeData("en-US");
+  let decimal = first.decimal;
+  let confidence = anyAmbiguous ? 0.5 : 1;
+  let reason = anyAmbiguous ? `No cell settles the format; ${candidates[0] ?? "en-US"} reads "${first.decimal}" as the decimal separator` : "Whole numbers only: every format reads them the same";
+  let total = 0;
+  for (const entry of tally.values()) total += entry.count;
+  if (total > 0) {
+    const ranked = [...tally.entries()].sort((a, b) => b[1].weight - a[1].weight || a[1].first - b[1].first);
+    const [mark, best] = ranked[0];
+    decimal = mark;
+    confidence = round(best.weight / best.count * (best.count / total));
+    const cell = JSON.stringify(cells[best.first]);
+    reason = ranked.length > 1 ? `${best.count} of ${total} cells use "${mark}" as the decimal separator, for example ${cell}` : `${cell} (row ${best.first + 1}) shows that "${mark}" is the decimal separator`;
+  }
+  let pick = -1;
+  let pickScore = -1;
+  datas.forEach((data2, i) => {
+    if (!data2.loose.decimals.includes(decimal)) return;
+    let read = 0;
+    for (const cell of cells) if (cell.trim() !== "" && !Number.isNaN(parseWith(cell, data2))) read++;
+    const score = read * 2 + (data2.decimal === decimal ? 1 : 0);
+    if (score > pickScore) {
+      pick = i;
+      pickScore = score;
+    }
+  });
+  const data = pick >= 0 ? datas[pick] : first;
+  const locale = pick >= 0 ? candidates[pick] : candidates[0] ?? data.info.locale;
+  const out = cells.map((cell) => cell.trim() === "" ? NaN : parseWith(cell, data));
+  const invalid = out.flatMap((v, i) => Number.isNaN(v) && cells[i].trim() !== "" ? [i] : []);
+  if (invalid.length > 0) {
+    confidence = round(confidence * (1 - invalid.length / cells.filter((c) => c.trim() !== "").length));
+  }
+  return {
+    values: out,
+    locale,
+    decimal: pick >= 0 ? decimal : data.decimal,
+    ambiguous: total === 0 && anyAmbiguous,
+    confidence,
+    reason,
+    invalid
+  };
+}
+
 // src/input.ts
 var COMPLETIONS = ["", "0", "00", "000"];
 function normalizeInputWith(value, data, options) {
@@ -776,6 +881,7 @@ function createParser(locale, options) {
   return {
     info: data.info,
     parse: (input) => parseWith(input, data, options),
+    tryParse: (input) => tryParseWith(input, data, options),
     isValid: (input) => {
       try {
         return !Number.isNaN(parseWith(input, data, options));
@@ -792,4 +898,4 @@ function createParser(locale, options) {
   };
 }
 
-export { DEFAULT_CANDIDATES, NumberParseError, createParser, detect, getLocaleInfo, isValid, normalizeInput, parse, parseCurrency };
+export { DEFAULT_CANDIDATES, NumberParseError, createParser, detect, getLocaleInfo, isValid, normalizeInput, parse, parseColumn, parseCurrency, tryParse };
