@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="460" height="470" viewBox="-30 -70 460 470" role="img" aria-label="Pico the parrot with a witch hat and a carved pumpkin"><title>Pico the parrot with a witch hat and a carved pumpkin</title><g fill="#8A72CC" opacity=".8"><path d="M40 40c-6 0-9-5-9-5l-5 8c-12-8-27-7-41 3 11 2 17 9 18 18 8-6 17-6 23 2 3-3 8-5 13-5s10 2 13 5c6-8 15-8 23-2 1-9 7-16 18-18-14-10-29-11-41-3l-5-8s-3 5-9 5Z" transform="translate(30 -20) scale(.7)"/></g>
+  <g id="pico">
+    <path d="M150 318 L104 392 L146 384 L178 336 Z" fill="#F25C54"/>
+    <path d="M178 330 L162 398 L204 378 L206 334 Z" fill="#2FBF71"/>
+    <path d="M184 34 C172 4 206 -2 214 24 C218 40 214 58 208 74 Z" fill="#F25C54"/>
+    <path d="M214 60 C222 24 258 30 248 58 C242 72 230 80 218 86 Z" fill="#F25C54"/>
+    <path d="M178 70 C150 46 132 74 152 90 C162 98 176 100 188 98 Z" fill="#F25C54"/>
+    <ellipse cx="190" cy="248" rx="96" ry="116" fill="#2FBF71"/>
+    <circle cx="214" cy="146" r="82" fill="#2FBF71"/>
+    <ellipse cx="214" cy="270" rx="56" ry="76" fill="#FFC83D"/>
+    <path d="M118 196 C92 262 112 322 152 350 C186 316 196 262 184 214 C168 188 138 182 118 196 Z" fill="#F25C54"/>
+    <path d="M128 236 C140 264 150 290 152 322" fill="none" stroke="#FFC83D" stroke-width="9" stroke-linecap="round"/>
+    <path d="M150 220 C162 248 168 274 166 300" fill="none" stroke="#FFC83D" stroke-width="9" stroke-linecap="round"/>
+    <ellipse cx="246" cy="136" rx="44" ry="42" fill="#FFFFFF"/>
+    <circle cx="250" cy="130" r="17" fill="#1D2B3A"/>
+    <circle cx="256" cy="123" r="6" fill="#FFFFFF"/>
+    <path d="M282 112 C336 104 352 150 334 196 C324 172 306 162 284 164 Z" fill="#FFC83D"/>
+    <path d="M284 164 C304 162 320 172 326 190 C306 196 290 192 278 180 Z" fill="#1D2B3A"/>
+    <path d="M176 352 C176 368 168 376 160 380 M214 352 C214 368 222 376 230 380" fill="none" stroke="#1D2B3A" stroke-width="10" stroke-linecap="round"/>
+  </g><g transform="rotate(10 214 78)"><path d="M160 76 Q 196 30 214 -26 Q 222 -50 244 -46 Q 252 -44 250 -36 Q 232 -30 236 0 Q 244 40 268 76 Z" fill="#8A72CC"/><ellipse cx="214" cy="80" rx="92" ry="17" fill="#8A72CC"/><path d="M168 54 L260 54 L266 72 Q 214 80 162 72 Z" fill="#F09A50"/></g>
+  <g transform="translate(318 340)"><ellipse cx="-24" cy="0" rx="30" ry="40" fill="#F09A50"/><ellipse cx="24" cy="0" rx="30" ry="40" fill="#F09A50"/><ellipse cx="0" cy="0" rx="30" ry="42" fill="#F09A50"/><path d="M0 -40 C0 -52 6 -60 16 -64" fill="none" stroke="#5BAF55" stroke-width="8" stroke-linecap="round"/><path d="M-26 -10 L-14 -22 L-4 -8 Z M26 -10 L14 -22 L4 -8 Z" fill="#2A1A0E"/><path d="M-30 10 L-20 22 L-10 12 L0 24 L10 12 L20 22 L30 10 Q 0 34 -30 10 Z" fill="#2A1A0E"/></g>
+</svg>
